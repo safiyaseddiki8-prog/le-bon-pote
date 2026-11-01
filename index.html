@@ -9,23 +9,28 @@
     body { margin: 0; font-family: -apple-system, Arial, sans-serif; background: #fafafa; color: #111; }
     main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; }
     h1 { font-size: 1.8rem; margin: 0 0 4px; }
+    h2 { font-size: 1.2rem; }
     .sous-titre { color: #666; margin: 0 0 24px; }
     .carte { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
     label { display: block; font-size: .9rem; margin: 10px 0 4px; }
     input, select, textarea { width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; }
     textarea { min-height: 80px; resize: vertical; }
     button { padding: 10px 16px; font-size: 1rem; border: 0; border-radius: 8px; cursor: pointer; margin-top: 12px; }
+    button:disabled { opacity: .5; cursor: default; }
     .principal { background: #111; color: #fff; }
     .secondaire { background: #eee; color: #111; }
     .ligne { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
     .message { margin-top: 10px; font-size: .9rem; }
     .erreur { color: #b00020; }
     .ok { color: #0a7a3a; }
+    .info { color: #666; font-size: .9rem; margin-top: 8px; }
     .badge { display: inline-block; font-size: .75rem; padding: 2px 8px; border-radius: 999px; background: #e8f4ff; }
     .badge.cherche { background: #fff1e0; }
     .annonce h3 { margin: 8px 0 4px; font-size: 1.05rem; }
     .annonce p { margin: 0; color: #333; white-space: pre-wrap; }
     .date { font-size: .8rem; color: #888; margin-top: 8px; }
+    .coordonnees { margin-top: 10px; padding: 10px; border-radius: 8px; background: #eefaf2; }
+    .cadenas { margin-top: 10px; padding: 10px; border-radius: 8px; background: #f2f2f2; color: #555; }
     .cache { display: none; }
   </style>
 </head>
@@ -56,6 +61,25 @@
     </div>
 
     <div class="carte">
+      <h2>Mes coordonnées</h2>
+      <p class="info">Elles ne sont visibles que par les personnes dont tu as accepté la demande (ou qui ont accepté la tienne).</p>
+      <label for="contact">Téléphone, Insta, e-mail…</label>
+      <input id="contact" maxlength="200" placeholder="Ex. 06 12 34 56 78 ou @mon.insta">
+      <button id="btn-coordonnees" class="principal">Enregistrer</button>
+      <p id="msg-coordonnees" class="message"></p>
+    </div>
+
+    <div class="carte">
+      <h2>Demandes reçues</h2>
+      <div id="liste-recues"></div>
+    </div>
+
+    <div class="carte">
+      <h2>Mes demandes envoyées</h2>
+      <div id="liste-envoyees"></div>
+    </div>
+
+    <div class="carte">
       <h2>Publier une annonce</h2>
       <label for="type">Je…</label>
       <select id="type">
@@ -83,6 +107,9 @@
 
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_CLE_PUBLIQUE);
   const $ = (id) => document.getElementById(id);
+  let moi = null; // l'utilisateur connecté
+
+  const STATUTS = { en_attente: '⏳ En attente', acceptee: '✅ Acceptée', refusee: '❌ Refusée' };
 
   function afficherMessage(id, texte, type) {
     const el = $(id);
@@ -90,19 +117,34 @@
     el.className = 'message ' + (type || '');
   }
 
+  // Petit outil pour créer un élément avec du texte (jamais de HTML injecté)
+  function el(balise, classe, texte) {
+    const e = document.createElement(balise);
+    if (classe) e.className = classe;
+    if (texte !== undefined) e.textContent = texte;
+    return e;
+  }
+
   // Affiche le bon écran selon que l'on est connecté ou non
   async function rafraichirEcran() {
     const { data } = await db.auth.getSession();
     const session = data.session;
+    moi = session ? session.user : null;
     $('ecran-connexion').classList.toggle('cache', !!session);
     $('ecran-appli').classList.toggle('cache', !session);
     if (session) {
       $('email-connecte').textContent = session.user.email;
-      chargerAnnonces();
+      chargerTout();
     }
   }
 
-  // Inscription
+  async function chargerTout() {
+    await chargerMesCoordonnees();
+    await chargerDemandes();
+    await chargerAnnonces();
+  }
+
+  // ---------- Comptes ----------
   $('btn-inscription').addEventListener('click', async () => {
     const email = $('email').value.trim();
     const motdepasse = $('motdepasse').value;
@@ -120,7 +162,6 @@
     rafraichirEcran();
   });
 
-  // Connexion
   $('btn-connexion').addEventListener('click', async () => {
     const { error } = await db.auth.signInWithPassword({
       email: $('email').value.trim(),
@@ -131,13 +172,119 @@
     rafraichirEcran();
   });
 
-  // Déconnexion
   $('btn-deconnexion').addEventListener('click', async () => {
     await db.auth.signOut();
     rafraichirEcran();
   });
 
-  // Publier une annonce
+  // ---------- Mes coordonnées ----------
+  async function chargerMesCoordonnees() {
+    const { data } = await db.from('coordonnees').select('contact').eq('user_id', moi.id).maybeSingle();
+    $('contact').value = data ? data.contact : '';
+  }
+
+  $('btn-coordonnees').addEventListener('click', async () => {
+    const contact = $('contact').value.trim();
+    if (contact.length < 3) return afficherMessage('msg-coordonnees', 'Entre au moins 3 caractères.', 'erreur');
+    const { error } = await db.from('coordonnees').upsert({
+      user_id: moi.id, contact, updated_at: new Date().toISOString()
+    });
+    if (error) return afficherMessage('msg-coordonnees', 'Enregistrement impossible : ' + error.message, 'erreur');
+    afficherMessage('msg-coordonnees', 'Coordonnées enregistrées !', 'ok');
+  });
+
+  // Récupère les coordonnées visibles pour une liste de personnes.
+  // La base ne renvoie QUE celles que j'ai le droit de voir (règle d'or n°1).
+  async function coordonneesDe(ids) {
+    if (ids.length === 0) return {};
+    const { data } = await db.from('coordonnees').select('user_id, contact').in('user_id', ids);
+    const resultat = {};
+    (data || []).forEach((c) => { resultat[c.user_id] = c.contact; });
+    return resultat;
+  }
+
+  function blocCoordonnees(contact) {
+    return contact
+      ? el('div', 'coordonnees', '📇 Coordonnées : ' + contact)
+      : el('div', 'cadenas', 'Cette personne n\'a pas encore renseigné ses coordonnées.');
+  }
+
+  // ---------- Demandes de contact ----------
+  let mesDemandesEnvoyees = {}; // annonce_id -> statut
+
+  async function chargerDemandes() {
+    const { data, error } = await db.from('demandes')
+      .select('id, statut, created_at, annonce_id, demandeur_id, proprietaire_id, annonces(titre)')
+      .order('created_at', { ascending: false });
+    const recues = $('liste-recues');
+    const envoyees = $('liste-envoyees');
+    recues.innerHTML = '';
+    envoyees.innerHTML = '';
+    mesDemandesEnvoyees = {};
+    if (error) { recues.textContent = 'Impossible de charger les demandes.'; return; }
+
+    const listeRecues = data.filter((d) => d.proprietaire_id === moi.id);
+    const listeEnvoyees = data.filter((d) => d.demandeur_id === moi.id);
+    listeEnvoyees.forEach((d) => { mesDemandesEnvoyees[d.annonce_id] = d.statut; });
+
+    // Coordonnées des personnes avec qui une demande est acceptée
+    const idsAcceptes = data.filter((d) => d.statut === 'acceptee')
+      .map((d) => d.proprietaire_id === moi.id ? d.demandeur_id : d.proprietaire_id);
+    const coords = await coordonneesDe(idsAcceptes);
+
+    // Demandes reçues (je suis l'auteur de l'annonce)
+    if (listeRecues.length === 0) recues.appendChild(el('p', 'info', 'Aucune demande reçue pour l\'instant.'));
+    listeRecues.forEach((d) => {
+      const carte = el('div', 'carte');
+      const titre = d.annonces ? d.annonces.titre : 'une annonce';
+      carte.appendChild(el('p', '', 'Un étudiant veut te contacter pour ton annonce « ' + titre + ' ».'));
+      carte.appendChild(el('p', 'info', 'État : ' + STATUTS[d.statut]));
+      if (d.statut === 'en_attente') {
+        carte.appendChild(el('div', 'cadenas', '🔒 Ses coordonnées seront visibles après ton accord.'));
+        const ligne = el('div', 'ligne');
+        const accepter = el('button', 'principal', 'Accepter');
+        const refuser = el('button', 'secondaire', 'Refuser');
+        accepter.addEventListener('click', () => repondre(d.id, 'acceptee'));
+        refuser.addEventListener('click', () => repondre(d.id, 'refusee'));
+        ligne.append(accepter, refuser);
+        carte.appendChild(ligne);
+      } else if (d.statut === 'acceptee') {
+        carte.appendChild(blocCoordonnees(coords[d.demandeur_id]));
+      }
+      recues.appendChild(carte);
+    });
+
+    // Demandes envoyées (je demande le contact)
+    if (listeEnvoyees.length === 0) envoyees.appendChild(el('p', 'info', 'Aucune demande envoyée pour l\'instant.'));
+    listeEnvoyees.forEach((d) => {
+      const carte = el('div', 'carte');
+      const titre = d.annonces ? d.annonces.titre : 'une annonce';
+      carte.appendChild(el('p', '', 'Annonce « ' + titre + ' »'));
+      carte.appendChild(el('p', 'info', 'État : ' + STATUTS[d.statut]));
+      if (d.statut === 'acceptee') carte.appendChild(blocCoordonnees(coords[d.proprietaire_id]));
+      if (d.statut === 'en_attente') carte.appendChild(el('div', 'cadenas', '🔒 Les coordonnées seront visibles si la personne accepte.'));
+      envoyees.appendChild(carte);
+    });
+  }
+
+  async function demanderContact(annonce) {
+    const { error } = await db.from('demandes').insert({
+      annonce_id: annonce.id, proprietaire_id: annonce.auteur_id
+    });
+    if (error) {
+      const texte = error.code === '23505' ? 'Tu as déjà demandé le contact pour cette annonce.' : 'Demande impossible : ' + error.message;
+      alert(texte);
+    }
+    chargerTout();
+  }
+
+  async function repondre(idDemande, statut) {
+    const { error } = await db.from('demandes').update({ statut }).eq('id', idDemande);
+    if (error) alert('Réponse impossible : ' + error.message);
+    chargerTout();
+  }
+
+  // ---------- Annonces ----------
   $('btn-publier').addEventListener('click', async () => {
     const titre = $('titre').value.trim();
     const description = $('description').value.trim();
@@ -152,29 +299,30 @@
     chargerAnnonces();
   });
 
-  // Afficher les annonces (les plus récentes en premier)
   async function chargerAnnonces() {
     const liste = $('liste-annonces');
     const { data, error } = await db.from('annonces')
-      .select('id, type, titre, description, created_at')
+      .select('id, type, titre, description, created_at, auteur_id')
       .order('created_at', { ascending: false });
     liste.innerHTML = '';
     if (error) { liste.textContent = 'Impossible de charger les annonces.'; return; }
     if (data.length === 0) { liste.textContent = 'Aucune annonce pour l\'instant.'; return; }
     data.forEach((a) => {
-      const carte = document.createElement('div');
-      carte.className = 'carte annonce';
-      const badge = document.createElement('span');
-      badge.className = 'badge ' + a.type;
-      badge.textContent = a.type === 'propose' ? 'Propose' : 'Cherche';
-      const titre = document.createElement('h3');
-      titre.textContent = a.titre;
-      const desc = document.createElement('p');
-      desc.textContent = a.description || '';
-      const date = document.createElement('div');
-      date.className = 'date';
-      date.textContent = 'Publiée le ' + new Date(a.created_at).toLocaleDateString('fr-FR');
-      carte.append(badge, titre, desc, date);
+      const carte = el('div', 'carte annonce');
+      carte.appendChild(el('span', 'badge ' + a.type, a.type === 'propose' ? 'Propose' : 'Cherche'));
+      carte.appendChild(el('h3', '', a.titre));
+      carte.appendChild(el('p', '', a.description || ''));
+      carte.appendChild(el('div', 'date', 'Publiée le ' + new Date(a.created_at).toLocaleDateString('fr-FR')));
+
+      if (a.auteur_id === moi.id) {
+        carte.appendChild(el('p', 'info', 'C\'est ton annonce.'));
+      } else if (mesDemandesEnvoyees[a.id]) {
+        carte.appendChild(el('p', 'info', 'Demande envoyée : ' + STATUTS[mesDemandesEnvoyees[a.id]]));
+      } else {
+        const bouton = el('button', 'principal', 'Demander le contact');
+        bouton.addEventListener('click', () => { bouton.disabled = true; demanderContact(a); });
+        carte.appendChild(bouton);
+      }
       liste.appendChild(carte);
     });
   }
