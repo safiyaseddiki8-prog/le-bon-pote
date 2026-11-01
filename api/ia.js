@@ -36,7 +36,7 @@ async function appelerGemini(prompt, texte) {
           })
         }
       );
-      if (!r.ok) { derniereErreur = modele + ' : ' + r.status; continue; }
+      if (!r.ok) { derniereErreur = modele + ' : ' + r.status + ' ' + (await r.text()).slice(0, 300); console.error('Essai IA raté :', derniereErreur); continue; }
       const data = await r.json();
       const brut = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
       return JSON.parse(brut);
