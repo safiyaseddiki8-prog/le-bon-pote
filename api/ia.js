@@ -1,468 +1,91 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Le Bon Pote</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: -apple-system, Arial, sans-serif; background: #fafafa; color: #111; }
-    main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; }
-    h1 { font-size: 1.8rem; margin: 0 0 4px; }
-    h2 { font-size: 1.2rem; }
-    .sous-titre { color: #666; margin: 0 0 24px; }
-    .carte { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; font-size: .9rem; margin: 10px 0 4px; }
-    input, select, textarea { width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; }
-    textarea { min-height: 80px; resize: vertical; }
-    button { padding: 10px 16px; font-size: 1rem; border: 0; border-radius: 8px; cursor: pointer; margin-top: 12px; }
-    button:disabled { opacity: .5; cursor: default; }
-    .principal { background: #111; color: #fff; }
-    .secondaire { background: #eee; color: #111; }
-    .ligne { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
-    .message { margin-top: 10px; font-size: .9rem; }
-    .erreur { color: #b00020; }
-    .ok { color: #0a7a3a; }
-    .info { color: #666; font-size: .9rem; margin-top: 8px; }
-    .badge { display: inline-block; font-size: .75rem; padding: 2px 8px; border-radius: 999px; background: #e8f4ff; }
-    .badge.cherche { background: #fff1e0; }
-    .annonce h3 { margin: 8px 0 4px; font-size: 1.05rem; }
-    .annonce p { margin: 0; color: #333; white-space: pre-wrap; }
-    .date { font-size: .8rem; color: #888; margin-top: 8px; }
-    .coordonnees { margin-top: 10px; padding: 10px; border-radius: 8px; background: #eefaf2; }
-    .cadenas { margin-top: 10px; padding: 10px; border-radius: 8px; background: #f2f2f2; color: #555; }
-    .ia { background: #eef2ff; color: #1e2a78; }
-    .cache { display: none; }
-  </style>
-</head>
-<body>
-<main>
-  <h1>Le Bon Pote</h1>
-  <p class="sous-titre">L'entraide entre étudiants du campus de l'ESP</p>
+// Fonction « serveur » de Vercel : c'est ELLE qui parle à Gemini.
+// La clé GEMINI_API_KEY reste dans les variables Vercel : elle n'est jamais envoyée au navigateur.
+const { PROMPTS } = require('./_prompts.js');
 
-  <!-- Écran : pas connecté -->
-  <section id="ecran-connexion" class="carte cache">
-    <h2>Connexion</h2>
-    <label for="email">E-mail</label>
-    <input id="email" type="email" autocomplete="email">
-    <label for="motdepasse">Mot de passe (6 caractères minimum)</label>
-    <input id="motdepasse" type="password" autocomplete="current-password">
-    <div class="ligne">
-      <button id="btn-connexion" class="principal">Se connecter</button>
-      <button id="btn-inscription" class="secondaire">Créer un compte</button>
-    </div>
-    <p id="msg-connexion" class="message"></p>
-  </section>
+// Infos publiques de Supabase (les mêmes que dans index.html) : servent à vérifier que l'utilisateur est connecté.
+const SUPABASE_URL = 'https://vvmjwavdgynoxcwonulh.supabase.co';
+const SUPABASE_CLE_PUBLIQUE = 'sb_publishable_9C6yu87w8il49xSCxpisRA_13jgF0wf';
 
-  <!-- Écran : connecté -->
-  <section id="ecran-appli" class="cache">
-    <div class="carte ligne">
-      <span>Connecté : <strong id="email-connecte"></strong></span>
-      <button id="btn-deconnexion" class="secondaire">Se déconnecter</button>
-    </div>
+// Modèles essayés dans l'ordre (si l'un est saturé, on passe au suivant)
+const MODELES = [process.env.GEMINI_MODEL, 'gemini-flash-latest', 'gemini-3.6-flash', 'gemini-3.5-flash-lite'].filter(Boolean);
 
-    <div class="carte">
-      <h2>Mes coordonnées</h2>
-      <p class="info">Elles ne sont visibles que par les personnes dont tu as accepté la demande (ou qui ont accepté la tienne).</p>
-      <label for="contact">Téléphone, Insta, e-mail…</label>
-      <input id="contact" maxlength="200" placeholder="Ex. 06 12 34 56 78 ou @mon.insta">
-      <button id="btn-coordonnees" class="principal">Enregistrer</button>
-      <p id="msg-coordonnees" class="message"></p>
-    </div>
+const LONGUEUR_MAX = { profil: 15000, annonce: 300 };
 
-    <div class="carte">
-      <h2>Mon profil</h2>
-      <p class="info">Dépose ton CV en PDF : l'IA propose tes compétences, tu relis et tu corriges avant de valider. Tu peux aussi les écrire à la main.</p>
-      <label for="cv">Mon CV (PDF)</label>
-      <input id="cv" type="file" accept="application/pdf">
-      <button id="btn-analyser" class="ia">✨ Analyser mon CV avec l'IA</button>
-      <p id="msg-profil" class="message"></p>
-      <label for="competences">Mes compétences (une par ligne) : relis et corrige</label>
-      <textarea id="competences" placeholder="Ex.&#10;Photo&#10;Montage vidéo"></textarea>
-      <button id="btn-profil" class="principal">Valider mon profil</button>
-      <p id="msg-profil-ok" class="message"></p>
-    </div>
-
-    <div class="carte">
-      <h2>Demandes reçues</h2>
-      <div id="liste-recues"></div>
-    </div>
-
-    <div class="carte">
-      <h2>Mes demandes envoyées</h2>
-      <div id="liste-envoyees"></div>
-    </div>
-
-    <div class="carte">
-      <h2>Publier une annonce</h2>
-      <label for="type">Je…</label>
-      <select id="type">
-        <option value="propose">propose un service</option>
-        <option value="cherche">cherche un service</option>
-      </select>
-      <label for="mots">Quelques mots pour l'IA (facultatif)</label>
-      <input id="mots" maxlength="200" placeholder="Ex. covoit Lyon vendredi">
-      <button id="btn-rediger" class="ia">✨ Rédiger avec l'IA</button>
-      <p id="msg-ia" class="message"></p>
-      <label for="titre">Titre</label>
-      <input id="titre" maxlength="100" placeholder="Ex. Photos pour vos événements">
-      <label for="description">Description</label>
-      <textarea id="description" maxlength="1000" placeholder="Ce que tu proposes ou ce que tu cherches"></textarea>
-      <button id="btn-publier" class="principal">Publier</button>
-      <p id="msg-annonce" class="message"></p>
-    </div>
-
-    <h2>Les annonces</h2>
-    <div id="liste-annonces"></div>
-  </section>
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script>
-  // Adresse du projet et clé PUBLIQUE (publishable). Jamais la clé secrète ici.
-  const SUPABASE_URL = 'https://vvmjwavdgynoxcwonulh.supabase.co';
-  const SUPABASE_CLE_PUBLIQUE = 'sb_publishable_9C6yu87w8il49xSCxpisRA_13jgF0wf';
-
-  const db = supabase.createClient(SUPABASE_URL, SUPABASE_CLE_PUBLIQUE);
-  const $ = (id) => document.getElementById(id);
-  let moi = null; // l'utilisateur connecté
-
-  const STATUTS = { en_attente: '⏳ En attente', acceptee: '✅ Acceptée', refusee: '❌ Refusée' };
-
-  function afficherMessage(id, texte, type) {
-    const el = $(id);
-    el.textContent = texte;
-    el.className = 'message ' + (type || '');
-  }
-
-  // Petit outil pour créer un élément avec du texte (jamais de HTML injecté)
-  function el(balise, classe, texte) {
-    const e = document.createElement(balise);
-    if (classe) e.className = classe;
-    if (texte !== undefined) e.textContent = texte;
-    return e;
-  }
-
-  // Affiche le bon écran selon que l'on est connecté ou non
-  async function rafraichirEcran() {
-    const { data } = await db.auth.getSession();
-    const session = data.session;
-    moi = session ? session.user : null;
-    $('ecran-connexion').classList.toggle('cache', !!session);
-    $('ecran-appli').classList.toggle('cache', !session);
-    if (session) {
-      $('email-connecte').textContent = session.user.email;
-      chargerTout();
-    }
-  }
-
-  async function chargerTout() {
-    await chargerMesCoordonnees();
-    await chargerMonProfil();
-    await chargerDemandes();
-    await chargerAnnonces();
-  }
-
-  // ---------- Comptes ----------
-  $('btn-inscription').addEventListener('click', async () => {
-    const email = $('email').value.trim();
-    const motdepasse = $('motdepasse').value;
-    if (!email || motdepasse.length < 6) {
-      return afficherMessage('msg-connexion', 'Entre un e-mail et un mot de passe de 6 caractères minimum.', 'erreur');
-    }
-    const { data, error } = await db.auth.signUp({
-      email, password: motdepasse,
-      options: { emailRedirectTo: window.location.origin }
-    });
-    if (error) return afficherMessage('msg-connexion', 'Inscription impossible : ' + error.message, 'erreur');
-    if (!data.session) {
-      afficherMessage('msg-connexion', 'Compte créé ! Clique sur le lien reçu par e-mail pour le confirmer, puis connecte-toi.', 'ok');
-    }
-    rafraichirEcran();
+async function utilisateurConnecte(req) {
+  const jeton = (req.headers.authorization || '').replace('Bearer ', '');
+  if (!jeton) return null;
+  const r = await fetch(SUPABASE_URL + '/auth/v1/user', {
+    headers: { apikey: SUPABASE_CLE_PUBLIQUE, Authorization: 'Bearer ' + jeton }
   });
+  return r.ok ? r.json() : null;
+}
 
-  $('btn-connexion').addEventListener('click', async () => {
-    const { error } = await db.auth.signInWithPassword({
-      email: $('email').value.trim(),
-      password: $('motdepasse').value
-    });
-    if (error) return afficherMessage('msg-connexion', 'Connexion impossible : e-mail ou mot de passe incorrect, ou compte pas encore confirmé.', 'erreur');
-    afficherMessage('msg-connexion', '');
-    rafraichirEcran();
-  });
-
-  $('btn-deconnexion').addEventListener('click', async () => {
-    await db.auth.signOut();
-    rafraichirEcran();
-  });
-
-  // ---------- Mes coordonnées ----------
-  async function chargerMesCoordonnees() {
-    const { data } = await db.from('coordonnees').select('contact').eq('user_id', moi.id).maybeSingle();
-    $('contact').value = data ? data.contact : '';
-  }
-
-  $('btn-coordonnees').addEventListener('click', async () => {
-    const contact = $('contact').value.trim();
-    if (contact.length < 3) return afficherMessage('msg-coordonnees', 'Entre au moins 3 caractères.', 'erreur');
-    const { error } = await db.from('coordonnees').upsert({
-      user_id: moi.id, contact, updated_at: new Date().toISOString()
-    });
-    if (error) return afficherMessage('msg-coordonnees', 'Enregistrement impossible : ' + error.message, 'erreur');
-    afficherMessage('msg-coordonnees', 'Coordonnées enregistrées !', 'ok');
-  });
-
-  // Récupère les coordonnées visibles pour une liste de personnes.
-  // La base ne renvoie QUE celles que j'ai le droit de voir (règle d'or n°1).
-  async function coordonneesDe(ids) {
-    if (ids.length === 0) return {};
-    const { data } = await db.from('coordonnees').select('user_id, contact').in('user_id', ids);
-    const resultat = {};
-    (data || []).forEach((c) => { resultat[c.user_id] = c.contact; });
-    return resultat;
-  }
-
-  function blocCoordonnees(contact) {
-    return contact
-      ? el('div', 'coordonnees', '📇 Coordonnées : ' + contact)
-      : el('div', 'cadenas', 'Cette personne n\'a pas encore renseigné ses coordonnées.');
-  }
-
-  // ---------- Demandes de contact ----------
-  let mesDemandesEnvoyees = {}; // annonce_id -> statut
-
-  let tourDemandes = 0; // évite d'afficher plusieurs fois la même liste
-  async function chargerDemandes() {
-    const monTour = ++tourDemandes;
-    const { data, error } = await db.from('demandes')
-      .select('id, statut, created_at, annonce_id, demandeur_id, proprietaire_id, annonces(titre)')
-      .order('created_at', { ascending: false });
-    const recues = $('liste-recues');
-    const envoyees = $('liste-envoyees');
-    if (error) {
-      if (monTour !== tourDemandes) return;
-      recues.textContent = 'Impossible de charger les demandes.';
-      return;
-    }
-
-    const listeRecues = data.filter((d) => d.proprietaire_id === moi.id);
-    const listeEnvoyees = data.filter((d) => d.demandeur_id === moi.id);
-
-    // Coordonnées des personnes avec qui une demande est acceptée
-    const idsAcceptes = data.filter((d) => d.statut === 'acceptee')
-      .map((d) => d.proprietaire_id === moi.id ? d.demandeur_id : d.proprietaire_id);
-    const coords = await coordonneesDe(idsAcceptes);
-
-    if (monTour !== tourDemandes) return; // un chargement plus récent a pris le relais
-    recues.innerHTML = '';
-    envoyees.innerHTML = '';
-    mesDemandesEnvoyees = {};
-    listeEnvoyees.forEach((d) => { mesDemandesEnvoyees[d.annonce_id] = d.statut; });
-
-    // Demandes reçues (je suis l'auteur de l'annonce)
-    if (listeRecues.length === 0) recues.appendChild(el('p', 'info', 'Aucune demande reçue pour l\'instant.'));
-    listeRecues.forEach((d) => {
-      const carte = el('div', 'carte');
-      const titre = d.annonces ? d.annonces.titre : 'une annonce';
-      carte.appendChild(el('p', '', 'Un étudiant veut te contacter pour ton annonce « ' + titre + ' ».'));
-      carte.appendChild(el('p', 'info', 'État : ' + STATUTS[d.statut]));
-      if (d.statut === 'en_attente') {
-        carte.appendChild(el('div', 'cadenas', '🔒 Ses coordonnées seront visibles après ton accord.'));
-        const ligne = el('div', 'ligne');
-        const accepter = el('button', 'principal', 'Accepter');
-        const refuser = el('button', 'secondaire', 'Refuser');
-        accepter.addEventListener('click', () => repondre(d.id, 'acceptee'));
-        refuser.addEventListener('click', () => repondre(d.id, 'refusee'));
-        ligne.append(accepter, refuser);
-        carte.appendChild(ligne);
-      } else if (d.statut === 'acceptee') {
-        carte.appendChild(blocCoordonnees(coords[d.demandeur_id]));
-      }
-      recues.appendChild(carte);
-    });
-
-    // Demandes envoyées (je demande le contact)
-    if (listeEnvoyees.length === 0) envoyees.appendChild(el('p', 'info', 'Aucune demande envoyée pour l\'instant.'));
-    listeEnvoyees.forEach((d) => {
-      const carte = el('div', 'carte');
-      const titre = d.annonces ? d.annonces.titre : 'une annonce';
-      carte.appendChild(el('p', '', 'Annonce « ' + titre + ' »'));
-      carte.appendChild(el('p', 'info', 'État : ' + STATUTS[d.statut]));
-      if (d.statut === 'acceptee') carte.appendChild(blocCoordonnees(coords[d.proprietaire_id]));
-      if (d.statut === 'en_attente') carte.appendChild(el('div', 'cadenas', '🔒 Les coordonnées seront visibles si la personne accepte.'));
-      envoyees.appendChild(carte);
-    });
-  }
-
-  async function demanderContact(annonce) {
-    const { error } = await db.from('demandes').insert({
-      annonce_id: annonce.id, proprietaire_id: annonce.auteur_id
-    });
-    if (error) {
-      const texte = error.code === '23505' ? 'Tu as déjà demandé le contact pour cette annonce.' : 'Demande impossible : ' + error.message;
-      alert(texte);
-    }
-    chargerTout();
-  }
-
-  async function repondre(idDemande, statut) {
-    const { error } = await db.from('demandes').update({ statut }).eq('id', idDemande);
-    if (error) alert('Réponse impossible : ' + error.message);
-    chargerTout();
-  }
-
-  // ---------- IA (passe par le serveur /api/ia : la clé reste cachée chez Vercel) ----------
-  async function appelerIA(tache, texte) {
-    const { data } = await db.auth.getSession();
-    const controleur = new AbortController();
-    const minuterie = setTimeout(() => controleur.abort(), 30000); // 30 s maximum
+async function appelerGemini(prompt, texte) {
+  let derniereErreur = 'aucun modèle disponible';
+  for (const modele of MODELES) {
     try {
-      const r = await fetch('/api/ia', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.session.access_token },
-        body: JSON.stringify({ tache, texte }),
-        signal: controleur.signal
-      });
-      const j = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(j.erreur || 'L\'IA ne répond pas pour le moment.');
-      return j;
+      const r = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/' + modele + ':generateContent',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: prompt.systeme }] },
+            contents: [{ role: 'user', parts: [{ text: prompt.prefixe + texte + prompt.suffixe }] }],
+            generationConfig: { responseMimeType: 'application/json', temperature: 0.4 }
+          })
+        }
+      );
+      if (!r.ok) { derniereErreur = modele + ' : ' + r.status + ' ' + (await r.text()).slice(0, 300); console.error('Essai IA raté :', derniereErreur); continue; }
+      const data = await r.json();
+      const brut = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
+      return JSON.parse(brut);
     } catch (e) {
-      if (e.name === 'AbortError') throw new Error('L\'IA met trop de temps à répondre.');
-      throw e;
-    } finally {
-      clearTimeout(minuterie);
+      derniereErreur = modele + ' : ' + e.message;
     }
   }
+  throw new Error(derniereErreur);
+}
 
-  // ---------- Mon profil depuis le CV ----------
-  if (window.pdfjsLib) {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+// On ne garde que ce qui est attendu, au bon format (on ne fait pas confiance aveuglément à l'IA)
+function nettoyer(tache, resultat) {
+  if (tache === 'profil') {
+    const liste = Array.isArray(resultat?.competences) ? resultat.competences : [];
+    return {
+      competences: liste
+        .filter((c) => typeof c === 'string')
+        .map((c) => c.trim().slice(0, 40))
+        .filter((c) => c.length > 0)
+        .slice(0, 10)
+    };
   }
+  return {
+    titre: String(resultat?.titre || '').trim().slice(0, 100),
+    description: String(resultat?.description || '').trim().slice(0, 1000)
+  };
+}
 
-  async function lireTextePDF(fichier) {
-    const pdf = await pdfjsLib.getDocument({ data: await fichier.arrayBuffer() }).promise;
-    let texte = '';
-    for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
-      const page = await pdf.getPage(i);
-      const contenu = await page.getTextContent();
-      texte += contenu.items.map((it) => it.str).join(' ') + '\n';
-    }
-    return texte.trim();
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ erreur: 'Méthode non autorisée' });
+  if (!process.env.GEMINI_API_KEY) return res.status(500).json({ erreur: "La clé de l'IA n'est pas configurée." });
+
+  // 1. Seuls les étudiants connectés peuvent utiliser l'IA (pour protéger le quota gratuit)
+  const user = await utilisateurConnecte(req);
+  if (!user) return res.status(401).json({ erreur: 'Connecte-toi pour utiliser l\'IA.' });
+
+  // 2. On vérifie la demande
+  const corps = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  const tache = corps.tache;
+  const texte = String(corps.texte || '').trim();
+  if (!PROMPTS[tache]) return res.status(400).json({ erreur: 'Tâche inconnue.' });
+  if (texte.length < 2) return res.status(400).json({ erreur: 'Le texte est vide.' });
+
+  // 3. On appelle l'IA, puis on nettoie sa réponse
+  try {
+    const resultat = await appelerGemini(PROMPTS[tache], texte.slice(0, LONGUEUR_MAX[tache]));
+    return res.status(200).json(nettoyer(tache, resultat));
+  } catch (e) {
+    console.error('Erreur IA :', e.message);
+    return res.status(503).json({ erreur: "L'IA ne répond pas pour le moment. Tu peux remplir à la main." });
   }
-
-  async function chargerMonProfil() {
-    const { data } = await db.from('profils').select('competences').eq('user_id', moi.id).maybeSingle();
-    $('competences').value = data ? data.competences.join('\n') : '';
-  }
-
-  $('btn-analyser').addEventListener('click', async () => {
-    const fichier = $('cv').files[0];
-    if (!fichier) return afficherMessage('msg-profil', 'Choisis d\'abord ton CV en PDF.', 'erreur');
-    if (fichier.type !== 'application/pdf') return afficherMessage('msg-profil', 'Le fichier doit être un PDF.', 'erreur');
-    if (fichier.size > 5 * 1024 * 1024) return afficherMessage('msg-profil', 'Le PDF est trop lourd (5 Mo maximum).', 'erreur');
-    const bouton = $('btn-analyser');
-    bouton.disabled = true;
-    try {
-      afficherMessage('msg-profil', 'Lecture du CV…');
-      const texte = await lireTextePDF(fichier);
-      if (texte.length < 20) {
-        return afficherMessage('msg-profil', 'Ce CV est presque vide (ou scanné en image) : l\'IA ne peut pas le lire. Écris tes compétences à la main ci-dessous.', 'erreur');
-      }
-      afficherMessage('msg-profil', 'L\'IA analyse ton CV… (quelques secondes)');
-      const resultat = await appelerIA('profil', texte);
-      if (resultat.competences.length === 0) {
-        return afficherMessage('msg-profil', 'L\'IA n\'a trouvé aucune compétence. Écris-les à la main ci-dessous.', 'erreur');
-      }
-      $('competences').value = resultat.competences.join('\n');
-      afficherMessage('msg-profil', 'Voici les compétences proposées par l\'IA. Relis, corrige, puis clique sur « Valider mon profil ». Rien n\'est enregistré tant que tu n\'as pas validé.', 'ok');
-    } catch (e) {
-      afficherMessage('msg-profil', e.message + ' Tu peux écrire tes compétences à la main ci-dessous.', 'erreur');
-    } finally {
-      bouton.disabled = false;
-    }
-  });
-
-  $('btn-profil').addEventListener('click', async () => {
-    const competences = [...new Set($('competences').value.split('\n').map((c) => c.trim().slice(0, 40)).filter((c) => c))].slice(0, 15);
-    const { error } = await db.from('profils').upsert({
-      user_id: moi.id, competences, updated_at: new Date().toISOString()
-    });
-    if (error) return afficherMessage('msg-profil-ok', 'Enregistrement impossible : ' + error.message, 'erreur');
-    $('competences').value = competences.join('\n');
-    afficherMessage('msg-profil-ok', 'Profil validé et enregistré !', 'ok');
-  });
-
-  // ---------- Annonce rédigée par l'IA ----------
-  $('btn-rediger').addEventListener('click', async () => {
-    const mots = $('mots').value.trim();
-    if (mots.length < 2) return afficherMessage('msg-ia', 'Écris d\'abord quelques mots (ex. « photo soirée asso »).', 'erreur');
-    const bouton = $('btn-rediger');
-    bouton.disabled = true;
-    afficherMessage('msg-ia', 'L\'IA rédige ton annonce… (quelques secondes)');
-    try {
-      const sens = $('type').value === 'propose' ? 'Je propose : ' : 'Je cherche : ';
-      const resultat = await appelerIA('annonce', sens + mots);
-      $('titre').value = resultat.titre;
-      $('description').value = resultat.description;
-      afficherMessage('msg-ia', 'Proposition de l\'IA : relis et modifie le titre et la description si besoin, puis clique sur « Publier ».', 'ok');
-    } catch (e) {
-      afficherMessage('msg-ia', e.message + ' Tu peux écrire ton annonce à la main.', 'erreur');
-    } finally {
-      bouton.disabled = false;
-    }
-  });
-
-  // ---------- Annonces ----------
-  $('btn-publier').addEventListener('click', async () => {
-    const titre = $('titre').value.trim();
-    const description = $('description').value.trim();
-    if (titre.length < 3) return afficherMessage('msg-annonce', 'Le titre doit faire au moins 3 caractères.', 'erreur');
-    const { error } = await db.from('annonces').insert({
-      type: $('type').value, titre, description
-    });
-    if (error) return afficherMessage('msg-annonce', 'Publication impossible : ' + error.message, 'erreur');
-    $('titre').value = '';
-    $('description').value = '';
-    $('mots').value = '';
-    afficherMessage('msg-ia', '');
-    afficherMessage('msg-annonce', 'Annonce publiée !', 'ok');
-    chargerAnnonces();
-  });
-
-  let tourAnnonces = 0; // évite d'afficher plusieurs fois la même liste
-  async function chargerAnnonces() {
-    const monTour = ++tourAnnonces;
-    const liste = $('liste-annonces');
-    const { data, error } = await db.from('annonces')
-      .select('id, type, titre, description, created_at, auteur_id')
-      .order('created_at', { ascending: false });
-    if (monTour !== tourAnnonces) return; // un chargement plus récent a pris le relais
-    liste.innerHTML = '';
-    if (error) { liste.textContent = 'Impossible de charger les annonces.'; return; }
-    if (data.length === 0) { liste.textContent = 'Aucune annonce pour l\'instant.'; return; }
-    data.forEach((a) => {
-      const carte = el('div', 'carte annonce');
-      carte.appendChild(el('span', 'badge ' + a.type, a.type === 'propose' ? 'Propose' : 'Cherche'));
-      carte.appendChild(el('h3', '', a.titre));
-      carte.appendChild(el('p', '', a.description || ''));
-      carte.appendChild(el('div', 'date', 'Publiée le ' + new Date(a.created_at).toLocaleDateString('fr-FR')));
-
-      if (a.auteur_id === moi.id) {
-        carte.appendChild(el('p', 'info', 'C\'est ton annonce.'));
-      } else if (mesDemandesEnvoyees[a.id]) {
-        carte.appendChild(el('p', 'info', 'Demande envoyée : ' + STATUTS[mesDemandesEnvoyees[a.id]]));
-      } else {
-        const bouton = el('button', 'principal', 'Demander le contact');
-        bouton.addEventListener('click', () => { bouton.disabled = true; demanderContact(a); });
-        carte.appendChild(bouton);
-      }
-      liste.appendChild(carte);
-    });
-  }
-
-  db.auth.onAuthStateChange(() => rafraichirEcran());
-  rafraichirEcran();
-</script>
-</body>
-</html>
+};
