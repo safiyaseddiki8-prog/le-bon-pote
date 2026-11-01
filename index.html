@@ -4,547 +4,1385 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Le Bon Pote</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --fond: #ffffff;
+      --surface: #f6f5f8;
+      --blanc: #ffffff;
+      --texte: #1d1a17;
+      --texte2: #2f2a26;
+      --gris: #6c6760;
+      --gris-clair: #ebe7de;
+      --encre: #2a2320;
+      --violet: #9465cd;
+      --violet-fonce: #6f45b0;
+      --lavande: #ece3f8;
+      --lavande2: #ddccf3;
+      --jaune: #eef07a;
+      --jaune-pale: #f8f8d6;
+      --peche: #f8e2c8;
+      --corail: #f19a7c;
+      --ciel: #dcedf6;
+      --rose: #f8dbe3;
+      --menthe: #dcf1e4;
+      --rouge: #e5484d;
+      --ombre: 0 1px 2px rgba(42,35,32,.05), 0 10px 28px rgba(42,35,32,.07);
+      --ombre-forte: 0 2px 4px rgba(42,35,32,.06), 0 24px 50px rgba(42,35,32,.14);
+      --titres: 'Bricolage Grotesque', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --police: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --ease: cubic-bezier(.2, .8, .2, 1);
+      --rebond: cubic-bezier(.34, 1.56, .64, 1);
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: -apple-system, Arial, sans-serif; background: #fafafa; color: #111; }
-    main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; }
-    h1 { font-size: 1.8rem; margin: 0 0 4px; }
-    h2 { font-size: 1.2rem; }
-    .sous-titre { color: #666; margin: 0 0 24px; }
-    .carte { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; font-size: .9rem; margin: 10px 0 4px; }
-    input, select, textarea { width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; }
-    textarea { min-height: 80px; resize: vertical; }
-    button { padding: 10px 16px; font-size: 1rem; border: 0; border-radius: 8px; cursor: pointer; margin-top: 12px; }
-    button:disabled { opacity: .5; cursor: default; }
-    .principal { background: #111; color: #fff; }
-    .secondaire { background: #eee; color: #111; }
-    .ligne { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
-    .message { margin-top: 10px; font-size: .9rem; }
-    .erreur { color: #b00020; }
-    .ok { color: #0a7a3a; }
-    .info { color: #666; font-size: .9rem; margin-top: 8px; }
-    .badge { display: inline-block; font-size: .75rem; padding: 2px 8px; border-radius: 999px; background: #e8f4ff; }
-    .badge.cherche { background: #fff1e0; }
-    .annonce h3 { margin: 8px 0 4px; font-size: 1.05rem; }
-    .annonce p { margin: 0; color: #333; white-space: pre-wrap; }
-    .date { font-size: .8rem; color: #888; margin-top: 8px; }
-    .coordonnees { margin-top: 10px; padding: 10px; border-radius: 8px; background: #eefaf2; }
-    .cadenas { margin-top: 10px; padding: 10px; border-radius: 8px; background: #f2f2f2; color: #555; }
-    .ia { background: #eef2ff; color: #1e2a78; }
-    .conversation { margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee; }
-    .fil { display: flex; flex-direction: column; max-height: 320px; overflow-y: auto; margin-bottom: 8px; }
-    .bulle { padding: 8px 12px; border-radius: 12px; margin: 4px 0; max-width: 85%; white-space: pre-wrap; word-wrap: break-word; }
-    .bulle.moi { background: #111; color: #fff; align-self: flex-end; }
-    .bulle.autre { background: #f2f2f2; color: #111; align-self: flex-start; }
-    .bulle small { display: block; font-size: .72rem; opacity: .7; margin-bottom: 2px; }
-    .cache { display: none; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--fond); color: var(--texte); font-family: var(--police); font-size: 16px; line-height: 1.55; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    body::before { content: none; display: none; opacity: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    h1, h2, h3, .logo, .btn, .onglet, .tag, .lien, .num, .pastille { font-family: var(--titres); }
+    h1, h2, h3 { letter-spacing: -.03em; line-height: 1; font-weight: 800; margin: 0; }
+    p { margin: 0; }
+    .conteneur { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .gris { color: var(--gris); }
+    h2 .gris { position: relative; display: inline-block; color: var(--violet); z-index: 0; }
+    h2 .gris .m { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .08em; }
+    h2 .gris .m > span { display: inline-block; transform: translateY(110%) rotate(6deg); transition: transform .9s var(--rebond); transition-delay: var(--dm); }
+    h2 .gris::after { content: ''; position: absolute; left: -1%; right: -1%; bottom: .1em; height: .22em; background: var(--jaune); border-radius: 6px; z-index: -1; transform: scaleX(0) rotate(-1deg); transform-origin: left; transition: transform .8s var(--ease) .55s; }
+    .vu h2 .gris .m > span, h2.vu .gris .m > span { transform: none; }
+    .vu h2 .gris::after, h2.vu .gris::after { transform: scaleX(1) rotate(-1deg); }
+    h2 .gris:hover .m > span { animation: sautille .5s var(--rebond); animation-delay: var(--dm); }
+    @keyframes sautille { 40% { transform: translateY(-8px) rotate(-3deg); } }
+    svg.ico { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .sticker { display: inline-block; }
+    .sticker svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+    /* ================= LOGO : poignée de main ================= */
+    .logo { display: inline-flex; align-items: baseline; gap: 0; font-weight: 800; font-size: 1.7rem; letter-spacing: -.045em; color: var(--texte); text-decoration: none; }
+    .mot-logo { display: inline-flex; }
+    .mot-logo .l { display: inline-block; opacity: 0; transform: translateY(-14px) rotate(-8deg); animation: lettre .7s var(--rebond) forwards; }
+    .mot-logo .esp { width: .26em; }
+    .mot-logo .pote { color: var(--violet); }
+    .logo:hover .mot-logo .l { animation: vague .6s var(--rebond) both; animation-delay: var(--dv); opacity: 1; transform: none; }
+    @keyframes lettre { to { opacity: 1; transform: none; } }
+    @keyframes vague { 40% { transform: translateY(-6px) rotate(-6deg); } 100% { transform: none; } }
+    .logo .point { display: inline-block; color: var(--violet); font-size: 1.1em; line-height: 1; margin-left: .02em; transform-origin: bottom; animation: rebondit 3.6s var(--ease) 1.2s infinite; }
+    @keyframes rebondit { 0%, 70%, 100% { transform: translateY(0) scale(1, 1); } 76% { transform: translateY(-.35em) scale(.9, 1.1); } 84% { transform: translateY(0) scale(1.25, .8); } 90% { transform: translateY(-.1em); } }
+    .logo .poignee { width: 46px; height: 46px; border-radius: 15px; background: var(--lavande); display: grid; place-items: center; overflow: hidden; transition: transform .45s var(--rebond), background .3s; }
+    .logo .poignee svg { width: 42px; overflow: visible; }
+    .logo .mains { transform-box: view-box; transform-origin: 32px 34px; animation: serre 3.2s ease-in-out infinite; }
+    .logo:hover .poignee { transform: rotate(-6deg) scale(1.06); background: var(--jaune); }
+    .logo:hover .mains { animation-duration: 1s; }
+    @keyframes serre { 0%, 45%, 100% { transform: translateY(0) rotate(0); } 6% { transform: translateY(-4px) rotate(-4deg); } 13% { transform: translateY(3px) rotate(3deg); } 20% { transform: translateY(-4px) rotate(-4deg); } 27% { transform: translateY(3px) rotate(2deg); } 34% { transform: translateY(-1px); } }
+
+    /* ================= LOUTRE (mascotte) ================= */
+    .loutre { position: relative; display: inline-block; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .loutre svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .loutre g { transform-box: view-box; }
+    .loutre .anim { transform-origin: 125px 270px; animation: respire 2.8s ease-in-out infinite; }
+    .loutre .ombre-sol { transform-origin: 125px 274px; animation: ombre 2.8s ease-in-out infinite; }
+    .loutre .queue { transform-origin: 150px 238px; animation: queue 1.4s ease-in-out infinite; }
+    .loutre .bras-salut { transform-origin: 156px 182px; animation: salut 1.7s ease-in-out infinite; }
+    .loutre .bras-bas { transform-origin: 92px 184px; animation: balance 2.8s ease-in-out infinite; }
+    .loutre .tete { transform-origin: 125px 160px; animation: tete 2.8s ease-in-out infinite; }
+    .loutre .yeux { transform-origin: 122px 112px; animation: cligne 5s infinite; }
+    .loutre .oreille-g { transform-origin: 72px 84px; animation: oreille 5s ease-in-out infinite; }
+    .loutre .regard { transition: transform .18s ease-out; }
+    .loutre .ferme, .loutre .bras-cache { opacity: 0; transition: opacity .25s; }
+    .loutre .joues { transform-origin: 122px 140px; transition: transform .3s var(--rebond); }
+    @keyframes respire { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.02, .975) translateY(2px); } }
+    @keyframes ombre { 50% { transform: scaleX(1.06); } }
+    @keyframes queue { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(8deg); } }
+    @keyframes salut { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(16deg); } }
+    @keyframes balance { 50% { transform: rotate(5deg); } }
+    @keyframes tete { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(2deg); } }
+    @keyframes cligne { 0%, 47%, 51%, 100% { transform: scaleY(1); } 49% { transform: scaleY(.08); } }
+    @keyframes oreille { 0%, 80%, 100% { transform: rotate(0); } 84% { transform: rotate(-14deg); } 88% { transform: rotate(6deg); } }
+    .loutre.boing .anim { animation: boing .8s var(--rebond); }
+    @keyframes boing { 0% { transform: scale(1.1, .86); } 30% { transform: scale(.92, 1.1) translateY(-40px); } 55% { transform: translateY(-46px) rotate(-5deg); } 80% { transform: scale(1.1, .9); } 100% { transform: none; } }
+    .loutre.timide .yeux, .loutre.timide .bras-salut, .loutre.timide .bras-bas { opacity: 0; }
+    .loutre.timide .ferme, .loutre.timide .bras-cache { opacity: 1; }
+    .loutre.timide .joues { transform: scale(1.3); }
+    .loutre .bulle-m { position: absolute; left: -110px; top: 10px; background: var(--violet); color: var(--blanc); font-family: var(--titres); font-weight: 600; font-size: .84rem; padding: 7px 12px; border-radius: 14px 14px 4px 14px; white-space: nowrap; opacity: 0; transform: translateY(6px) scale(.9); transition: all .35s var(--rebond); pointer-events: none; }
+    .loutre .bulle-m.visible { opacity: 1; transform: none; }
+
+    /* ================= BOUTONS ================= */
+    .btn { --bg: var(--violet); --fg: var(--blanc); position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 48px; padding: 0 8px 0 22px; border: 0; border-radius: 999px; background: var(--bg); color: var(--fg); font-size: 1rem; font-weight: 600; letter-spacing: -.01em; cursor: pointer; text-decoration: none; transition: transform .3s var(--rebond), box-shadow .3s var(--ease), background .3s; white-space: nowrap; box-shadow: 0 4px 0 rgba(111,69,176,.0); }
+    .btn .fleche { width: 34px; height: 34px; border-radius: 50%; background: var(--jaune); color: var(--encre); display: grid; place-items: center; }
+    .btn .fleche svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.2; transition: transform .35s var(--ease); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(111,69,176,.28); }
+    .btn:hover .fleche svg { transform: translateX(3px); }
+    .btn:active { transform: scale(.96); }
+    .btn:disabled { cursor: default; transform: none; box-shadow: none; }
+    .btn.sans { padding: 0 22px; }
+    .btn.jaune { --bg: var(--jaune); --fg: var(--encre); }
+    .btn.jaune:hover { box-shadow: 0 12px 26px rgba(180,182,40,.3); }
+    .btn.jaune .fleche { background: var(--violet); color: var(--blanc); }
+    .btn.clair { --bg: var(--blanc); --fg: var(--texte); box-shadow: inset 0 0 0 1px var(--gris-clair); }
+    .btn.clair:hover { box-shadow: inset 0 0 0 1px var(--gris-clair), 0 10px 22px rgba(42,35,32,.08); }
+    .btn.petit { height: 38px; font-size: .9rem; padding: 0 16px; }
+    .btn.plein { width: 100%; justify-content: space-between; }
+    .btn.ok { --bg: var(--menthe); --fg: #1f7a48; }
+    .btn .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: tourne .7s linear infinite; }
+    @keyframes tourne { to { transform: rotate(360deg); } }
+    .lien { position: relative; color: var(--texte); text-decoration: none; font-weight: 600; font-size: .96rem; cursor: pointer; background: none; border: 0; padding: 4px 0; }
+    .lien::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--violet); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease); }
+    .lien:hover::after { transform: scaleX(1); transform-origin: left; }
+
+    .tag { display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 600; padding: 4px 11px; border-radius: 999px; background: var(--gris-clair); }
+    .tag.propose { background: var(--lavande); color: var(--violet-fonce); }
+    .tag.cherche { background: var(--jaune-pale); color: #6b6a12; }
+    .tag.nouveau { background: var(--rouge); color: var(--blanc); }
+    .tag .pt { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    label { display: block; font-size: .85rem; font-weight: 500; color: var(--texte2); margin: 16px 0 6px; }
+    input, textarea, select { width: 100%; height: 50px; padding: 0 16px; font: inherit; font-size: 1rem; color: var(--texte); border: 1px solid var(--gris-clair); border-radius: 14px; background: var(--surface); transition: border-color .2s, box-shadow .2s, background .2s; }
+    textarea { height: auto; padding: 12px 16px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { outline: none; background: var(--blanc); border-color: var(--violet); box-shadow: 0 0 0 4px rgba(148,101,205,.16); }
+    .champ-mdp { position: relative; }
+    .champ-mdp button { position: absolute; right: 8px; top: 8px; height: 34px; padding: 0 12px; border: 0; border-radius: 10px; background: none; color: var(--gris); font-family: var(--titres); font-weight: 600; font-size: .82rem; cursor: pointer; }
+    .champ-mdp button:hover { background: var(--gris-clair); color: var(--texte); }
+
+    /* ================= NAV ================= */
+    .nav { position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(1.4) blur(14px); background: rgba(255,255,255,.82); border-bottom: 1px solid transparent; transition: border-color .3s; }
+    .nav.defile { border-color: var(--gris-clair); }
+    .nav .conteneur { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .nav .liens { display: flex; gap: 30px; }
+
+    /* ================= HERO ================= */
+    .hero { position: relative; padding: 90px 0 0; overflow: hidden; }
+    .hero::before { display: none; content: ''; position: absolute; left: 50%; top: -30%; width: 1600px; height: 1600px; margin-left: -800px; background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(148,101,205,.05) 0 4deg, transparent 4deg 12deg); -webkit-mask: radial-gradient(circle, #000 0, transparent 60%); mask: radial-gradient(circle, #000 0, transparent 60%); animation: rayons 120s linear infinite; pointer-events: none; }
+    @keyframes rayons { to { transform: rotate(360deg); } }
+    .hero .conteneur { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 60px; align-items: center; }
+    .hero h1 { font-size: clamp(3rem, 7vw, 6rem); letter-spacing: -.05em; line-height: .92; }
+    .hero h1 .mot { display: inline-block; opacity: 0; transform: translateY(32px) rotate(4deg); animation: mot .9s var(--rebond) forwards; }
+    .hero h1 .surligne { position: relative; color: var(--violet); z-index: 0; }
+    .hero h1 .surligne::after { content: ''; position: absolute; left: -3%; right: -3%; bottom: .06em; height: .24em; background: var(--jaune); z-index: -1; border-radius: 6px; transform: scaleX(0) rotate(-1.5deg); transform-origin: left; animation: trace .7s var(--ease) 1.05s forwards; }
+    @keyframes mot { to { opacity: 1; transform: none; } }
+    @keyframes trace { to { transform: scaleX(1) rotate(-1.5deg); } }
+    .hero .intro { max-width: 500px; margin-top: 26px; font-size: 1.22rem; line-height: 1.5; color: #2f2a26; font-weight: 500; opacity: 0; animation: monte .8s var(--ease) .8s forwards; }
+    .confiance { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; opacity: 0; animation: monte .8s var(--ease) 1s forwards; }
+    .confiance > span { display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; transition: transform .4s var(--rebond); cursor: default; border-radius: 999px; background: var(--blanc); box-shadow: var(--ombre); font-family: var(--titres); font-weight: 600; font-size: .9rem; }
+    .confiance .ico-rond { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; transition: transform .5s var(--rebond); }
+    .confiance .ico-rond svg { width: 18px; height: 18px; stroke: #4b2d80; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .confiance > span:hover .ico-rond { transform: rotate(-12deg) scale(1.1); }
+    @keyframes monte { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+    .carte-co { position: relative; background: var(--blanc); border-radius: 30px; padding: 34px 30px 28px; box-shadow: var(--ombre-forte); opacity: 0; animation: arrive 1s var(--rebond) .45s forwards; z-index: 2; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(40px) rotate(2deg); } to { opacity: 1; transform: none; } }
+    .carte-co .loutre { position: absolute; width: 150px; right: 0; top: -158px; }
+    .carte-co h2 { font-size: 2.1rem; letter-spacing: -.04em; }
+    .carte-co .sous { margin-top: 6px; color: var(--gris); font-size: .96rem; }
+    .bascule { display: flex; background: var(--surface); border-radius: 999px; padding: 4px; margin: 20px 0 2px; position: relative; }
+    .bascule button { flex: 1; position: relative; z-index: 1; border: 0; background: none; height: 40px; border-radius: 999px; font-family: var(--titres); font-weight: 600; font-size: .95rem; color: var(--gris); cursor: pointer; transition: color .3s; }
+    .bascule button.actif { color: var(--texte); }
+    .bascule .curseur { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 999px; background: var(--blanc); box-shadow: 0 1px 3px rgba(0,0,0,.1); transition: transform .5s var(--rebond); }
+    .bascule.droite .curseur { transform: translateX(100%); }
+    .aide { margin-top: 14px; display: flex; gap: 8px; align-items: center; font-size: .86rem; color: var(--gris); }
+
+    /* Pastilles qui tombent (pile de compétences) */
+    .pile { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px 16px; max-width: 1120px; margin: 46px auto 0; padding: 10px 24px 40px; }
+    .pastille { --r: 0deg; position: relative; padding: 11px 22px; border-radius: 999px; font-weight: 600; font-size: clamp(.88rem, 1.4vw, 1.05rem); color: var(--texte); white-space: nowrap; cursor: grab; user-select: none; touch-action: none; opacity: 0; transform: translateY(-260px) rotate(calc(var(--r) * -3)); will-change: transform; }
+    .pastille .flot { display: inline-block; animation: flotteP var(--fd) ease-in-out infinite; animation-delay: var(--fdl); will-change: transform; }
+    .pile.tombe .pastille { animation: tombeP 1.3s var(--rebond) forwards; animation-delay: var(--d); }
+    .pastille:hover { filter: brightness(.97); }
+    .pastille:active { cursor: grabbing; z-index: 5; }
+    @keyframes tombeP { 0% { opacity: 0; transform: translateY(-260px) rotate(calc(var(--r) * -3)); } 25% { opacity: 1; } 75% { transform: translateY(6px) rotate(var(--r)); } 100% { opacity: 1; transform: translateY(0) rotate(var(--r)); } }
+    @keyframes flotteP { 0%, 100% { transform: translate(0, 0) rotate(0); } 33% { transform: translate(var(--fx), -7px) rotate(1.5deg); } 66% { transform: translate(calc(var(--fx) * -1), 3px) rotate(-1.5deg); } }
+
+    /* ================= DIRECT (ticker) ================= */
+    .direct { border-top: 1px solid var(--gris-clair); border-bottom: 1px solid var(--gris-clair); background: var(--blanc); padding: 12px 0; display: flex; align-items: center; gap: 0; overflow: hidden; }
+    .direct .label { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 0 18px 0 24px; font-family: var(--titres); font-weight: 700; font-size: .85rem; color: var(--violet); background: var(--blanc); position: relative; z-index: 2; }
+    .direct .label i { width: 8px; height: 8px; border-radius: 50%; background: #3fbf72; animation: pulse 2s infinite; }
+    .direct .defil { overflow: hidden; flex: 1; -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+    .direct .piste { display: flex; gap: 12px; width: max-content; animation: defile 46s linear infinite; }
+    .direct:hover .piste { animation-play-state: paused; }
+    .evt { display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px; background: var(--surface); font-size: .88rem; white-space: nowrap; }
+    .evt .sticker { width: 30px; }
+    .evt b { font-family: var(--titres); }
+    .evt span { color: var(--gris); }
+    @keyframes defile { to { transform: translateX(-50%); } }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(63,191,114,.55); } 70% { box-shadow: 0 0 0 9px rgba(63,191,114,0); } 100% { box-shadow: 0 0 0 0 rgba(63,191,114,0); } }
+
+    /* ================= SECTIONS ================= */
+    section.bloc { padding: 110px 0 0; }
+    .entete { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 40px; flex-wrap: wrap; }
+    .entete h2 { font-size: clamp(2.2rem, 5vw, 4rem); letter-spacing: -.045em; }
+    .entete p { max-width: 380px; color: var(--texte2); font-size: 1.08rem; font-weight: 500; }
+    .centre { text-align: center; }
+    .centre h2 { font-size: clamp(2.2rem, 5vw, 4rem); letter-spacing: -.045em; }
+    .centre p.sous { max-width: 520px; margin: 14px auto 0; color: var(--texte2); font-size: 1.08rem; font-weight: 500; }
+    .surligne-h { position: relative; color: var(--violet); z-index: 0; }
+    .surligne-h::after { content: ''; position: absolute; left: -2%; right: -2%; bottom: .05em; height: .24em; background: var(--jaune); z-index: -1; border-radius: 6px; transform: rotate(-1deg); }
+    .pouls { position: absolute; top: calc(50% - 9px); left: calc(50% - 9px); width: 18px; height: 18px; border-radius: 50%; background: var(--violet); animation: pulseV 2s infinite; }
+    @keyframes pulseV { 0% { box-shadow: 0 0 0 0 rgba(148,101,205,.45); } 70% { box-shadow: 0 0 0 22px rgba(148,101,205,0); } 100% { box-shadow: 0 0 0 0 rgba(148,101,205,0); } }
+    .inline-pastille { display: inline-flex; vertical-align: middle; width: 1.1em; height: 1em; border-radius: 999px; background: var(--jaune); align-items: center; justify-content: center; transform: rotate(-6deg); margin: 0 .05em; }
+    .inline-pastille svg { width: .95em; }
+
+    /* ================= HISTOIRE ANIMÉE ================= */
+    .histoire-scroll { height: 420vh; padding-top: 80px; }
+    .collant { position: sticky; top: 84px; }
+    .histoire-scroll .centre h2 { font-size: clamp(2rem, 4vw, 3.2rem); }
+    .histoire-scroll .centre p.sous { margin-top: 8px; }
+    .defile-indic { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; color: var(--gris); font-size: .85rem; font-family: var(--titres); font-weight: 600; transition: opacity .4s; }
+    .defile-indic i { width: 18px; height: 28px; border: 2px solid currentColor; border-radius: 10px; position: relative; }
+    .defile-indic i::after { content: ''; position: absolute; left: 50%; top: 5px; width: 3px; height: 6px; margin-left: -1.5px; border-radius: 2px; background: currentColor; animation: molette 1.6s infinite; }
+    @keyframes molette { 0% { opacity: 1; transform: none; } 80% { opacity: 0; transform: translateY(9px); } 100% { opacity: 0; } }
+    .histoire { margin-top: 24px; background: var(--surface); border-radius: 36px; padding: 26px 30px 22px; box-shadow: var(--ombre); position: relative; overflow: hidden; }
+    .histoire::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(148,101,205,.14) 1.2px, transparent 1.3px); background-size: 18px 18px; -webkit-mask: radial-gradient(ellipse at center, #000 30%, transparent 75%); mask: radial-gradient(ellipse at center, #000 30%, transparent 75%); pointer-events: none; }
+    .scene { position: relative; display: grid; grid-template-columns: 1fr 200px 1fr; align-items: center; justify-items: center; gap: 10px; }
+    .tel { width: 270px; height: min(470px, calc(100vh - 380px)); border-radius: 40px; background: var(--surface); border: 8px solid var(--blanc); box-shadow: 0 0 0 1px var(--gris-clair), var(--ombre-forte); display: flex; flex-direction: column; overflow: hidden; position: relative; transition: transform .5s var(--rebond); }
+    .tel.vibre { animation: vibre .5s; }
+    @keyframes vibre { 20%, 60% { transform: translateX(-4px) rotate(-1deg); } 40%, 80% { transform: translateX(4px) rotate(1deg); } }
+    .tel .barre { display: flex; align-items: center; gap: 10px; padding: 16px 14px 12px; background: var(--blanc); border-bottom: 1px solid var(--gris-clair); }
+    .tel .barre .av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-family: var(--titres); font-weight: 700; }
+    .tel .barre b { font-family: var(--titres); display: block; line-height: 1.1; }
+    .tel .barre small { color: var(--gris); font-size: .76rem; }
+    .tel .flux { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; scrollbar-width: none; }
+    .tel .flux::-webkit-scrollbar { display: none; }
+    .tel .flux > * { animation: pop .5s var(--rebond) both; flex: none; }
+    @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.92); } to { opacity: 1; transform: none; } }
+    .t-carte { background: var(--blanc); border-radius: 16px; padding: 10px; box-shadow: var(--ombre); font-size: .84rem; }
+    .t-carte .vis { height: 70px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 8px; }
+    .t-carte .vis .sticker { width: 44px; }
+    .t-carte b { display: block; font-family: var(--titres); font-size: .95rem; line-height: 1.15; margin-top: 6px; letter-spacing: -.01em; }
+    .t-btn { margin-top: 8px; display: flex; gap: 6px; }
+    .t-btn span { flex: 1; text-align: center; padding: 7px 8px; border-radius: 999px; font-family: var(--titres); font-weight: 600; font-size: .78rem; background: var(--violet); color: #fff; transition: all .3s var(--rebond); }
+    .t-btn span.clair { background: var(--fond); color: var(--texte); }
+    .t-btn span.appui { transform: scale(.9); }
+    .t-btn span.fait { background: var(--menthe); color: #1f7a48; }
+    .t-notif { background: var(--lavande); border-radius: 16px; padding: 10px 12px; font-size: .84rem; }
+    .t-notif b { font-family: var(--titres); }
+    .t-coord { display: flex; align-items: center; gap: 8px; background: var(--jaune-pale); border-radius: 14px; padding: 9px 12px; font-family: var(--titres); font-weight: 700; font-size: .9rem; }
+    .t-coord .num { filter: blur(5px); }
+    .t-coord.revele .num { animation: net .9s ease .3s forwards; }
+    @keyframes net { to { filter: blur(0); } }
+    .t-coord .sticker { width: 26px; }
+    .t-bulle { max-width: 82%; padding: 8px 12px; border-radius: 16px; font-size: .86rem; }
+    .t-bulle.moi { align-self: flex-end; background: var(--violet); color: #fff; border-bottom-right-radius: 5px; }
+    .t-bulle.autre { align-self: flex-start; background: var(--blanc); box-shadow: var(--ombre); border-bottom-left-radius: 5px; }
+    .t-ecrit { align-self: flex-start; display: inline-flex; gap: 4px; padding: 10px 12px; border-radius: 14px; background: var(--blanc); box-shadow: var(--ombre); }
+    .t-ecrit.moi { align-self: flex-end; }
+    .t-ecrit i, .ecrit i { width: 6px; height: 6px; border-radius: 50%; background: var(--gris); animation: point 1.2s infinite; }
+    .t-ecrit i:nth-child(2), .ecrit i:nth-child(2) { animation-delay: .15s; } .t-ecrit i:nth-child(3), .ecrit i:nth-child(3) { animation-delay: .3s; }
+    @keyframes point { 0%, 60%, 100% { transform: none; opacity: .4; } 30% { transform: translateY(-4px); opacity: 1; } }
+    .t-photos { align-self: flex-end; background: var(--violet); border-radius: 16px; padding: 6px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 78%; }
+    .t-photos span { aspect-ratio: 1; border-radius: 10px; }
+    .t-photos small { grid-column: 1 / -1; color: #fff; font-size: .76rem; padding: 2px 4px; }
+
+    .milieu { position: relative; width: 200px; height: min(470px, calc(100vh - 380px)); display: grid; place-items: center; }
+    .milieu .fil-lien { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background-image: linear-gradient(90deg, var(--lavande2) 50%, transparent 0); background-size: 12px 2px; }
+    .milieu .voyageur { position: absolute; top: calc(50% - 22px); width: 44px; opacity: 0; }
+    .milieu .voyageur.vers-g { animation: versG 1s var(--ease) forwards; }
+    .milieu .voyageur.vers-d { animation: versD 1s var(--ease) forwards; }
+    @keyframes versG { 0% { left: 150px; opacity: 0; transform: scale(.6); } 20% { opacity: 1; transform: scale(1) rotate(-10deg); } 100% { left: 6px; opacity: 0; transform: scale(.7) rotate(10deg); } }
+    @keyframes versD { 0% { left: 6px; opacity: 0; transform: scale(.6); } 20% { opacity: 1; transform: scale(1) rotate(10deg); } 100% { left: 150px; opacity: 0; transform: scale(.7) rotate(-10deg); } }
+    .badge-final { position: absolute; top: 50%; left: 50%; width: 200px; transform: translate(-50%, -50%) scale(0); text-align: center; background: var(--jaune); border-radius: 26px; padding: 16px 14px 14px; box-shadow: var(--ombre-forte); transition: transform .7s var(--rebond); z-index: 3; }
+    .badge-final.visible { transform: translate(-50%, -50%) scale(1); }
+    .badge-final svg { width: 90px; }
+    .badge-final b { display: block; font-family: var(--titres); font-weight: 800; font-size: 1.1rem; line-height: 1.1; letter-spacing: -.02em; margin-top: 6px; }
+    .badge-final .plus1 { display: inline-block; margin-top: 8px; background: var(--violet); color: #fff; font-family: var(--titres); font-weight: 700; font-size: .8rem; padding: 4px 10px; border-radius: 999px; }
+
+    .etapes-anim { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 30px; }
+    .etapes-anim .rail { position: absolute; left: 10%; right: 10%; top: 17px; height: 4px; border-radius: 4px; background: var(--gris-clair); overflow: hidden; }
+    .etapes-anim .rail i { position: absolute; inset: 0; background: linear-gradient(90deg, var(--violet), #b38be0); transform-origin: left; transform: scaleX(0); transition: transform .8s var(--ease); }
+    .etape-a { position: relative; z-index: 1; border: 0; background: none; cursor: pointer; text-align: center; padding: 0; font: inherit; color: var(--gris); }
+    .etape-a .rond { width: 38px; height: 38px; margin: 0 auto; border-radius: 50%; background: var(--blanc); border: 2px solid var(--gris-clair); display: grid; place-items: center; font-family: var(--titres); font-weight: 700; transition: all .45s var(--rebond); }
+    .etape-a b { display: block; margin-top: 10px; font-family: var(--titres); font-size: .95rem; transition: color .3s; }
+    .etape-a.faite .rond { background: var(--violet); border-color: var(--violet); color: #fff; }
+    .etape-a.active .rond { background: var(--jaune); border-color: var(--violet); color: var(--encre); transform: scale(1.18); box-shadow: 0 0 0 6px rgba(148,101,205,.15); }
+    .etape-a.active b, .etape-a.faite b { color: var(--texte); }
+    .legende { text-align: center; margin-top: 18px; min-height: 26px; font-size: 1.05rem; color: var(--texte2); }
+    .legende span { display: inline-block; animation: pop .5s var(--rebond); }
+
+    /* ================= ÉVENTAIL ================= */
+    .eventail { position: relative; height: 360px; max-width: 1060px; margin: 0 auto; }
+    .mini { position: absolute; left: 50%; top: 50px; width: 176px; margin-left: -88px; border-radius: 24px; padding: 12px 12px 16px; background: var(--blanc); box-shadow: var(--ombre-forte); transform: translate(0, 60px) rotate(0) scale(.85); opacity: 0; transition: transform 1.1s var(--rebond), opacity .6s; }
+    .eventail.ouvert .mini { opacity: 1; transform: translate(var(--x), var(--y)) rotate(var(--r)); transition-delay: var(--d); }
+    .eventail.ouvert .mini:hover { transform: translate(var(--x), calc(var(--y) - 22px)) rotate(0) scale(1.06); z-index: 10; transition: transform .45s var(--rebond); }
+    .mini .vis { height: 108px; border-radius: 16px; display: grid; place-items: center; }
+    .mini .vis .sticker { width: 62px; transition: transform .5s var(--rebond); }
+    .mini:hover .vis .sticker { transform: rotate(-10deg) scale(1.12); }
+    .mini .tag { margin-top: 12px; }
+    .mini b { display: block; margin-top: 8px; font-family: var(--titres); font-weight: 700; font-size: 1rem; letter-spacing: -.02em; line-height: 1.15; }
+    .pseudo { position: absolute; z-index: 12; font-family: var(--titres); font-size: .84rem; font-weight: 600; padding: 6px 12px; border-radius: 999px 999px 999px 4px; color: var(--blanc); opacity: 0; transform: scale(.6); transition: opacity .5s 1.2s, transform .6s var(--rebond) 1.2s; }
+    .eventail.ouvert .pseudo { opacity: 1; transform: none; }
+    .pseudo span { display: inline-block; animation: flotte 4.5s ease-in-out infinite; }
+    @keyframes flotte { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+
+    /* ================= SÉCURITÉ ================= */
+    .securite { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .regle { border-radius: 26px; padding: 24px; display: flex; gap: 16px; align-items: flex-start; transition: transform .45s var(--rebond); }
+    .regle:hover { transform: translateY(-6px) rotate(-1deg); }
+    .regle .sticker { width: 52px; flex: none; transition: transform .5s var(--rebond); }
+    .regle:hover .sticker { transform: rotate(-12deg) scale(1.1); }
+    .regle h3 { font-size: 1.2rem; letter-spacing: -.02em; }
+    .regle p { margin-top: 6px; color: var(--texte2); font-size: .92rem; }
+
+    /* ================= FAQ ================= */
+    .faq { display: grid; grid-template-columns: .8fr 1.2fr; gap: 50px; align-items: start; padding-bottom: 110px; }
+    .faq h2 { font-size: clamp(2.2rem, 4.6vw, 3.6rem); letter-spacing: -.045em; }
+    .faq .gauche p { margin-top: 14px; color: var(--texte2); max-width: 320px; }
+    .faq .gauche .loutre { width: 120px; margin-top: 24px; }
+    .question { background: var(--blanc); border-radius: 20px; margin-bottom: 10px; box-shadow: inset 0 0 0 1px var(--gris-clair); overflow: hidden; }
+    .question button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 22px; border: 0; background: none; text-align: left; font-family: var(--titres); font-weight: 700; font-size: 1.08rem; letter-spacing: -.02em; cursor: pointer; color: var(--texte); }
+    .question .plus { width: 30px; height: 30px; border-radius: 50%; background: var(--surface); display: grid; place-items: center; flex: none; transition: transform .45s var(--rebond), background .3s; font-size: 1.2rem; }
+    .question.ouverte .plus { transform: rotate(45deg); background: var(--jaune); }
+    .question .reponse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease); }
+    .question.ouverte .reponse { grid-template-rows: 1fr; }
+    .question .reponse > div { overflow: hidden; }
+    .question .reponse p { padding: 0 22px 20px; color: var(--texte2); }
+
+    footer { border-top: 1px solid var(--gris-clair); padding: 34px 0; }
+    footer .conteneur { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; color: var(--gris); font-size: .88rem; }
+
+    .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+    .reveal.vu { opacity: 1; transform: none; }
+    .d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; }
+
+    /* ================= APPLI ================= */
+    .appli { display: none; }
+    body.connecte .site { display: none; }
+    body.connecte .appli { display: block; }
+    .app-nav { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,.86); backdrop-filter: blur(14px); border-bottom: 1px solid var(--gris-clair); }
+    .app-nav .conteneur { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .segment { position: relative; display: flex; background: var(--gris-clair); border-radius: 999px; padding: 4px; }
+    .segment .curseur { position: absolute; top: 4px; bottom: 4px; left: 4px; border-radius: 999px; background: var(--blanc); box-shadow: 0 1px 3px rgba(0,0,0,.08); transition: transform .5s var(--rebond), width .5s var(--rebond); }
+    .onglet { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; border: 0; background: none; height: 42px; padding: 0 18px; border-radius: 999px; font-size: .95rem; font-weight: 600; color: var(--gris); cursor: pointer; transition: color .3s; }
+    .onglet.actif { color: var(--texte); }
+    .onglet .notif { min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: var(--rouge); color: var(--blanc); font-size: .72rem; display: grid; place-items: center; animation: pop .5s var(--rebond); }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--lavande); color: var(--violet-fonce); display: grid; place-items: center; font-family: var(--titres); font-weight: 700; flex: none; }
+
+    .page { padding-top: 40px; padding-bottom: 130px; }
+    .ecran { display: none; }
+    .ecran.actif { display: block; }
+    .ecran.actif .entre { animation: monte .7s var(--ease) both; }
+    .ecran.actif .entre:nth-child(2) { animation-delay: .06s; } .ecran.actif .entre:nth-child(3) { animation-delay: .12s; }
+    .titre-page { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
+    .titre-page h1 { font-size: clamp(2.6rem, 5.5vw, 4.4rem); letter-spacing: -.05em; }
+    .compteur { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; color: var(--gris); font-size: .96rem; }
+    .compteur i { width: 8px; height: 8px; border-radius: 50%; background: #3fbf72; animation: pulse 2s infinite; }
+
+    .outils { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+    .filtres { display: inline-flex; background: var(--gris-clair); border-radius: 999px; padding: 4px; gap: 2px; }
+    .filtres button { border: 0; background: none; height: 38px; padding: 0 18px; border-radius: 999px; font-family: var(--titres); font-size: .92rem; font-weight: 600; color: var(--gris); cursor: pointer; transition: all .3s var(--ease); }
+    .filtres button.actif { background: var(--blanc); color: var(--texte); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .recherche { position: relative; width: 300px; }
+    .recherche input { padding-left: 44px; height: 46px; background: var(--blanc); }
+    .recherche svg { position: absolute; left: 15px; top: 14px; color: var(--gris); }
+    .categories { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .categories button { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px 0 8px; border-radius: 999px; border: 1px solid var(--gris-clair); background: var(--blanc); font-family: var(--titres); font-weight: 600; font-size: .9rem; cursor: pointer; transition: all .3s var(--rebond); color: var(--texte); }
+    .categories button .sticker { width: 26px; }
+    .categories button:hover { transform: translateY(-2px); }
+    .categories button.actif { background: var(--lavande); border-color: var(--violet); color: var(--violet-fonce); }
+
+    .annonces { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .annonce { background: var(--blanc); border-radius: 26px; padding: 10px; box-shadow: var(--ombre); transition: transform .45s var(--rebond), box-shadow .45s var(--ease); animation: monte .6s var(--ease) both; display: flex; flex-direction: column; }
+    .annonce:hover { transform: translateY(-8px); box-shadow: var(--ombre-forte); }
+    .annonce .vis { height: 128px; border-radius: 20px; display: grid; place-items: center; position: relative; }
+    .annonce .vis .sticker { width: 72px; transition: transform .5s var(--rebond); }
+    .annonce:hover .vis .sticker { transform: rotate(-10deg) scale(1.12); }
+    .annonce .vis .tag { position: absolute; left: 12px; top: 12px; }
+    .annonce .corps { padding: 14px 10px 8px; display: flex; flex-direction: column; align-items: flex-start; flex: 1; }
+    .annonce h3 { font-size: 1.28rem; font-weight: 700; margin-top: 10px; letter-spacing: -.025em; }
+    .annonce p { margin: 6px 0 16px; color: var(--texte2); font-size: .93rem; flex: 1; }
+    .annonce .pied { align-self: stretch; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .meta { color: var(--gris); font-size: .85rem; }
+    .vide { grid-column: 1 / -1; text-align: center; padding: 30px 20px; }
+    .vide .loutre { width: 130px; }
+    .vide h3 { font-size: 1.4rem; margin-top: 10px; }
+    .vide p { color: var(--gris); margin-top: 6px; }
+
+    .panneau { background: var(--blanc); border-radius: 28px; padding: 26px; box-shadow: var(--ombre); margin-bottom: 18px; }
+    .panneau h2 { font-size: 1.5rem; letter-spacing: -.035em; }
+    .panneau .sous { color: var(--gris); font-size: .92rem; margin-top: 6px; }
+    .grille2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+    .btn-ia { --bg: var(--lavande); --fg: var(--violet-fonce); padding: 0 18px; overflow: hidden; }
+    .btn-ia::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.8) 50%, transparent 70%); transform: translateX(-100%); animation: brille 3.2s ease-in-out infinite; }
+    @keyframes brille { 60%, 100% { transform: translateX(100%); } }
+
+    .demande { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 20px; background: var(--surface); margin-top: 14px; transition: background .4s; }
+    .demande.acceptee { background: var(--menthe); }
+    .demande .txt { flex: 1; }
+    .demande p { margin-top: 6px; font-size: .95rem; }
+    .verrou { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .86rem; color: var(--gris); }
+    .coord { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 14px; border-radius: 999px; background: var(--jaune-pale); font-weight: 600; font-size: .94rem; animation: pop .5s var(--rebond); }
+    .fil { display: flex; flex-direction: column; gap: 8px; margin: 18px 0; min-height: 140px; max-height: 320px; overflow-y: auto; }
+    .bulle { max-width: 76%; padding: 10px 15px; border-radius: 20px; font-size: .96rem; animation: pop .45s var(--rebond) both; }
+    .bulle small { display: block; font-size: .72rem; opacity: .65; margin-bottom: 2px; }
+    .bulle.moi { align-self: flex-end; background: var(--violet); color: var(--blanc); border-bottom-right-radius: 6px; }
+    .bulle.autre { align-self: flex-start; background: var(--surface); border-bottom-left-radius: 6px; }
+    .ecrit { align-self: flex-start; display: inline-flex; gap: 4px; padding: 12px 14px; border-radius: 18px; background: var(--surface); }
+    .ecrire { display: flex; gap: 10px; align-items: center; padding: 6px 6px 6px 18px; border-radius: 999px; background: var(--surface); border: 1px solid var(--gris-clair); }
+    .ecrire input { border: 0; background: none; height: 40px; padding: 0; box-shadow: none; }
+    .ecrire .envoyer { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--violet); color: var(--blanc); display: grid; place-items: center; cursor: pointer; transition: transform .35s var(--rebond); }
+    .ecrire .envoyer:hover { transform: rotate(-14deg) scale(1.08); }
+    .conv-vide { text-align: center; padding: 30px 10px; color: var(--gris); }
+    .conv-vide .sticker { width: 60px; margin: 0 auto 10px; }
+
+    .depot { display: flex; align-items: center; gap: 16px; border: 1.5px dashed #d6d1c7; border-radius: 20px; padding: 16px 20px; color: var(--gris); font-size: .93rem; margin-top: 18px; transition: border-color .3s, background .3s; cursor: pointer; }
+    .depot .sticker { width: 46px; flex: none; }
+    .depot:hover { border-color: var(--violet); background: #faf7fe; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 20px; min-height: 36px; }
+    .chips span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; background: var(--lavande); color: var(--violet-fonce); font-size: .9rem; font-weight: 500; animation: pop .45s var(--rebond) both; }
+    .chips span button { border: 0; background: none; color: inherit; cursor: pointer; padding: 0; opacity: .6; font-size: 1rem; }
+    .chips .squelette { width: 110px; height: 34px; border-radius: 999px; background: linear-gradient(90deg, var(--gris-clair), #f4f1ea, var(--gris-clair)); background-size: 200% 100%; animation: charge 1s linear infinite; }
+    @keyframes charge { to { background-position: -200% 0; } }
+
+    .voile { position: fixed; inset: 0; background: rgba(42,35,32,.28); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .4s; z-index: 60; }
+    .tiroir { position: fixed; top: 12px; right: 12px; bottom: 12px; width: min(480px, calc(100% - 24px)); background: var(--blanc); border-radius: 28px; box-shadow: var(--ombre-forte); z-index: 61; padding: 28px; overflow-y: auto; transform: translateX(110%); transition: transform .6s var(--rebond); }
+    body.publie .voile { opacity: 1; pointer-events: auto; }
+    body.publie .tiroir { transform: none; }
+    .tiroir .haut { display: flex; justify-content: space-between; align-items: center; }
+    .tiroir h2 { font-size: 1.9rem; letter-spacing: -.04em; }
+    .fermer { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--surface); cursor: pointer; font-size: 1.3rem; transition: transform .35s var(--rebond); }
+    .fermer:hover { transform: rotate(90deg); }
+    .choix { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .choix label { margin: 0; }
+    .choix input { position: absolute; opacity: 0; }
+    .choix span { display: block; text-align: center; padding: 14px; border-radius: 16px; border: 1.5px solid var(--gris-clair); font-family: var(--titres); font-weight: 700; color: var(--texte); cursor: pointer; transition: all .3s var(--rebond); }
+    .choix input:checked + span { border-color: var(--violet); background: var(--lavande); color: var(--violet-fonce); transform: scale(1.02); }
+    .ia-ligne { display: flex; gap: 8px; }
+    .ia-ligne input { flex: 1; }
+    .fab { display: none; }
+
+    .toasts { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 80; display: flex; flex-direction: column; gap: 8px; align-items: center; pointer-events: none; }
+    .toast { width: max-content; max-width: calc(100vw - 32px); display: flex; align-items: center; gap: 10px; background: var(--violet); color: var(--blanc); padding: 10px 18px 10px 10px; border-radius: 999px; font-family: var(--titres); font-weight: 600; font-size: .95rem; box-shadow: 0 18px 40px rgba(111,69,176,.35); animation: toast 3.4s var(--rebond) forwards; }
+    .toast .sticker { width: 30px; background: var(--blanc); border-radius: 50%; padding: 3px; }
+    @keyframes toast { 0% { opacity: 0; transform: translateY(20px) scale(.9); } 10%, 85% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(10px); } }
+    .confetti { position: fixed; width: 9px; height: 14px; border-radius: 3px; z-index: 90; pointer-events: none; animation: explose 1.1s var(--ease) forwards; }
+    @keyframes explose { to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; } }
+
+    .msg-co { margin-top: 12px; font-size: .92rem; font-weight: 500; }
+    .msg-co.erreur { color: #c0262d; }
+    .msg-co.ok { color: #1f7a48; }
+    [hidden] { display: none !important; }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 1000px) {
+      .nav .liens { display: none; }
+      .hero { padding-top: 40px; }
+      .hero .conteneur, .grille2, .faq { grid-template-columns: 1fr; }
+      .carte-co { margin-top: 10px; }
+      .securite { grid-template-columns: 1fr; }
+      .scene { grid-template-columns: 1fr 1fr; }
+      .milieu { display: none; }
+      .badge-final { position: fixed; }
+      .tel { width: 100%; max-width: 270px; }
+      .eventail { transform: scale(.72); transform-origin: top center; height: 280px; }
+      .annonces { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav .btn { height: 36px; padding: 0 14px; font-size: .85rem; }
+      .hero h1 { font-size: 3.1rem; }
+      .pile { gap: 10px; margin-top: 30px; }
+      .pastille { padding: 9px 16px; }
+      .histoire { padding: 24px 12px 20px; }
+      .scene { gap: 8px; }
+      .tel { height: calc(100vh - 400px); border-width: 5px; border-radius: 28px; }
+      .histoire-scroll { height: 460vh; }
+      .collant { top: 70px; }
+      .histoire-scroll .centre p.sous { display: none; }
+      .tel .flux { padding: 8px; }
+      .tel .barre small { display: none; }
+      .t-btn { flex-wrap: wrap; }
+      .t-btn span { padding: 6px; font-size: .72rem; }
+      .tel .barre { padding: 12px 10px 10px; }
+      .t-carte, .t-bulle, .t-notif { font-size: .76rem; }
+      .etapes-anim b { font-size: .72rem; }
+      .eventail { transform: scale(.5); height: 210px; }
+      .annonces { grid-template-columns: 1fr; }
+      .recherche { width: 100%; }
+      .app-nav .segment { position: fixed; left: 14px; right: 14px; bottom: 14px; justify-content: space-between; box-shadow: 0 12px 30px rgba(42,35,32,.16); background: var(--blanc); }
+      .app-nav .segment .curseur { background: var(--lavande); box-shadow: none; }
+      .app-nav .onglet { flex: 1; justify-content: center; padding: 0 8px; font-size: .84rem; }
+      .app-nav .onglet.actif { color: var(--violet-fonce); }
+      .titre-page .btn { display: none; }
+      .fab { display: grid; place-items: center; position: fixed; right: 20px; bottom: 92px; width: 58px; height: 58px; border-radius: 50%; background: var(--jaune); border: 0; font-size: 1.8rem; box-shadow: 0 14px 30px rgba(42,35,32,.18); z-index: 41; cursor: pointer; color: var(--encre); }
+      .toasts { bottom: 96px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      h2 .gris .m > span { transform: none !important; }
+      .hero h1 .mot, .hero .intro, .confiance, .carte-co, .reveal, .mini, .pseudo, .pastille { opacity: 1 !important; transform: rotate(var(--r, 0)) !important; }
+      .pastille .flot { animation: none !important; }
+    }
   </style>
 </head>
 <body>
-<main>
-  <h1>Le Bon Pote</h1>
-  <p class="sous-titre">L'entraide entre étudiants du campus de l'ESP</p>
 
-  <!-- Écran : pas connecté -->
-  <section id="ecran-connexion" class="carte cache">
-    <h2>Connexion</h2>
-    <label for="email">E-mail</label>
-    <input id="email" type="email" autocomplete="email">
-    <label for="motdepasse">Mot de passe (6 caractères minimum)</label>
-    <input id="motdepasse" type="password" autocomplete="current-password">
-    <div class="ligne">
-      <button id="btn-connexion" class="principal">Se connecter</button>
-      <button id="btn-inscription" class="secondaire">Créer un compte</button>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="trame-ombre" width="4.2" height="4.2" patternUnits="userSpaceOnUse"><circle cx="2.1" cy="2.1" r="1.25" fill="#9465cd"/></pattern>
+    <pattern id="trame-brun" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.7" fill="#5e3a22"/></pattern>
+    <pattern id="trame-jaune" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.4" fill="#c4c63a"/></pattern>
+    <filter id="encre" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="2"/></filter>
+    <clipPath id="cp-tete"><ellipse cx="122" cy="116" rx="62" ry="54"/></clipPath>
+    <clipPath id="cp-corps"><path d="M88 168C78 190 80 230 96 244C112 254 136 254 152 244C168 230 168 190 156 168Z"/></clipPath>
+  </defs>
+  <symbol id="i-fleche" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.8A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-envoi" viewBox="0 0 24 24"><path d="M5 12l14-7-5 15-3-6z"/></symbol>
+  <symbol id="i-loupe" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+</svg>
+
+<!-- =================== LANDING =================== -->
+<div class="site">
+  <nav class="nav">
+    <div class="conteneur">
+      <a class="logo" href="#" aria-label="le bon pote"><span class="mot-logo" data-logo>le bon pote</span><span class="point">.</span></a>
+      <div class="liens">
+        <a class="lien" href="#histoire">Comment ça marche</a>
+        <a class="lien" href="#campus">Sur le campus</a>
+        <a class="lien" href="#faq">Questions</a>
+      </div>
+      <button class="btn petit sans" onclick="allerConnexion()">Se connecter</button>
     </div>
-    <p id="msg-connexion" class="message"></p>
+  </nav>
+
+  <header class="hero">
+    <div class="conteneur">
+      <div>
+        <h1 id="titre-hero">Un service rendu, un <span class="surligne">pote</span> gagné.</h1>
+        <p class="intro">Propose ce que tu sais faire, trouve qui peut t'aider. Photo, montage, coloc, covoit' : tout se passe entre étudiants du campus.</p>
+        <div class="confiance">
+          <span><span class="ico-rond" style="background:var(--jaune)"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="16" r="1.2" fill="#4b2d80"/></svg></span>Coordonnées privées</span>
+          <span><span class="ico-rond" style="background:var(--lavande)"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9z"/></svg></span>100 % gratuit</span>
+          <span><span class="ico-rond" style="background:var(--peche)"><svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v5"/></svg></span>Réservé au campus</span>
+        </div>
+      </div>
+
+      <div class="carte-co" id="connexion">
+        
+        <h2 id="titre-co">Content de te revoir !</h2>
+        <p class="sous" id="sous-co">Connecte-toi avec ton e-mail étudiant.</p>
+        <div class="bascule" id="bascule"><span class="curseur"></span><button class="actif">Connexion</button><button>Inscription</button></div>
+        <form id="form-co" novalidate>
+        <label for="email">E-mail étudiant</label><input id="email" type="email" placeholder="prenom@ecole.fr" autocomplete="email">
+        <label for="mdp">Mot de passe</label>
+        <div class="champ-mdp"><input id="mdp" type="password" placeholder="6 caractères minimum" autocomplete="current-password"><button type="button" id="voir-mdp">Afficher</button></div>
+        <div style="margin-top:20px"><button type="submit" class="btn plein" id="btn-entrer"><span id="txt-entrer">Se connecter</span> <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
+        <p class="msg-co" id="msg-co" role="status"></p>
+        </form>
+        <p class="aide"><svg class="ico"><use href="#i-lock"/></svg>Tes coordonnées ne sont visibles qu'après ton accord.</p>
+      </div>
+    </div>
+    <div class="pile" id="pile" aria-hidden="true"></div>
+  </header>
+
+  <div class="direct" aria-hidden="true">
+    <span class="label"><i></i>En direct</span>
+    <div class="defil"><div class="piste" id="piste-direct"></div></div>
+  </div>
+
+  <!-- Histoire animée -->
+  <section class="bloc histoire-scroll" id="histoire">
+    <div class="conteneur collant">
+      <div class="centre reveal">
+        <h2>De l'annonce au <span class="surligne-h">service rendu.</span></h2>
+        <p class="sous">Léa cherche un photographe pour la soirée de son asso. Sam sait faire. Regarde comment ça se passe.</p>
+      </div>
+      <div class="histoire reveal">
+        <div class="scene">
+          <div class="tel" id="tel-lea">
+            <div class="barre"><span class="av" style="background:var(--rose)">L</span><div><b>Léa</b><small>Étudiante en com'</small></div></div>
+            <div class="flux" id="flux-lea"></div>
+          </div>
+          <div class="milieu">
+            <div class="fil-lien"></div>
+            <span class="pouls"></span>
+            <span class="voyageur sticker" id="voyageur"></span>
+            <div class="badge-final" id="badge-final"><span class="sticker" data-s="coeur" data-c="#f8dbe3" style="width:64px"></span><b>Un service rendu,<br>un pote gagné !</b><span class="plus1">+1 pote</span></div>
+          </div>
+          <div class="tel" id="tel-sam">
+            <div class="barre"><span class="av" style="background:var(--lavande)">S</span><div><b>Sam</b><small>Photographe amateur</small></div></div>
+            <div class="flux" id="flux-sam"></div>
+          </div>
+        </div>
+        <div class="etapes-anim" id="etapes">
+          <div class="rail"><i id="rail"></i></div>
+          <button class="etape-a" data-e="0"><span class="rond">1</span><b>Annonce</b></button>
+          <button class="etape-a" data-e="1"><span class="rond">2</span><b>Demande</b></button>
+          <button class="etape-a" data-e="2"><span class="rond">3</span><b>Accord</b></button>
+          <button class="etape-a" data-e="3"><span class="rond">4</span><b>Discussion</b></button>
+          <button class="etape-a" data-e="4"><span class="rond">5</span><b>Service rendu</b></button>
+        </div>
+        <p class="legende" id="legende"></p>
+        <div class="defile-indic" id="defile-indic"><i></i>Fais défiler pour suivre l'histoire</div>
+      </div>
+    </div>
   </section>
 
-  <!-- Écran : connecté -->
-  <section id="ecran-appli" class="cache">
-    <div class="carte ligne">
-      <span>Connecté : <strong id="email-connecte"></strong></span>
-      <button id="btn-deconnexion" class="secondaire">Se déconnecter</button>
+  <section class="bloc" id="campus">
+    <div class="conteneur">
+      <div class="entete reveal">
+        <h2>Cette semaine<br><span class="gris">sur le campus.</span></h2>
+        <p>Des étudiants proposent leurs talents, d'autres cherchent un coup de main. Peut-être toi ?</p>
+      </div>
+      <div class="eventail" id="eventail" aria-hidden="true">
+        <div class="mini" style="--x:-440px; --y:46px; --r:-15deg; --d:0s"><div class="vis" style="background:var(--lavande)"><span class="sticker" data-s="appareil" data-c="#ffffff"></span></div><span class="tag propose">Propose</span><b>Photos pour vos soirées d'asso</b></div>
+        <div class="mini" style="--x:-270px; --y:14px; --r:-9deg; --d:.06s"><div class="vis" style="background:var(--jaune-pale)"><span class="sticker" data-s="voiture" data-c="#f19a7c"></span></div><span class="tag cherche">Cherche</span><b>Covoit' Lyon vendredi</b></div>
+        <div class="mini" style="--x:-95px; --y:-4px; --r:-3deg; --d:.12s"><div class="vis" style="background:var(--peche)"><span class="sticker" data-s="bulle" data-c="#ddccf3"></span></div><span class="tag propose">Propose</span><b>Community management pour ton projet</b></div>
+        <div class="mini" style="--x:95px; --y:-4px; --r:3deg; --d:.18s"><div class="vis" style="background:var(--menthe)"><span class="sticker" data-s="ordi" data-c="#ffffff"></span></div><span class="tag cherche">Cherche</span><b>Un site pour mon BDE</b></div>
+        <div class="mini" style="--x:270px; --y:14px; --r:9deg; --d:.24s"><div class="vis" style="background:var(--ciel)"><span class="sticker" data-s="maison" data-c="#ffffff"></span></div><span class="tag cherche">Cherche</span><b>Coloc près du campus</b></div>
+        <div class="mini" style="--x:440px; --y:46px; --r:15deg; --d:.3s"><div class="vis" style="background:var(--rose)"><span class="sticker" data-s="livre" data-c="#eef07a"></span></div><span class="tag propose">Propose</span><b>Cours de maths L1/L2</b></div>
+        <span class="pseudo" style="left:14%; top:4px; background:var(--violet)"><span>@sam</span></span>
+        <span class="pseudo" style="left:46%; top:-8px; background:var(--corail)"><span style="animation-delay:-1.5s">@léa</span></span>
+        <span class="pseudo" style="right:10%; top:20px; background:var(--violet-fonce)"><span style="animation-delay:-3s">@tom</span></span>
+      </div>
     </div>
-
-    <div class="carte">
-      <h2>Mes coordonnées</h2>
-      <p class="info">Elles ne sont visibles que par les personnes dont tu as accepté la demande (ou qui ont accepté la tienne).</p>
-      <label for="contact">Téléphone, Insta, e-mail…</label>
-      <input id="contact" maxlength="200" placeholder="Ex. 06 12 34 56 78 ou @mon.insta">
-      <button id="btn-coordonnees" class="principal">Enregistrer</button>
-      <p id="msg-coordonnees" class="message"></p>
-    </div>
-
-    <div class="carte">
-      <h2>Mon profil</h2>
-      <p class="info">Dépose ton CV en PDF : l'IA propose tes compétences, tu relis et tu corriges avant de valider. Tu peux aussi les écrire à la main.</p>
-      <label for="cv">Mon CV (PDF)</label>
-      <input id="cv" type="file" accept="application/pdf">
-      <button id="btn-analyser" class="ia">✨ Analyser mon CV avec l'IA</button>
-      <p id="msg-profil" class="message"></p>
-      <label for="competences">Mes compétences (une par ligne) : relis et corrige</label>
-      <textarea id="competences" placeholder="Ex.&#10;Photo&#10;Montage vidéo"></textarea>
-      <button id="btn-profil" class="principal">Valider mon profil</button>
-      <p id="msg-profil-ok" class="message"></p>
-    </div>
-
-    <div class="carte">
-      <h2>Demandes reçues</h2>
-      <div id="liste-recues"></div>
-    </div>
-
-    <div class="carte">
-      <h2>Mes demandes envoyées</h2>
-      <div id="liste-envoyees"></div>
-    </div>
-
-    <div class="carte">
-      <h2>Publier une annonce</h2>
-      <label for="type">Je…</label>
-      <select id="type">
-        <option value="propose">propose un service</option>
-        <option value="cherche">cherche un service</option>
-      </select>
-      <label for="mots">Quelques mots pour l'IA (facultatif)</label>
-      <input id="mots" maxlength="200" placeholder="Ex. covoit Lyon vendredi">
-      <button id="btn-rediger" class="ia">✨ Rédiger avec l'IA</button>
-      <p id="msg-ia" class="message"></p>
-      <label for="titre">Titre</label>
-      <input id="titre" maxlength="100" placeholder="Ex. Photos pour vos événements">
-      <label for="description">Description</label>
-      <textarea id="description" maxlength="1000" placeholder="Ce que tu proposes ou ce que tu cherches"></textarea>
-      <button id="btn-publier" class="principal">Publier</button>
-      <p id="msg-annonce" class="message"></p>
-    </div>
-
-    <h2>Les annonces</h2>
-    <div id="liste-annonces"></div>
   </section>
-</main>
+
+  <section class="bloc">
+    <div class="conteneur">
+      <div class="entete reveal">
+        <h2>Ta vie privée,<br><span class="gris">non négociable.</span></h2>
+        <p>Tes infos restent entre de bonnes mains. Toujours.</p>
+      </div>
+      <div class="securite">
+        <div class="regle reveal" style="background:var(--lavande)"><span class="sticker" data-s="cadenas" data-c="#eef07a"></span><div><h3>Tes coordonnées restent privées</h3><p>Tu choisis à qui tu les montres.</p></div></div>
+        <div class="regle reveal d1" style="background:var(--jaune-pale)"><span class="sticker" data-s="crayon" data-c="#ddccf3"></span><div><h3>Tes annonces t'appartiennent</h3><p>Toi seul·e peux les modifier.</p></div></div>
+        <div class="regle reveal d2" style="background:var(--peche)"><span class="sticker" data-s="bulle" data-c="#ffffff"></span><div><h3>Tes conversations aussi</h3><p>Ce qui se dit entre vous reste entre vous.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloc" id="faq">
+    <div class="conteneur faq">
+      <div class="gauche reveal">
+        <h2>Tu te poses<br><span class="gris">des questions ?</span></h2>
+        <p>Tout ce qu'il faut savoir avant de te lancer.</p>
+      </div>
+      <div class="reveal d1">
+        <div class="question ouverte"><button>C'est vraiment gratuit ?<span class="plus">+</span></button><div class="reponse"><div><p>Oui, totalement. On s'entraide entre étudiants, c'est tout.</p></div></div></div>
+        <div class="question"><button>Qui peut voir mon numéro ?<span class="plus">+</span></button><div class="reponse"><div><p>Personne, tant que tu n'as pas accepté une demande de contact. Et seule la personne acceptée le voit.</p></div></div></div>
+        <div class="question"><button>Que fait l'IA avec mon CV ?<span class="plus">+</span></button><div class="reponse"><div><p>Elle te propose tes compétences. Tu relis, tu corriges, et c'est toi qui valides.</p></div></div></div>
+        <div class="question"><button>Je peux supprimer mon annonce ?<span class="plus">+</span></button><div class="reponse"><div><p>Oui, à tout moment. Et personne d'autre que toi ne peut la modifier ou la supprimer.</p></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="conteneur">
+      <a class="logo" href="#" aria-label="le bon pote"><span class="mot-logo" data-logo>le bon pote</span><span class="point">.</span></a>
+      <span>Projet étudiant · Module Vibe Coding · ESP</span>
+    </div>
+  </footer>
+</div>
+
+<!-- =================== APPLI (connecté) =================== -->
+<div class="appli">
+  <nav class="app-nav">
+    <div class="conteneur">
+      <a class="logo" href="#" aria-label="le bon pote"><span class="mot-logo" data-logo>le bon pote</span><span class="point">.</span></a>
+      <div class="segment" id="segment">
+        <span class="curseur"></span>
+        <button class="onglet actif" data-ecran="annonces"><svg class="ico"><use href="#i-home"/></svg>Annonces</button>
+        <button class="onglet" data-ecran="contacts"><svg class="ico"><use href="#i-chat"/></svg>Contacts<span class="notif" id="notif" hidden></span></button>
+        <button class="onglet" data-ecran="profil"><svg class="ico"><use href="#i-user"/></svg>Profil</button>
+      </div>
+      <div class="avatar" id="mon-avatar">?</div>
+    </div>
+  </nav>
+
+  <div class="page conteneur">
+    <!-- Annonces -->
+    <section class="ecran actif" id="annonces">
+      <div class="titre-page entre">
+        <div><h1>Annonces</h1><div class="compteur"><i></i><span id="nb-annonces">…</span></div></div>
+        <button class="btn jaune" onclick="ouvrirTiroir()">Publier une annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
+      </div>
+      <div class="outils entre">
+        <div class="filtres" id="filtres"><button class="actif" data-f="tout">Tout</button><button data-f="propose">Propose</button><button data-f="cherche">Cherche</button></div>
+        <div class="recherche"><svg class="ico"><use href="#i-loupe"/></svg><input id="recherche" placeholder="Photo, coloc, maths…"></div>
+      </div>
+      <div class="annonces" id="liste"></div>
+    </section>
+
+    <!-- Contacts -->
+    <section class="ecran" id="contacts">
+      <div class="titre-page entre"><div><h1>Contacts</h1><div class="compteur" id="compteur-contacts"><i></i>…</div></div></div>
+      <div class="grille2">
+        <div class="entre">
+          <div class="panneau"><h2>Demandes reçues</h2><div id="liste-recues"></div></div>
+          <div class="panneau"><h2>Demandes envoyées</h2><div id="liste-envoyees"></div></div>
+        </div>
+        <div class="panneau entre" id="panneau-conv">
+          <div class="conv-vide" id="conv-vide"><span class="sticker" data-s="bulle" data-c="#ddccf3"></span><b style="font-family:var(--titres); font-size:1.15rem; color:var(--texte)">Pas encore de conversation</b><p style="margin-top:4px">Quand une demande est acceptée, tu peux discuter ici.</p></div>
+          <div id="conv" hidden>
+            <div style="display:flex; gap:12px; align-items:center; justify-content:space-between">
+              <div style="display:flex; gap:12px; align-items:center"><div class="avatar">💬</div><div><b id="conv-titre" style="font-family:var(--titres); font-size:1.05rem"></b><br><span class="meta">Conversation privée</span></div></div>
+              <button class="btn petit clair" id="btn-actualiser">↻ Actualiser</button>
+            </div>
+            <div class="fil" id="fil"></div>
+            <form class="ecrire" id="form-msg"><input id="msg" maxlength="1000" placeholder="Écris ton message…" autocomplete="off"><button class="envoyer" aria-label="Envoyer"><svg class="ico"><use href="#i-envoi"/></svg></button></form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profil -->
+    <section class="ecran" id="profil">
+      <div class="titre-page entre"><div><h1>Profil</h1><div class="compteur" id="mon-email"></div></div></div>
+      <div class="grille2">
+        <div class="panneau entre">
+          <h2>Mes compétences</h2>
+          <p class="sous">Dépose ton CV : l'IA propose, tu relis, tu valides.</p>
+          <input type="file" id="cv" accept="application/pdf" hidden>
+          <div class="depot" id="depot"><span class="sticker" data-s="livre" data-c="#eef07a"></span><div><b style="color:var(--texte)" id="nom-cv">Choisis ton CV (PDF)</b><br><span id="etat-cv">L'IA analysera tes compétences</span></div></div>
+          <div class="chips" id="chips"></div>
+          <div class="ia-ligne" style="margin-bottom:16px"><input id="ajout-comp" maxlength="40" placeholder="Ajouter une compétence à la main"><button class="btn clair sans" id="btn-ajout">Ajouter</button></div>
+          <button class="btn" id="btn-profil">Valider mon profil <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
+        </div>
+        <div class="panneau entre">
+          <h2>Mes coordonnées</h2>
+          <p class="sous">Visibles uniquement par les personnes dont tu acceptes la demande.</p>
+          <label for="contact">Téléphone, Insta, e-mail…</label><input id="contact" maxlength="200" placeholder="Ex. 06 12 34 56 78 ou @mon.insta">
+          <div style="margin-top:16px"><button class="btn sans" id="btn-coord">Enregistrer</button></div>
+          <div style="border-top:1px solid var(--gris-clair); margin:24px 0 18px"></div>
+          <button class="btn petit clair" id="btn-deco">Se déconnecter</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <button class="fab" onclick="ouvrirTiroir()" aria-label="Publier une annonce">+</button>
+</div>
+
+<div class="voile" onclick="fermerTiroir()"></div>
+<aside class="tiroir" aria-label="Publier une annonce">
+  <div class="haut"><h2>Nouvelle annonce</h2><button class="fermer" onclick="fermerTiroir()" aria-label="Fermer">×</button></div>
+  <p class="gris" style="margin-top:6px">Écris quelques mots, l'IA propose un texte. Tu relis avant de publier.</p>
+  <label>Tu…</label>
+  <div class="choix">
+    <label><input type="radio" name="sens" value="propose" checked><span>Proposes</span></label>
+    <label><input type="radio" name="sens" value="cherche"><span>Cherches</span></label>
+  </div>
+  <label for="mots">En quelques mots (facultatif)</label>
+  <div class="ia-ligne"><input id="mots" maxlength="200" placeholder="Ex. covoit Lyon vendredi"><button class="btn btn-ia sans" id="btn-rediger">✨ Rédiger</button></div>
+  <label for="t-titre">Titre</label><input id="t-titre" maxlength="100" placeholder="Le titre de ton annonce">
+  <label for="t-desc">Description</label><textarea id="t-desc" rows="4" maxlength="1000" placeholder="Quelques phrases pour expliquer"></textarea>
+  <div style="margin-top:20px"><button class="btn plein" id="btn-publier">Publier l'annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
+</aside>
+
+<div class="toasts" id="toasts"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-  // Adresse du projet et clé PUBLIQUE (publishable). Jamais la clé secrète ici.
+  const E = '#2a2320';           // encre
+  const BRUN = '#9b6542', BRUN2 = '#7a4b2e', CREME = '#f6e6cc';
+
+  /* ================= LOGO : deux mains qui se serrent ================= */
+  function poignee() {
+    const bras = (coul) => `<rect x="-34" y="-8.5" width="28" height="17" rx="6" fill="${coul}" stroke="${E}" stroke-width="2.6"/><rect x="-7" y="-10.5" width="9" height="21" rx="4.5" fill="#fff" stroke="${E}" stroke-width="2.6"/>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true"><g class="mains">
+      <g transform="translate(22 41) rotate(-40)">${bras('#9465cd')}</g>
+      <g transform="translate(42 41) rotate(-140)">${bras('#eef07a')}</g>
+      <ellipse cx="35" cy="33" rx="12" ry="9.5" transform="rotate(-25 35 33)" fill="#fff" stroke="${E}" stroke-width="2.6"/>
+      <path d="M21 33c1-7 7-12 14-12 5 0 9 3 10 7 1 6-4 12-12 13-7 1-12-2-12-8z" fill="#fff" stroke="${E}" stroke-width="2.6" stroke-linejoin="round"/>
+      <path d="M30 23c3 4 3 10 1 16M36 23c3 4 3 10 1 15" stroke="${E}" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <ellipse cx="27" cy="22.5" rx="6" ry="3.6" transform="rotate(-30 27 22.5)" fill="#fff" stroke="${E}" stroke-width="2.4"/>
+      <path d="M14 12l3 4M32 6v5M50 12l-3 4" stroke="#9465cd" stroke-width="2.6" stroke-linecap="round"/>
+    </g></svg>`;
+  }
+  // Logo typographique : chaque lettre arrive puis ondule au survol, « pote » en violet
+  document.querySelectorAll('[data-logo]').forEach((el) => {
+    let i = 0;
+    el.innerHTML = el.textContent.split(' ').map((mot, m) => {
+      const lettres = [...mot].map((c) => `<span class="l" style="animation-delay:${(0.05 * i).toFixed(2)}s; --dv:${(0.035 * i++).toFixed(2)}s">${c}</span>`).join('');
+      return `<span class="${m === 2 ? 'pote' : ''}" style="display:inline-flex">${lettres}</span>`;
+    }).join('<span class="l esp"> </span>');
+  });
+  document.querySelectorAll('[data-mini-poignee]').forEach((el) => { el.innerHTML = poignee(); });
+  document.querySelectorAll('[data-grande-poignee]').forEach((el) => { el.innerHTML = poignee(); el.firstElementChild.style.width = '90px'; el.style.display = 'inline-block'; });
+
+  /* ================= LOUTRE : mascotte originale, style cartoon années 30 ================= */
+  function gant(x, y, r = 0, s = 1) {
+    const f = (fi, st) => `
+      <ellipse cx="-11" cy="-13" rx="4.8" ry="9" ${fi} ${st}/><ellipse cx="-3.5" cy="-17" rx="4.8" ry="10.5" ${fi} ${st}/>
+      <ellipse cx="4.5" cy="-17" rx="4.8" ry="10.5" ${fi} ${st}/><ellipse cx="11.5" cy="-12" rx="4.4" ry="8.5" ${fi} ${st}/>
+      <ellipse cx="0" cy="1" rx="15" ry="13.5" ${fi} ${st}/><ellipse cx="-15" cy="4" rx="5.5" ry="8.5" transform="rotate(-35 -15 4)" ${fi} ${st}/>
+      <rect x="-12" y="11" width="24" height="10" rx="5" ${fi} ${st}/>`;
+    return `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})">
+      ${f(`fill="${E}"`, `stroke="${E}" stroke-width="6.5"`)}${f('fill="#fff"', '')}
+      <path d="M-5 -3v8M1 -3v8M7 -3v8" stroke="${E}" stroke-width="2.2" stroke-linecap="round"/><path d="M-11 16h22" stroke="${E}" stroke-width="2" stroke-linecap="round"/>
+    </g>`;
+  }
+  function loutre() {
+    return `<svg viewBox="0 20 250 265" aria-hidden="true"><g filter="url(#encre)"><g class="anim">
+      <ellipse class="ombre-sol" cx="125" cy="274" rx="64" ry="8" fill="${E}" opacity=".15"/>
+      <!-- queue -->
+      <g class="queue"><path d="M150 236C176 244 200 238 214 222C220 216 228 220 224 228C212 252 178 262 146 252Z" fill="${BRUN2}" stroke="${E}" stroke-width="4.5" stroke-linejoin="round"/>
+        <path d="M168 248C184 248 200 240 210 230" stroke="url(#trame-brun)" stroke-width="8" fill="none" opacity=".8"/></g>
+      <!-- jambes + chaussures -->
+      <path d="M108 238C104 252 100 260 98 266" stroke="${E}" stroke-width="12" stroke-linecap="round" fill="none"/>
+      <path d="M140 238C144 252 148 260 150 266" stroke="${E}" stroke-width="12" stroke-linecap="round" fill="none"/>
+      <path d="M72 272C70 258 88 252 100 257C111 261 114 270 109 276C104 281 76 281 72 272Z" fill="#eef07a" stroke="${E}" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="M178 272C180 258 162 252 150 257C139 261 136 270 141 276C146 281 174 281 178 272Z" fill="#eef07a" stroke="${E}" stroke-width="4.5" stroke-linejoin="round"/>
+      <ellipse cx="85" cy="262" rx="7" ry="3.4" fill="#fff" transform="rotate(-15 85 262)"/><ellipse cx="165" cy="262" rx="7" ry="3.4" fill="#fff" transform="rotate(15 165 262)"/>
+      <!-- bras qui pend -->
+      <g class="bras-bas"><path d="M92 184C76 194 70 210 72 224" stroke="${E}" stroke-width="11" stroke-linecap="round" fill="none"/>${gant(73, 232, 175, .9)}</g>
+      <!-- corps -->
+      <path d="M88 168C78 190 80 230 96 244C112 254 136 254 152 244C168 230 168 190 156 168Z" fill="${BRUN}"/>
+      <g clip-path="url(#cp-corps)"><ellipse cx="170" cy="214" rx="26" ry="50" fill="${BRUN2}"/><ellipse cx="162" cy="210" rx="16" ry="44" fill="url(#trame-brun)" opacity=".6"/>
+        <ellipse cx="122" cy="214" rx="27" ry="32" fill="${CREME}"/></g>
+      <path d="M88 168C78 190 80 230 96 244C112 254 136 254 152 244C168 230 168 190 156 168Z" fill="none" stroke="${E}" stroke-width="4.5" stroke-linejoin="round"/>
+      <!-- foulard -->
+      <path d="M86 166C104 178 142 178 160 164L158 180C140 190 106 190 88 182Z" fill="#9465cd" stroke="${E}" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M140 182L156 206L132 196Z" fill="#9465cd" stroke="${E}" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="102" cy="178" r="2.2" fill="#eef07a"/><circle cx="118" cy="181" r="2.2" fill="#eef07a"/><circle cx="134" cy="180" r="2.2" fill="#eef07a"/><circle cx="148" cy="174" r="2.2" fill="#eef07a"/>
+      <!-- tête -->
+      <g class="tete">
+        <g class="oreille-g"><circle cx="72" cy="84" r="14" fill="${BRUN}" stroke="${E}" stroke-width="4.5"/><circle cx="73" cy="86" r="6.5" fill="${BRUN2}"/></g>
+        <circle cx="172" cy="84" r="14" fill="${BRUN}" stroke="${E}" stroke-width="4.5"/><circle cx="171" cy="86" r="6.5" fill="${BRUN2}"/>
+        <ellipse cx="122" cy="116" rx="62" ry="54" fill="${BRUN}"/>
+        <g clip-path="url(#cp-tete)"><ellipse cx="190" cy="130" rx="44" ry="70" fill="${BRUN2}"/><ellipse cx="182" cy="122" rx="30" ry="60" fill="url(#trame-brun)" opacity=".55"/></g>
+        <ellipse cx="122" cy="116" rx="62" ry="54" fill="none" stroke="${E}" stroke-width="4.5"/>
+        <path d="M78 98C82 84 92 76 104 74" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".35"/>
+        <!-- museau crème -->
+        <ellipse cx="104" cy="142" rx="27" ry="20" fill="${CREME}" stroke="${E}" stroke-width="3.5"/>
+        <ellipse cx="140" cy="142" rx="27" ry="20" fill="${CREME}" stroke="${E}" stroke-width="3.5"/>
+        <ellipse cx="122" cy="140" rx="24" ry="18" fill="${CREME}"/>
+        <!-- sourcils + yeux -->
+        <path d="M90 92Q101 84 112 90M132 90Q143 84 154 92" fill="none" stroke="${E}" stroke-width="4" stroke-linecap="round"/>
+        <g class="regard"><g class="yeux">
+          <ellipse cx="104" cy="112" rx="10" ry="15" fill="${E}"/><path d="M105 99L113 104L106 111Z" fill="#fff"/>
+          <ellipse cx="140" cy="112" rx="10" ry="15" fill="${E}"/><path d="M141 99L149 104L142 111Z" fill="#fff"/>
+        </g></g>
+        <g class="ferme"><path d="M93 114Q104 105 115 114M129 114Q140 105 151 114" fill="none" stroke="${E}" stroke-width="4.5" stroke-linecap="round"/></g>
+        <!-- moustaches -->
+        <path d="M84 140L60 134M84 146L58 148M86 152L64 160M160 140L184 134M160 146L186 148M158 152L180 160" stroke="${E}" stroke-width="2.4" stroke-linecap="round"/>
+        <g class="joues"><ellipse cx="90" cy="150" rx="7" ry="5" fill="#f4a6b5"/><ellipse cx="154" cy="150" rx="7" ry="5" fill="#f4a6b5"/></g>
+        <!-- nez + bouche -->
+        <path d="M110 128Q122 121 134 128Q131 139 122 141Q113 139 110 128Z" fill="${E}"/><ellipse cx="117" cy="128" rx="3" ry="1.6" fill="#fff"/>
+        <path d="M122 141V146" stroke="${E}" stroke-width="3" stroke-linecap="round"/>
+        <path d="M106 148C112 166 132 166 138 148C130 152 114 152 106 148Z" fill="${E}"/>
+        <rect x="116.5" y="149" width="5" height="6" rx="1.5" fill="#fff"/><rect x="122.5" y="149" width="5" height="6" rx="1.5" fill="#fff"/>
+        <path d="M114 159C118 155 126 155 130 159C126 162 118 162 114 159Z" fill="#e5484d"/>
+      </g>
+      <!-- bras qui salue -->
+      <g class="bras-salut"><path d="M156 182C176 172 188 156 190 136" stroke="${E}" stroke-width="11" stroke-linecap="round" fill="none"/>${gant(191, 124, 12, .9)}</g>
+      <!-- bras qui cachent les yeux (mot de passe) -->
+      <g class="bras-cache">
+        <path d="M92 184C80 160 88 136 100 124" stroke="${E}" stroke-width="11" stroke-linecap="round" fill="none"/>${gant(104, 114, 20, .95)}
+        <path d="M156 182C166 160 158 136 144 124" stroke="${E}" stroke-width="11" stroke-linecap="round" fill="none"/>${gant(140, 114, -20, .95)}
+      </g>
+    </g></g></svg>`;
+  }
+
+  /* ================= PICTOS rétro modernes ================= */
+  const P = {
+    appareil: (c) => `<rect x="16" y="11" width="14" height="9" rx="3" fill="#ddccf3"/><rect x="6" y="17" width="52" height="36" rx="10" fill="${c}"/><path d="M6 27h52" stroke-width="2.6"/><circle cx="32" cy="36" r="12" fill="#eef07a"/><circle cx="32" cy="36" r="6" fill="#9465cd"/><circle cx="29.5" cy="33.5" r="1.8" fill="#fff" stroke="none"/><circle cx="48" cy="22" r="2.6" fill="#f19a7c"/>`,
+    ordi: (c) => `<rect x="11" y="10" width="42" height="31" rx="6" fill="${c}"/><rect x="16" y="15" width="32" height="21" rx="3" fill="#ddccf3"/><path d="M21 22l5 4-5 4M30 31h9" stroke-width="2.6" fill="none"/><path d="M5 44h54l-4 9H9z" fill="#eef07a"/>`,
+    maison: (c) => `<path d="M12 30L32 13l20 17v24H12z" fill="${c}"/><path d="M5 31L32 7l27 24-4.5 5L32 16 9.5 36z" fill="#f19a7c"/><rect x="26" y="37" width="12" height="17" rx="3" fill="#9465cd"/><rect x="40" y="33" width="7" height="7" rx="1.5" fill="#dcedf6"/>`,
+    voiture: (c) => `<path d="M5 44v-8c0-4 3-7 7-7l7-11c2-3 4-4 7-4h13c3 0 5 1 7 4l7 11c4 0 7 3 7 7v8z" fill="${c}"/><path d="M23 29l5-9h9l5 9z" fill="#dcedf6"/><circle cx="18" cy="46" r="7" fill="#9465cd"/><circle cx="46" cy="46" r="7" fill="#9465cd"/><circle cx="18" cy="46" r="2.5" fill="#fff"/><circle cx="46" cy="46" r="2.5" fill="#fff"/><circle cx="54" cy="37" r="2.2" fill="#eef07a"/>`,
+    livre: (c) => `<rect x="13" y="7" width="40" height="50" rx="6" fill="${c}"/><rect x="13" y="7" width="10" height="50" rx="4" fill="#9465cd"/><path d="M30 20h15M30 27h10" stroke-width="3" stroke-linecap="round"/><path d="M40 44l3 6 3-6" fill="#f19a7c"/>`,
+    bulle: (c) => `<path d="M32 9c15 0 25 9 25 21s-10 21-25 21c-4 0-7 0-10-2l-11 7 3-10c-5-4-7-10-7-16 0-12 10-21 25-21z" fill="${c}"/><circle cx="22" cy="30" r="3.4" fill="#9465cd"/><circle cx="32" cy="30" r="3.4" fill="#9465cd"/><circle cx="42" cy="30" r="3.4" fill="#9465cd"/>`,
+    cadenas: (c) => `<path d="M21 29v-8a11 11 0 0 1 22 0v8" fill="none" stroke-width="6"/><rect x="11" y="27" width="42" height="29" rx="9" fill="${c}"/><circle cx="32" cy="39" r="4.2" fill="#9465cd"/><path d="M32 41v7" stroke="#9465cd" stroke-width="4" stroke-linecap="round"/>`,
+    etoile: (c) => `<path d="M32 5l7 16 17 2-13 12 4 17-15-9-15 9 4-17L8 23l17-2z" fill="${c}"/><circle cx="27" cy="22" r="2" fill="#fff" stroke="none"/>`,
+    ecole: (c) => `<path d="M4 25L32 12l28 13-28 13z" fill="#9465cd"/><path d="M16 31v12c0 4 7 8 16 8s16-4 16-8V31L32 38z" fill="${c}"/><path d="M58 26v13" stroke-width="2.6"/><circle cx="58" cy="41" r="3" fill="#eef07a"/>`,
+    crayon: (c) => `<path d="M14 50l4-14 26-26 10 10-26 26z" fill="${c}"/><path d="M40 14l10 10" stroke-width="2.6"/><path d="M14 50l4-14 10 10z" fill="#f6e6cc"/><path d="M14 50l2-6 4 4z" fill="#9465cd"/><path d="M44 10l4-4c2-2 4-2 6 0l4 4c2 2 2 4 0 6l-4 4z" fill="#f19a7c"/>`,
+    coeur: (c) => `<path d="M32 54C14 42 6 32 6 22a12 12 0 0 1 26-6 12 12 0 0 1 26 6c0 10-8 20-26 32z" fill="${c}"/><circle cx="20" cy="22" r="2.4" fill="#fff" stroke="none"/>`
+  };
+  function sticker(type, couleur) {
+    const forme = P[type](couleur);
+    const relief = forme.replace(/fill="[^"]*"/g, 'fill="#ddccf3"').replace(/stroke="[^"]*"/g, 'stroke="#ddccf3"');
+    return `<svg viewBox="0 0 68 68" aria-hidden="true">
+      <g transform="translate(2.5 3)" fill="#ddccf3" stroke="#ddccf3" stroke-width="2.2" stroke-linejoin="round" opacity=".9">${relief}</g>
+      <g fill="${couleur}" stroke="#4b2d80" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">${forme}</g>
+    </svg>`;
+  }
+  const dessinerStickers = (r = document) => r.querySelectorAll('.sticker[data-s]').forEach((el) => { if (!el.innerHTML) el.innerHTML = sticker(el.dataset.s, el.dataset.c); });
+  dessinerStickers();
+
+  const boing = () => {};
+  const lHero = null;
+  const mdp = document.getElementById('mdp');
+  document.getElementById('voir-mdp').addEventListener('click', (e) => {
+    const visible = mdp.type === 'password'; mdp.type = visible ? 'text' : 'password';
+    e.target.textContent = visible ? 'Masquer' : 'Afficher';
+  });
+
+  /* ================= Titre mot par mot ================= */
+  (() => {
+    const h1 = document.getElementById('titre-hero'); let i = 0;
+    [...h1.childNodes].forEach((n) => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach((m) => {
+          if (!m.trim()) { frag.appendChild(document.createTextNode(m)); return; }
+          const s = document.createElement('span'); s.className = 'mot'; s.textContent = m; s.style.animationDelay = (0.09 * i++) + 's'; frag.appendChild(s);
+        });
+        n.replaceWith(frag);
+      } else { n.classList.add('mot'); n.style.animationDelay = (0.09 * i++) + 's'; }
+    });
+  })();
+
+  /* ================= Pastilles : tombent puis flottent doucement ================= */
+  (() => {
+    const pile = document.getElementById('pile');
+    const couleurs = ['var(--lavande)', 'var(--jaune)', 'var(--peche)', 'var(--ciel)', 'var(--rose)', 'var(--menthe)', 'var(--lavande2)'];
+    const mots = ['Photo', 'Montage vidéo', 'Coloc', "Covoit'", 'Dev web', 'Maths', 'Anglais', 'Graphisme', 'Prise de parole', 'Déménagement', 'Relecture de CV', 'Excel', 'Guitare', 'Cuisine', 'Community management', 'Révisions'];
+    pile.innerHTML = mots.map((m, i) => {
+      const r = ((i * 37) % 13) - 6;
+      return `<span class="pastille" style="--r:${r}deg; --d:${(i * 0.06).toFixed(2)}s; --fd:${(5 + (i % 5) * 0.9).toFixed(1)}s; --fdl:${(-i * 0.7).toFixed(1)}s; --fx:${(i % 2 ? 4 : -4)}px; background:${couleurs[i % couleurs.length]}"><span class="flot">${m}</span></span>`;
+    }).join('');
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { pile.classList.add('tombe'); o.disconnect(); } }, { threshold: .2 });
+    o.observe(pile);
+    // Attraper et relâcher : la pastille revient à sa place en douceur
+    pile.querySelectorAll('.pastille').forEach((p) => {
+      let x0, y0;
+      p.addEventListener('pointerdown', (e) => { p.setPointerCapture(e.pointerId); x0 = e.clientX; y0 = e.clientY; p.style.animation = 'none'; p.style.opacity = 1; p.style.transition = 'none'; });
+      p.addEventListener('pointermove', (e) => { if (!p.hasPointerCapture(e.pointerId)) return; p.style.transform = `translate(${e.clientX - x0}px, ${e.clientY - y0}px) rotate(var(--r)) scale(1.06)`; });
+      p.addEventListener('pointerup', () => { p.style.transition = 'transform .9s cubic-bezier(.34,1.56,.64,1)'; p.style.transform = 'rotate(var(--r))'; });
+    });
+  })();
+
+  /* ================= Fil « en direct » ================= */
+  (() => {
+    const evts = [['appareil', '#ffffff', 'Sam', 'a aidé Léa', 'photos de soirée'], ['voiture', '#f19a7c', 'Inès', 'a trouvé un covoit', 'Lyon'], ['livre', '#eef07a', 'Tom', 'propose', 'cours de maths'], ['maison', '#ffffff', 'Yanis', 'cherche', 'une coloc'], ['ordi', '#ffffff', 'Chloé', 'a aidé le BDE', 'site web'], ['bulle', '#ddccf3', 'Nora', 'propose', 'community management'], ['coeur', '#f8dbe3', 'Hugo', 'a gagné un pote', 'déménagement']];
+    const html = evts.map(([s, c, n, v, q]) => `<span class="evt"><span class="sticker">${sticker(s, c)}</span><b>${n}</b> ${v} · <span>${q}</span></span>`).join('');
+    document.getElementById('piste-direct').innerHTML = html + html;
+  })();
+
+  /* ================= HISTOIRE ANIMÉE ================= */
+  const H = (() => {
+    const fl = document.getElementById('flux-lea'), fs = document.getElementById('flux-sam');
+    const telL = document.getElementById('tel-lea'), telS = document.getElementById('tel-sam');
+    const voy = document.getElementById('voyageur'), badge = document.getElementById('badge-final');
+    const leg = document.getElementById('legende'), rail = document.getElementById('rail');
+    const etapes = [...document.querySelectorAll('.etape-a')];
+    const LEGENDES = ['Léa publie une annonce en 3 mots, l\'IA rédige le reste.', 'Sam demande le contact. Ses coordonnées à elle restent cachées.', 'Léa accepte : les coordonnées s\'affichent, pour eux deux seulement.', 'Ils s\'organisent dans une conversation privée.', 'Le service est rendu. Un pote de gagné !'];
+    const ajoute = (f, html) => { f.insertAdjacentHTML('beforeend', html); const el = f.lastElementChild; f.scrollTo({ top: f.scrollHeight, behavior: 'smooth' }); return el; };
+    const carte = (avecBouton) => `<div class="t-carte"><div class="vis" style="background:var(--lavande)"><span class="sticker">${sticker('appareil', '#ffffff')}</span></div><span class="tag cherche">Cherche</span><b>Un·e photographe pour la soirée de mon asso</b>${avecBouton ? '<div class="t-btn"><span id="b-demander">Demander le contact</span></div>' : '<div class="meta" style="margin-top:6px">✓ Publiée</div>'}</div>`;
+    const ecrit = (f, moi) => ajoute(f, `<div class="t-ecrit ${moi ? 'moi' : ''}"><i></i><i></i><i></i></div>`);
+    const voyage = (sens, s, c) => { voy.innerHTML = sticker(s, c); voy.className = 'voyageur sticker'; void voy.offsetWidth; voy.classList.add(sens); };
+    const vibre = (t) => { t.classList.remove('vibre'); void t.offsetWidth; t.classList.add('vibre'); };
+    const message = (deSam, txt) => { ajoute(fs, `<div class="t-bulle ${deSam ? 'moi' : 'autre'}">${txt}</div>`); ajoute(fl, `<div class="t-bulle ${deSam ? 'autre' : 'moi'}">${txt}</div>`); };
+
+    // Les « temps forts » de l'histoire : [étape, délai avant (ms), action]
+    const BEATS = [
+      [0, 400, () => ajoute(fl, `<div class="t-notif"><b>✨ L'IA rédige…</b><br>« photographe soirée asso »</div>`)],
+      [0, 1300, () => ajoute(fl, carte(false))],
+      [0, 700, () => voyage('vers-d', 'appareil', '#ffffff')],
+      [0, 800, () => ajoute(fs, carte(true))],
+      [1, 1400, () => document.getElementById('b-demander').classList.add('appui')],
+      [1, 250, () => { const b = document.getElementById('b-demander'); b.classList.remove('appui'); b.classList.add('fait'); b.textContent = '✓ Demande envoyée'; voyage('vers-g', 'bulle', '#ddccf3'); }],
+      [1, 900, () => { vibre(telL); ajoute(fl, `<div class="t-notif"><b>Un étudiant veut te contacter</b><br>🔒 Ses coordonnées sont cachées<div class="t-btn"><span id="b-accepter">Accepter</span><span class="clair">Refuser</span></div></div>`); }],
+      [2, 1500, () => document.getElementById('b-accepter').classList.add('appui')],
+      [2, 250, () => { const b = document.getElementById('b-accepter'); b.classList.remove('appui'); b.classList.add('fait'); b.textContent = '✓ Acceptée'; voyage('vers-d', 'cadenas', '#eef07a'); }],
+      [2, 800, () => { vibre(telS); const a = ajoute(fs, `<div class="t-coord"><span class="sticker">${sticker('cadenas', '#eef07a')}</span><span class="num">06 12 34 56 48</span></div>`); const b = ajoute(fl, `<div class="t-coord"><span class="sticker">${sticker('cadenas', '#eef07a')}</span><span class="num">06 98 76 54 21</span></div>`); setTimeout(() => { a.classList.add('revele'); b.classList.add('revele'); }, 60); }],
+      [3, 1500, () => ecrit(fs, true)],
+      [3, 900, () => { fs.lastElementChild.remove(); message(true, 'Salut ! C\'est pour quand ?'); }],
+      [3, 900, () => ecrit(fl, true)],
+      [3, 1000, () => { fl.lastElementChild.remove(); message(false, 'Samedi 12, au foyer 🎉'); }],
+      [3, 900, () => ecrit(fs, true)],
+      [3, 900, () => { fs.lastElementChild.remove(); message(true, 'Parfait, j\'apporte mon appareil 📸'); }],
+      [4, 1500, () => { const p = ['#ddccf3', '#eef07a', '#f19a7c', '#dcedf6', '#f8dbe3', '#dcf1e4']; ajoute(fs, `<div class="t-photos">${p.map((c) => `<span style="background:${c}"></span>`).join('')}<small>24 photos envoyées</small></div>`); voyage('vers-g', 'appareil', '#ffffff'); }],
+      [4, 900, () => { vibre(telL); ajoute(fl, `<div class="t-photos" style="align-self:flex-start; background:var(--blanc); box-shadow:var(--ombre)">${['#ddccf3', '#eef07a', '#f19a7c', '#dcedf6', '#f8dbe3', '#dcf1e4'].map((c) => `<span style="background:${c}"></span>`).join('')}<small style="color:var(--gris)">24 photos reçues</small></div>`); }],
+      [4, 900, () => message(false, 'Elles sont trop belles, merci !! 🙌')],
+      [4, 700, () => { badge.classList.add('visible'); const r = badge.getBoundingClientRect(); confettis({ clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 }); }]
+
+    ];
+    const marquer = (e) => {
+      etapes.forEach((b, i) => { b.classList.toggle('faite', i < e); b.classList.toggle('active', i === e); });
+      rail.style.transform = `scaleX(${e / (etapes.length - 1)})`;
+      if (leg.dataset.e !== String(e)) { leg.dataset.e = e; leg.innerHTML = `<span>${LEGENDES[e]}</span>`; }
+    };
+    const reset = () => { fl.innerHTML = ''; fs.innerHTML = ''; badge.classList.remove('visible'); voy.className = 'voyageur sticker'; };
+    // Le défilement pilote l'histoire : chaque « temps fort » correspond à une portion du scroll
+    const section = document.getElementById('histoire');
+    const indic = document.getElementById('defile-indic');
+    let fait = 0;
+    const allerA = (cible) => {
+      if (cible < fait) { reset(); fait = 0; const sauvegarde = document.body.classList.contains('rapide'); for (; fait < cible; fait++) BEATS[fait][2](); return; }
+      for (; fait < cible; fait++) BEATS[fait][2]();
+    };
+    const majScroll = () => {
+      const r = section.getBoundingClientRect();
+      const total = section.offsetHeight - innerHeight;
+      const prog = Math.min(1, Math.max(0, -r.top / total));
+      const cible = Math.min(BEATS.length, Math.floor(prog * (BEATS.length + 1)));
+      allerA(cible);
+      const etape = cible === 0 ? 0 : BEATS[Math.min(cible, BEATS.length) - 1][0];
+      marquer(etape);
+      indic.style.opacity = prog > .05 ? 0 : 1;
+    };
+    let attente = false;
+    addEventListener('scroll', () => { if (!attente) { attente = true; requestAnimationFrame(() => { majScroll(); attente = false; }); } }, { passive: true });
+    addEventListener('resize', majScroll);
+    // Clic sur une étape : on fait défiler jusqu'au bon endroit
+    etapes.forEach((b, i) => b.addEventListener('click', () => {
+      const premier = BEATS.findIndex((x) => x[0] === i);
+      const total = section.offsetHeight - innerHeight;
+      scrollTo({ top: section.offsetTop + total * ((premier + 1.2) / (BEATS.length + 1)), behavior: 'smooth' });
+    }));
+    majScroll();
+    return { lancer: () => {} };
+  })();
+
+  /* Deuxième ligne des titres : mots qui surgissent + surlignage jaune */
+  document.querySelectorAll('h2 .gris').forEach((g) => {
+    g.innerHTML = g.textContent.split(' ').map((m, i) => `<span class="m"><span style="--dm:${(i * 0.08).toFixed(2)}s">${m}</span></span>`).join(' ');
+  });
+
+  /* ================= Défilement ================= */
+  const nav = document.querySelector('.nav');
+  addEventListener('scroll', () => nav.classList.toggle('defile', scrollY > 10), { passive: true });
+  const obs = new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    if (e.target.id === 'eventail') e.target.classList.add('ouvert');
+    else if (e.target.classList.contains('histoire')) { e.target.classList.add('vu'); H.lancer(); }
+    else e.target.classList.add('vu');
+    obs.unobserve(e.target);
+  }), { threshold: 0.25 });
+  document.querySelectorAll('.reveal, #eventail').forEach((el) => obs.observe(el));
+  document.querySelectorAll('.question button').forEach((b) => b.addEventListener('click', () => {
+    const q = b.parentElement, o = q.classList.contains('ouverte');
+    document.querySelectorAll('.question').forEach((x) => x.classList.remove('ouverte'));
+    if (!o) q.classList.add('ouverte');
+  }));
+
+  /* ================= Toasts & confettis ================= */
+  function toast(texte, s = 'etoile', c = '#eef07a') {
+    const t = document.createElement('div'); t.className = 'toast';
+    t.innerHTML = `<span class="sticker">${sticker(s, c)}</span>${texte}`;
+    document.getElementById('toasts').appendChild(t); setTimeout(() => t.remove(), 3500);
+  }
+  function confettis(e) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const x = e && e.clientX ? e.clientX : innerWidth / 2, y = e && e.clientY ? e.clientY : innerHeight / 2;
+    const couleurs = ['#9465cd', '#eef07a', '#f19a7c', '#ddccf3', '#dcedf6'];
+    for (let i = 0; i < 26; i++) {
+      const c = document.createElement('span'); c.className = 'confetti';
+      c.style.left = x + 'px'; c.style.top = y + 'px'; c.style.background = couleurs[i % couleurs.length];
+      const a = Math.random() * Math.PI * 2, d = 60 + Math.random() * 120;
+      c.style.setProperty('--dx', Math.cos(a) * d + 'px'); c.style.setProperty('--dy', Math.sin(a) * d + 80 + 'px'); c.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+      document.body.appendChild(c); setTimeout(() => c.remove(), 1200);
+    }
+  }
+
+  /* =====================================================================
+     APPLI RÉELLE (Supabase + IA). Clé PUBLIQUE uniquement, jamais la secrète.
+     ===================================================================== */
   const SUPABASE_URL = 'https://vvmjwavdgynoxcwonulh.supabase.co';
   const SUPABASE_CLE_PUBLIQUE = 'sb_publishable_9C6yu87w8il49xSCxpisRA_13jgF0wf';
-
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_CLE_PUBLIQUE);
   const $ = (id) => document.getElementById(id);
-  let moi = null; // l'utilisateur connecté
+  let moi = null;
+  const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const STATUTS = { en_attente: '⏳ En attente', acceptee: '✓ Acceptée', refusee: '✕ Refusée' };
+  const FONDS = ['var(--lavande)', 'var(--jaune-pale)', 'var(--peche)', 'var(--menthe)', 'var(--ciel)', 'var(--rose)'];
+  const quand = (d) => {
+    const m = (Date.now() - new Date(d)) / 60000;
+    if (m < 1) return "À l'instant"; if (m < 60) return `Il y a ${Math.floor(m)} min`;
+    if (m < 1440) return `Il y a ${Math.floor(m / 60)} h`; if (m < 2880) return 'Hier';
+    return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+  };
+  // Picto choisi selon les mots de l'annonce (purement décoratif)
+  const pictoPour = (t) => {
+    t = t.toLowerCase();
+    if (/photo|vid|montage|film|tournage/.test(t)) return ['appareil', '#ffffff'];
+    if (/covoit|voiture|trajet|route|train/.test(t)) return ['voiture', '#f19a7c'];
+    if (/coloc|chambre|appart|logement|déménag|demenag/.test(t)) return ['maison', '#ffffff'];
+    if (/site|dev|code|web|appli|excel|informatique/.test(t)) return ['ordi', '#ffffff'];
+    if (/cours|math|révis|revis|anglais|langue|partiel|cv/.test(t)) return ['livre', '#eef07a'];
+    if (/communit|réseau|reseau|insta|com/.test(t)) return ['bulle', '#ddccf3'];
+    return ['etoile', '#eef07a'];
+  };
 
-  const STATUTS = { en_attente: '⏳ En attente', acceptee: '✅ Acceptée', refusee: '❌ Refusée' };
-
-  function afficherMessage(id, texte, type) {
-    const el = $(id);
-    el.textContent = texte;
-    el.className = 'message ' + (type || '');
+  /* ---------- Connexion / inscription ---------- */
+  let modeInscription = false;
+  const bascule = $('bascule');
+  bascule.querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => {
+    bascule.querySelectorAll('button').forEach((x) => x.classList.remove('actif'));
+    b.classList.add('actif'); bascule.classList.toggle('droite', i === 1); modeInscription = i === 1;
+    $('titre-co').textContent = i ? 'Bienvenue, futur pote !' : 'Content de te revoir !';
+    $('sous-co').textContent = i ? 'Crée ton compte en 30 secondes.' : 'Connecte-toi avec ton e-mail étudiant.';
+    $('txt-entrer').textContent = i ? 'Créer mon compte' : 'Se connecter';
+    msgCo('');
+  }));
+  const msgCo = (t, type) => { const el = $('msg-co'); el.textContent = t; el.className = 'msg-co ' + (type || ''); };
+  const BTN_ENTRER = $('btn-entrer').innerHTML;
+  async function entrer(e) {
+    e.preventDefault();
+    const email = $('email').value.trim(), password = mdp.value;
+    if (!email || password.length < 6) return msgCo('Entre ton e-mail et un mot de passe de 6 caractères minimum.', 'erreur');
+    const b = $('btn-entrer'); b.disabled = true;
+    b.innerHTML = '<span>Un instant…</span><span class="fleche"><span class="spin"></span></span>';
+    let res;
+    if (modeInscription) res = await db.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
+    else res = await db.auth.signInWithPassword({ email, password });
+    b.disabled = false; b.innerHTML = BTN_ENTRER;
+    if (modeInscription) $('txt-entrer').textContent = 'Créer mon compte';
+    if (res.error) return msgCo(modeInscription ? 'Inscription impossible : ' + res.error.message : 'E-mail ou mot de passe incorrect, ou compte pas encore confirmé.', 'erreur');
+    if (modeInscription && !res.data.session) return msgCo('Compte créé ! Clique sur le lien reçu par e-mail pour le confirmer, puis connecte-toi.', 'ok');
+    confettis(e);
+  }
+  $('form-co').addEventListener('submit', entrer);
+  function allerConnexion() {
+    $('connexion').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => $('email').focus({ preventScroll: true }), 500);
   }
 
-  // Petit outil pour créer un élément avec du texte (jamais de HTML injecté)
-  function el(balise, classe, texte) {
-    const e = document.createElement(balise);
-    if (classe) e.className = classe;
-    if (texte !== undefined) e.textContent = texte;
-    return e;
-  }
-
-  // Affiche le bon écran selon que l'on est connecté ou non
-  async function rafraichirEcran() {
+  /* ---------- Session ---------- */
+  async function rafraichir() {
     const { data } = await db.auth.getSession();
-    const session = data.session;
-    moi = session ? session.user : null;
-    $('ecran-connexion').classList.toggle('cache', !!session);
-    $('ecran-appli').classList.toggle('cache', !session);
-    if (session) {
-      $('email-connecte').textContent = session.user.email;
-      chargerTout();
+    moi = data.session ? data.session.user : null;
+    document.body.classList.toggle('connecte', !!moi);
+    if (!moi) return;
+    $('mon-avatar').textContent = (moi.email || '?')[0].toUpperCase();
+    $('mon-email').textContent = moi.email;
+    scrollTo(0, 0); requestAnimationFrame(placerCurseur);
+    await Promise.all([chargerCoordonnees(), chargerProfil()]);
+    await chargerDemandes(); await chargerAnnonces();
+  }
+  db.auth.onAuthStateChange((ev, session) => { if ((session ? session.user.id : null) !== (moi ? moi.id : null)) rafraichir(); });
+  $('btn-deco').addEventListener('click', async () => { await db.auth.signOut(); scrollTo(0, 0); });
+
+  /* ---------- Onglets ---------- */
+  const segment = $('segment'), curseur = segment.querySelector('.curseur');
+  const placerCurseur = () => { const a = segment.querySelector('.onglet.actif'); if (!a.offsetWidth) return; curseur.style.width = a.offsetWidth + 'px'; curseur.style.transform = 'translateX(' + (a.offsetLeft - 4) + 'px)'; };
+  function ouvrirOnglet(nom) {
+    segment.querySelectorAll('.onglet').forEach((x) => x.classList.toggle('actif', x.dataset.ecran === nom));
+    document.querySelectorAll('.ecran').forEach((x) => x.classList.toggle('actif', x.id === nom));
+    placerCurseur(); scrollTo({ top: 0, behavior: 'smooth' });
+    if (nom === 'contacts') chargerDemandes();
+  }
+  segment.querySelectorAll('.onglet').forEach((o) => o.addEventListener('click', () => ouvrirOnglet(o.dataset.ecran)));
+  addEventListener('resize', placerCurseur);
+
+  /* ---------- Annonces ---------- */
+  let annonces = [], mesDemandes = {};
+  const filtre = { f: 'tout', q: '' };
+  let tourA = 0;
+  async function chargerAnnonces() {
+    const t = ++tourA;
+    const { data, error } = await db.from('annonces').select('id, type, titre, description, created_at, auteur_id').order('created_at', { ascending: false });
+    if (t !== tourA) return;
+    if (error) { $('liste').innerHTML = '<p class="meta">Impossible de charger les annonces.</p>'; return; }
+    annonces = data; afficherAnnonces();
+  }
+  function afficherAnnonces() {
+    const n = annonces.length;
+    $('nb-annonces').textContent = n + (n > 1 ? ' annonces en ligne sur le campus' : ' annonce en ligne sur le campus');
+    const q = filtre.q.toLowerCase();
+    const res = annonces.filter((a) => (filtre.f === 'tout' || a.type === filtre.f) && (!q || (a.titre + ' ' + (a.description || '')).toLowerCase().includes(q)));
+    if (!res.length) {
+      $('liste').innerHTML = `<div class="vide"><span class="sticker" style="width:80px">${sticker('etoile', '#eef07a')}</span><h3>${n ? 'Aucune annonce ne correspond' : 'Pas encore d’annonce'}</h3><p>${n ? 'Essaie un autre mot, ou publie ta propre annonce.' : 'Sois le premier ou la première à publier !'}</p><div style="margin-top:16px"><button class="btn jaune" onclick="ouvrirTiroir()">Publier une annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div></div>`;
+      return;
     }
+    $('liste').innerHTML = res.map((a, i) => {
+      const [s, c] = pictoPour(a.titre + ' ' + (a.description || ''));
+      const nouveau = Date.now() - new Date(a.created_at) < 86400000;
+      let action;
+      if (a.auteur_id === moi.id) action = `<button class="btn petit clair" onclick="supprimerAnnonce('${a.id}')">Supprimer</button>`;
+      else if (mesDemandes[a.id]) action = `<button class="btn petit ok" disabled>${STATUTS[mesDemandes[a.id]]}</button>`;
+      else action = `<button class="btn petit sans" onclick="demander(this, '${a.id}', '${a.auteur_id}', event)">Demander le contact</button>`;
+      return `<article class="annonce" style="animation-delay:${Math.min(i, 8) * 0.05}s">
+        <div class="vis" style="background:${FONDS[i % FONDS.length]}">${nouveau ? '<span class="tag nouveau">Nouveau</span>' : ''}<span class="sticker">${sticker(s, c)}</span></div>
+        <div class="corps">
+          <span class="tag ${a.type}"><span class="pt"></span>${a.type === 'propose' ? 'Propose' : 'Cherche'}</span>
+          <h3>${esc(a.titre)}</h3><p>${esc(a.description)}</p>
+          <div class="pied"><span class="meta">${a.auteur_id === moi.id ? 'Ton annonce · ' : ''}${quand(a.created_at)}</span>${action}</div>
+        </div></article>`;
+    }).join('');
+  }
+  $('filtres').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('filtres').querySelectorAll('button').forEach((x) => x.classList.remove('actif')); b.classList.add('actif');
+    filtre.f = b.dataset.f; afficherAnnonces();
+  });
+  $('recherche').addEventListener('input', (e) => { filtre.q = e.target.value; afficherAnnonces(); });
+
+  async function demander(b, idAnnonce, auteur, e) {
+    b.disabled = true; b.innerHTML = '<span class="spin"></span>Envoi…';
+    const { error } = await db.from('demandes').insert({ annonce_id: idAnnonce, proprietaire_id: auteur });
+    if (error) {
+      b.disabled = false; b.textContent = 'Demander le contact';
+      return toast(error.code === '23505' ? 'Tu as déjà demandé le contact pour cette annonce.' : 'Demande impossible : ' + error.message, 'bulle', '#f8dbe3');
+    }
+    confettis(e); toast('Demande envoyée ! Tu verras sa réponse dans Contacts.', 'bulle', '#ddccf3');
+    await chargerDemandes(); afficherAnnonces();
+  }
+  async function supprimerAnnonce(id) {
+    if (!confirm('Supprimer cette annonce ?')) return;
+    const { error } = await db.from('annonces').delete().eq('id', id);
+    if (error) return toast('Suppression impossible : ' + error.message, 'crayon', '#f8dbe3');
+    toast('Annonce supprimée', 'crayon', '#ddccf3'); chargerAnnonces();
   }
 
-  async function chargerTout() {
-    await chargerMesCoordonnees();
-    await chargerMonProfil();
-    await chargerDemandes();
-    await chargerAnnonces();
+  /* ---------- Publier (tiroir + IA) ---------- */
+  function ouvrirTiroir() { document.body.classList.add('publie'); setTimeout(() => $('mots').focus(), 400); }
+  function fermerTiroir() { document.body.classList.remove('publie'); }
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') fermerTiroir(); });
+
+  async function appelerIA(tache, texte) {
+    const { data } = await db.auth.getSession();
+    const ctrl = new AbortController(); const minuterie = setTimeout(() => ctrl.abort(), 30000);
+    try {
+      const r = await fetch('/api/ia', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.session.access_token }, body: JSON.stringify({ tache, texte }), signal: ctrl.signal });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.erreur || "L'IA ne répond pas pour le moment.");
+      return j;
+    } catch (e) {
+      if (e.name === 'AbortError') throw new Error("L'IA met trop de temps à répondre.");
+      throw e;
+    } finally { clearTimeout(minuterie); }
   }
-
-  // ---------- Comptes ----------
-  $('btn-inscription').addEventListener('click', async () => {
-    const email = $('email').value.trim();
-    const motdepasse = $('motdepasse').value;
-    if (!email || motdepasse.length < 6) {
-      return afficherMessage('msg-connexion', 'Entre un e-mail et un mot de passe de 6 caractères minimum.', 'erreur');
-    }
-    const { data, error } = await db.auth.signUp({
-      email, password: motdepasse,
-      options: { emailRedirectTo: window.location.origin }
-    });
-    if (error) return afficherMessage('msg-connexion', 'Inscription impossible : ' + error.message, 'erreur');
-    if (!data.session) {
-      afficherMessage('msg-connexion', 'Compte créé ! Clique sur le lien reçu par e-mail pour le confirmer, puis connecte-toi.', 'ok');
-    }
-    rafraichirEcran();
+  const taper = (el, texte, v = 12) => new Promise((ok) => { el.value = ''; if (!texte) return ok(); let i = 0; const t = setInterval(() => { el.value += texte[i++] || ''; if (i >= texte.length) { clearInterval(t); ok(); } }, v); });
+  $('btn-rediger').addEventListener('click', async () => {
+    const mots = $('mots').value.trim();
+    if (mots.length < 2) return toast("Écris d'abord quelques mots (ex. « photo soirée asso »).", 'crayon', '#ddccf3');
+    const b = $('btn-rediger'); b.disabled = true; b.innerHTML = '<span class="spin"></span>L\'IA écrit…';
+    try {
+      const sens = document.querySelector('input[name=sens]:checked').value === 'propose' ? 'Je propose : ' : 'Je cherche : ';
+      const r = await appelerIA('annonce', sens + mots);
+      await taper($('t-titre'), r.titre, 20); await taper($('t-desc'), r.description, 8);
+      toast('Relis et modifie si besoin, puis publie.', 'etoile', '#ddccf3');
+    } catch (err) { toast(err.message + ' Tu peux écrire à la main.', 'crayon', '#f8dbe3'); }
+    b.disabled = false; b.innerHTML = '✨ Rédiger';
+  });
+  $('btn-publier').addEventListener('click', async (e) => {
+    const titre = $('t-titre').value.trim(), description = $('t-desc').value.trim();
+    if (titre.length < 3) return toast('Ajoute un titre (3 caractères minimum).', 'crayon', '#f8dbe3');
+    const b = $('btn-publier'); b.disabled = true;
+    const { error } = await db.from('annonces').insert({ type: document.querySelector('input[name=sens]:checked').value, titre, description });
+    b.disabled = false;
+    if (error) return toast('Publication impossible : ' + error.message, 'crayon', '#f8dbe3');
+    $('t-titre').value = ''; $('t-desc').value = ''; $('mots').value = '';
+    fermerTiroir(); confettis(e); toast('Ton annonce est en ligne !', 'etoile', '#eef07a');
+    ouvrirOnglet('annonces'); chargerAnnonces();
   });
 
-  $('btn-connexion').addEventListener('click', async () => {
-    const { error } = await db.auth.signInWithPassword({
-      email: $('email').value.trim(),
-      password: $('motdepasse').value
-    });
-    if (error) return afficherMessage('msg-connexion', 'Connexion impossible : e-mail ou mot de passe incorrect, ou compte pas encore confirmé.', 'erreur');
-    afficherMessage('msg-connexion', '');
-    rafraichirEcran();
+  /* ---------- Contacts ---------- */
+  let convOuverte = null, tourD = 0;
+  async function coordonneesDe(ids) {
+    if (!ids.length) return {};
+    const { data } = await db.from('coordonnees').select('user_id, contact').in('user_id', ids);
+    const r = {}; (data || []).forEach((c) => { r[c.user_id] = c.contact; }); return r;
+  }
+  const blocCoord = (c) => c ? `<span class="coord">📇 ${esc(c)}</span>` : '<span class="verrou">Cette personne n’a pas encore renseigné ses coordonnées.</span>';
+  async function chargerDemandes() {
+    const t = ++tourD;
+    const { data, error } = await db.from('demandes').select('id, statut, created_at, annonce_id, demandeur_id, proprietaire_id, annonces(titre)').order('created_at', { ascending: false });
+    if (t !== tourD || error) return;
+    const recues = data.filter((d) => d.proprietaire_id === moi.id), envoyees = data.filter((d) => d.demandeur_id === moi.id);
+    mesDemandes = {}; envoyees.forEach((d) => { mesDemandes[d.annonce_id] = d.statut; });
+    const ids = data.filter((d) => d.statut === 'acceptee').map((d) => d.proprietaire_id === moi.id ? d.demandeur_id : d.proprietaire_id);
+    const coords = await coordonneesDe(ids);
+    if (t !== tourD) return;
+    const enAttente = recues.filter((d) => d.statut === 'en_attente').length;
+    $('notif').hidden = !enAttente; $('notif').textContent = enAttente;
+    $('compteur-contacts').innerHTML = '<i></i>' + (enAttente ? `${enAttente} nouvelle${enAttente > 1 ? 's' : ''} demande${enAttente > 1 ? 's' : ''}` : 'Tout est à jour');
+    const titreDe = (d) => esc(d.annonces ? d.annonces.titre : 'une annonce');
+    const boutonConv = (d) => `<button class="btn petit sans" style="margin-top:10px" onclick="ouvrirConv('${d.id}', this.dataset.t)" data-t="${titreDe(d)}">💬 Discuter</button>`;
+    $('liste-recues').innerHTML = recues.length ? recues.map((d) => `
+      <div class="demande ${d.statut === 'acceptee' ? 'acceptee' : ''}"><div class="avatar">?</div><div class="txt">
+        <span class="tag ${d.statut === 'en_attente' ? 'nouveau' : 'propose'}">${d.statut === 'en_attente' ? 'Nouvelle' : STATUTS[d.statut]}</span>
+        <p>Un·e étudiant·e veut te contacter pour « <b>${titreDe(d)}</b> ».</p>
+        ${d.statut === 'en_attente' ? `<span class="verrou"><svg class="ico"><use href="#i-lock"/></svg>Ses coordonnées s'affichent après ton accord.</span>
+          <div style="display:flex; gap:8px; margin-top:12px"><button class="btn petit sans" onclick="repondre('${d.id}', 'acceptee', event)">Accepter</button><button class="btn petit clair" onclick="repondre('${d.id}', 'refusee')">Refuser</button></div>` : ''}
+        ${d.statut === 'acceptee' ? blocCoord(coords[d.demandeur_id]) + '<br>' + boutonConv(d) : ''}
+      </div></div>`).join('') : '<p class="meta" style="margin-top:12px">Aucune demande reçue pour l’instant.</p>';
+    $('liste-envoyees').innerHTML = envoyees.length ? envoyees.map((d) => `
+      <div class="demande ${d.statut === 'acceptee' ? 'acceptee' : ''}"><div class="avatar" style="background:var(--peche); color:#8a4b00">✉</div><div class="txt">
+        <p style="margin:0">« <b>${titreDe(d)}</b> »</p><span class="meta">${STATUTS[d.statut]}</span>
+        ${d.statut === 'acceptee' ? '<br>' + blocCoord(coords[d.proprietaire_id]) + '<br>' + boutonConv(d) : ''}
+        ${d.statut === 'en_attente' ? '<br><span class="verrou"><svg class="ico"><use href="#i-lock"/></svg>Les coordonnées s’afficheront si la personne accepte.</span>' : ''}
+      </div></div>`).join('') : '<p class="meta" style="margin-top:12px">Aucune demande envoyée pour l’instant.</p>';
+    if (!convOuverte) { const premiere = data.find((d) => d.statut === 'acceptee'); if (premiere) ouvrirConv(premiere.id, titreDe(premiere), true); }
+  }
+  async function repondre(id, statut, e) {
+    const { error } = await db.from('demandes').update({ statut }).eq('id', id);
+    if (error) return toast('Réponse impossible : ' + error.message, 'bulle', '#f8dbe3');
+    if (statut === 'acceptee') { confettis(e); toast('Contact accepté : vous pouvez discuter', 'cadenas', '#eef07a'); convOuverte = null; }
+    chargerDemandes();
+  }
+  async function ouvrirConv(id, titre, silencieux) {
+    convOuverte = id; $('conv-vide').hidden = true; $('conv').hidden = false; $('conv-titre').textContent = titre;
+    await chargerMessages();
+    if (!silencieux && innerWidth < 1000) $('panneau-conv').scrollIntoView({ behavior: 'smooth' });
+  }
+  async function chargerMessages() {
+    if (!convOuverte) return;
+    const { data, error } = await db.from('messages').select('id, auteur_id, contenu, created_at').eq('demande_id', convOuverte).order('created_at', { ascending: true });
+    const fil = $('fil');
+    if (error) { fil.innerHTML = '<p class="meta">Impossible de charger la conversation.</p>'; return; }
+    fil.innerHTML = data.length ? data.map((m) => `<div class="bulle ${m.auteur_id === moi.id ? 'moi' : 'autre'}"><small>${m.auteur_id === moi.id ? 'Moi' : 'L’autre étudiant·e'} · ${quand(m.created_at)}</small>${esc(m.contenu)}</div>`).join('')
+      : '<p class="meta" style="text-align:center; padding:30px 0">Aucun message pour l’instant. Lance la conversation !</p>';
+    fil.scrollTop = fil.scrollHeight;
+  }
+  $('btn-actualiser').addEventListener('click', chargerMessages);
+  $('form-msg').addEventListener('submit', async (e) => {
+    e.preventDefault(); const contenu = $('msg').value.trim(); if (!contenu || !convOuverte) return;
+    $('msg').value = '';
+    const { error } = await db.from('messages').insert({ demande_id: convOuverte, contenu });
+    if (error) { $('msg').value = contenu; return toast('Envoi impossible : ' + error.message, 'bulle', '#f8dbe3'); }
+    chargerMessages();
   });
 
-  $('btn-deconnexion').addEventListener('click', async () => {
-    await db.auth.signOut();
-    rafraichirEcran();
-  });
-
-  // ---------- Mes coordonnées ----------
-  async function chargerMesCoordonnees() {
+  /* ---------- Profil : coordonnées ---------- */
+  async function chargerCoordonnees() {
     const { data } = await db.from('coordonnees').select('contact').eq('user_id', moi.id).maybeSingle();
     $('contact').value = data ? data.contact : '';
   }
-
-  $('btn-coordonnees').addEventListener('click', async () => {
+  $('btn-coord').addEventListener('click', async () => {
     const contact = $('contact').value.trim();
-    if (contact.length < 3) return afficherMessage('msg-coordonnees', 'Entre au moins 3 caractères.', 'erreur');
-    const { error } = await db.from('coordonnees').upsert({
-      user_id: moi.id, contact, updated_at: new Date().toISOString()
-    });
-    if (error) return afficherMessage('msg-coordonnees', 'Enregistrement impossible : ' + error.message, 'erreur');
-    afficherMessage('msg-coordonnees', 'Coordonnées enregistrées !', 'ok');
+    if (contact.length < 3) return toast('Entre au moins 3 caractères.', 'cadenas', '#f8dbe3');
+    const { error } = await db.from('coordonnees').upsert({ user_id: moi.id, contact, updated_at: new Date().toISOString() });
+    if (error) return toast('Enregistrement impossible : ' + error.message, 'cadenas', '#f8dbe3');
+    toast('Coordonnées enregistrées', 'cadenas', '#eef07a');
   });
 
-  // Récupère les coordonnées visibles pour une liste de personnes.
-  // La base ne renvoie QUE celles que j'ai le droit de voir (règle d'or n°1).
-  async function coordonneesDe(ids) {
-    if (ids.length === 0) return {};
-    const { data } = await db.from('coordonnees').select('user_id, contact').in('user_id', ids);
-    const resultat = {};
-    (data || []).forEach((c) => { resultat[c.user_id] = c.contact; });
-    return resultat;
-  }
-
-  function blocCoordonnees(contact) {
-    return contact
-      ? el('div', 'coordonnees', '📇 Coordonnées : ' + contact)
-      : el('div', 'cadenas', 'Cette personne n\'a pas encore renseigné ses coordonnées.');
-  }
-
-  // ---------- Demandes de contact ----------
-  let mesDemandesEnvoyees = {}; // annonce_id -> statut
-
-  let tourDemandes = 0; // évite d'afficher plusieurs fois la même liste
-  async function chargerDemandes() {
-    const monTour = ++tourDemandes;
-    const { data, error } = await db.from('demandes')
-      .select('id, statut, created_at, annonce_id, demandeur_id, proprietaire_id, annonces(titre)')
-      .order('created_at', { ascending: false });
-    const recues = $('liste-recues');
-    const envoyees = $('liste-envoyees');
-    if (error) {
-      if (monTour !== tourDemandes) return;
-      recues.textContent = 'Impossible de charger les demandes.';
-      return;
-    }
-
-    const listeRecues = data.filter((d) => d.proprietaire_id === moi.id);
-    const listeEnvoyees = data.filter((d) => d.demandeur_id === moi.id);
-
-    // Coordonnées des personnes avec qui une demande est acceptée
-    const idsAcceptes = data.filter((d) => d.statut === 'acceptee')
-      .map((d) => d.proprietaire_id === moi.id ? d.demandeur_id : d.proprietaire_id);
-    const coords = await coordonneesDe(idsAcceptes);
-
-    if (monTour !== tourDemandes) return; // un chargement plus récent a pris le relais
-    recues.innerHTML = '';
-    envoyees.innerHTML = '';
-    mesDemandesEnvoyees = {};
-    listeEnvoyees.forEach((d) => { mesDemandesEnvoyees[d.annonce_id] = d.statut; });
-
-    // Demandes reçues (je suis l'auteur de l'annonce)
-    if (listeRecues.length === 0) recues.appendChild(el('p', 'info', 'Aucune demande reçue pour l\'instant.'));
-    listeRecues.forEach((d) => {
-      const carte = el('div', 'carte');
-      const titre = d.annonces ? d.annonces.titre : 'une annonce';
-      carte.appendChild(el('p', '', 'Un étudiant veut te contacter pour ton annonce « ' + titre + ' ».'));
-      carte.appendChild(el('p', 'info', 'État : ' + STATUTS[d.statut]));
-      if (d.statut === 'en_attente') {
-        carte.appendChild(el('div', 'cadenas', '🔒 Ses coordonnées seront visibles après ton accord.'));
-        const ligne = el('div', 'ligne');
-        const accepter = el('button', 'principal', 'Accepter');
-        const refuser = el('button', 'secondaire', 'Refuser');
-        accepter.addEventListener('click', () => repondre(d.id, 'acceptee'));
-        refuser.addEventListener('click', () => repondre(d.id, 'refusee'));
-        ligne.append(accepter, refuser);
-        carte.appendChild(ligne);
-      } else if (d.statut === 'acceptee') {
-        carte.appendChild(blocCoordonnees(coords[d.demandeur_id]));
-        carte.appendChild(boutonConversation(d));
-      }
-      recues.appendChild(carte);
-    });
-
-    // Demandes envoyées (je demande le contact)
-    if (listeEnvoyees.length === 0) envoyees.appendChild(el('p', 'info', 'Aucune demande envoyée pour l\'instant.'));
-    listeEnvoyees.forEach((d) => {
-      const carte = el('div', 'carte');
-      const titre = d.annonces ? d.annonces.titre : 'une annonce';
-      carte.appendChild(el('p', '', 'Annonce « ' + titre + ' »'));
-      carte.appendChild(el('p', 'info', 'État : ' + STATUTS[d.statut]));
-      if (d.statut === 'acceptee') {
-        carte.appendChild(blocCoordonnees(coords[d.proprietaire_id]));
-        carte.appendChild(boutonConversation(d));
-      }
-      if (d.statut === 'en_attente') carte.appendChild(el('div', 'cadenas', '🔒 Les coordonnées seront visibles si la personne accepte.'));
-      envoyees.appendChild(carte);
-    });
-  }
-
-  async function demanderContact(annonce) {
-    const { error } = await db.from('demandes').insert({
-      annonce_id: annonce.id, proprietaire_id: annonce.auteur_id
-    });
-    if (error) {
-      const texte = error.code === '23505' ? 'Tu as déjà demandé le contact pour cette annonce.' : 'Demande impossible : ' + error.message;
-      alert(texte);
-    }
-    chargerTout();
-  }
-
-  async function repondre(idDemande, statut) {
-    const { error } = await db.from('demandes').update({ statut }).eq('id', idDemande);
-    if (error) alert('Réponse impossible : ' + error.message);
-    chargerTout();
-  }
-
-  // ---------- Messagerie (palier 2) ----------
-  // Règle d'or n°3 : la base ne renvoie les messages qu'aux deux participants de la demande.
-  const conversationsOuvertes = new Set(); // demandes dont la conversation est ouverte
-  const brouillons = {};                    // texte en cours de saisie, par demande
-
-  function boutonConversation(d) {
-    const zone = el('div');
-    const ouverte = conversationsOuvertes.has(d.id);
-    const bouton = el('button', 'secondaire', ouverte ? 'Fermer la conversation' : '💬 Ouvrir la conversation');
-    bouton.addEventListener('click', () => {
-      if (conversationsOuvertes.has(d.id)) conversationsOuvertes.delete(d.id);
-      else conversationsOuvertes.add(d.id);
-      zone.replaceWith(boutonConversation(d));
-    });
-    zone.appendChild(bouton);
-    if (ouverte) zone.appendChild(blocConversation(d));
-    return zone;
-  }
-
-  function blocConversation(d) {
-    const bloc = el('div', 'conversation');
-    const fil = el('div', 'fil');
-    const saisie = el('textarea');
-    saisie.maxLength = 1000;
-    saisie.placeholder = 'Écris ton message…';
-    saisie.value = brouillons[d.id] || '';
-    saisie.addEventListener('input', () => { brouillons[d.id] = saisie.value; });
-    const ligne = el('div', 'ligne');
-    const envoyer = el('button', 'principal', 'Envoyer');
-    const actualiser = el('button', 'secondaire', '↻ Actualiser');
-    const info = el('p', 'message');
-    ligne.append(envoyer, actualiser);
-    bloc.append(fil, saisie, ligne, info);
-
-    actualiser.addEventListener('click', () => chargerMessages(d.id, fil, info));
-    envoyer.addEventListener('click', async () => {
-      const contenu = saisie.value.trim();
-      if (!contenu) { info.textContent = 'Écris un message avant d\'envoyer.'; info.className = 'message erreur'; return; }
-      envoyer.disabled = true;
-      const { error } = await db.from('messages').insert({ demande_id: d.id, contenu });
-      envoyer.disabled = false;
-      if (error) { info.textContent = 'Envoi impossible : ' + error.message; info.className = 'message erreur'; return; }
-      saisie.value = '';
-      brouillons[d.id] = '';
-      info.textContent = '';
-      chargerMessages(d.id, fil, info);
-    });
-
-    chargerMessages(d.id, fil, info);
-    return bloc;
-  }
-
-  async function chargerMessages(idDemande, fil, info) {
-    const { data, error } = await db.from('messages')
-      .select('id, auteur_id, contenu, created_at')
-      .eq('demande_id', idDemande)
-      .order('created_at', { ascending: true });
-    fil.innerHTML = '';
-    if (error) { info.textContent = 'Impossible de charger la conversation.'; info.className = 'message erreur'; return; }
-    if (data.length === 0) { fil.appendChild(el('p', 'info', 'Aucun message pour l\'instant. Lance la conversation !')); return; }
-    data.forEach((m) => {
-      const deMoi = m.auteur_id === moi.id;
-      const bulle = el('div', 'bulle ' + (deMoi ? 'moi' : 'autre'));
-      const quand = new Date(m.created_at).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-      bulle.appendChild(el('small', '', (deMoi ? 'Moi' : 'L\'autre étudiant') + ' · ' + quand));
-      bulle.appendChild(document.createTextNode(m.contenu));
-      fil.appendChild(bulle);
-    });
-    fil.scrollTop = fil.scrollHeight;
-  }
-
-  // ---------- IA (passe par le serveur /api/ia : la clé reste cachée chez Vercel) ----------
-  async function appelerIA(tache, texte) {
-    const { data } = await db.auth.getSession();
-    const controleur = new AbortController();
-    const minuterie = setTimeout(() => controleur.abort(), 30000); // 30 s maximum
-    try {
-      const r = await fetch('/api/ia', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.session.access_token },
-        body: JSON.stringify({ tache, texte }),
-        signal: controleur.signal
-      });
-      const j = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(j.erreur || 'L\'IA ne répond pas pour le moment.');
-      return j;
-    } catch (e) {
-      if (e.name === 'AbortError') throw new Error('L\'IA met trop de temps à répondre.');
-      throw e;
-    } finally {
-      clearTimeout(minuterie);
-    }
-  }
-
-  // ---------- Mon profil depuis le CV ----------
-  if (window.pdfjsLib) {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  }
-
-  async function lireTextePDF(fichier) {
-    const pdf = await pdfjsLib.getDocument({ data: await fichier.arrayBuffer() }).promise;
-    let texte = '';
-    for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
-      const page = await pdf.getPage(i);
-      const contenu = await page.getTextContent();
-      texte += contenu.items.map((it) => it.str).join(' ') + '\n';
-    }
-    return texte.trim();
-  }
-
-  async function chargerMonProfil() {
+  /* ---------- Profil : compétences depuis le CV ---------- */
+  let competences = [];
+  const afficherChips = () => {
+    $('chips').innerHTML = competences.length ? competences.map((c, i) => `<span style="animation-delay:${i * 0.05}s">${esc(c)} <button data-i="${i}" aria-label="Retirer">×</button></span>`).join('') : '<p class="meta">Aucune compétence pour l’instant.</p>';
+  };
+  $('chips').addEventListener('click', (e) => { const b = e.target.closest('button[data-i]'); if (!b) return; competences.splice(+b.dataset.i, 1); afficherChips(); });
+  const ajouterComp = () => { const v = $('ajout-comp').value.trim().slice(0, 40); if (v && !competences.includes(v) && competences.length < 15) { competences.push(v); afficherChips(); } $('ajout-comp').value = ''; };
+  $('btn-ajout').addEventListener('click', ajouterComp);
+  $('ajout-comp').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); ajouterComp(); } });
+  async function chargerProfil() {
     const { data } = await db.from('profils').select('competences').eq('user_id', moi.id).maybeSingle();
-    $('competences').value = data ? data.competences.join('\n') : '';
+    competences = data ? data.competences : []; afficherChips();
   }
-
-  $('btn-analyser').addEventListener('click', async () => {
-    const fichier = $('cv').files[0];
-    if (!fichier) return afficherMessage('msg-profil', 'Choisis d\'abord ton CV en PDF.', 'erreur');
-    if (fichier.type !== 'application/pdf') return afficherMessage('msg-profil', 'Le fichier doit être un PDF.', 'erreur');
-    if (fichier.size > 5 * 1024 * 1024) return afficherMessage('msg-profil', 'Le PDF est trop lourd (5 Mo maximum).', 'erreur');
-    const bouton = $('btn-analyser');
-    bouton.disabled = true;
-    try {
-      afficherMessage('msg-profil', 'Lecture du CV…');
-      const texte = await lireTextePDF(fichier);
-      if (texte.length < 20) {
-        return afficherMessage('msg-profil', 'Ce CV est presque vide (ou scanné en image) : l\'IA ne peut pas le lire. Écris tes compétences à la main ci-dessous.', 'erreur');
-      }
-      afficherMessage('msg-profil', 'L\'IA analyse ton CV… (quelques secondes)');
-      const resultat = await appelerIA('profil', texte);
-      if (resultat.competences.length === 0) {
-        return afficherMessage('msg-profil', 'L\'IA n\'a trouvé aucune compétence. Écris-les à la main ci-dessous.', 'erreur');
-      }
-      $('competences').value = resultat.competences.join('\n');
-      afficherMessage('msg-profil', 'Voici les compétences proposées par l\'IA. Relis, corrige, puis clique sur « Valider mon profil ». Rien n\'est enregistré tant que tu n\'as pas validé.', 'ok');
-    } catch (e) {
-      afficherMessage('msg-profil', e.message + ' Tu peux écrire tes compétences à la main ci-dessous.', 'erreur');
-    } finally {
-      bouton.disabled = false;
-    }
-  });
-
-  $('btn-profil').addEventListener('click', async () => {
-    const competences = [...new Set($('competences').value.split('\n').map((c) => c.trim().slice(0, 40)).filter((c) => c))].slice(0, 15);
-    const { error } = await db.from('profils').upsert({
-      user_id: moi.id, competences, updated_at: new Date().toISOString()
-    });
-    if (error) return afficherMessage('msg-profil-ok', 'Enregistrement impossible : ' + error.message, 'erreur');
-    $('competences').value = competences.join('\n');
-    afficherMessage('msg-profil-ok', 'Profil validé et enregistré !', 'ok');
-  });
-
-  // ---------- Annonce rédigée par l'IA ----------
-  $('btn-rediger').addEventListener('click', async () => {
-    const mots = $('mots').value.trim();
-    if (mots.length < 2) return afficherMessage('msg-ia', 'Écris d\'abord quelques mots (ex. « photo soirée asso »).', 'erreur');
-    const bouton = $('btn-rediger');
-    bouton.disabled = true;
-    afficherMessage('msg-ia', 'L\'IA rédige ton annonce… (quelques secondes)');
-    try {
-      const sens = $('type').value === 'propose' ? 'Je propose : ' : 'Je cherche : ';
-      const resultat = await appelerIA('annonce', sens + mots);
-      $('titre').value = resultat.titre;
-      $('description').value = resultat.description;
-      afficherMessage('msg-annonce', '');
-      afficherMessage('msg-ia', 'Proposition de l\'IA : relis et modifie le titre et la description si besoin, puis clique sur « Publier ».', 'ok');
-    } catch (e) {
-      afficherMessage('msg-ia', e.message + ' Tu peux écrire ton annonce à la main.', 'erreur');
-    } finally {
-      bouton.disabled = false;
-    }
-  });
-
-  // ---------- Annonces ----------
-  $('btn-publier').addEventListener('click', async () => {
-    const titre = $('titre').value.trim();
-    const description = $('description').value.trim();
-    if (titre.length < 3) return afficherMessage('msg-annonce', 'Le titre doit faire au moins 3 caractères.', 'erreur');
-    const { error } = await db.from('annonces').insert({
-      type: $('type').value, titre, description
-    });
-    if (error) return afficherMessage('msg-annonce', 'Publication impossible : ' + error.message, 'erreur');
-    $('titre').value = '';
-    $('description').value = '';
-    $('mots').value = '';
-    afficherMessage('msg-ia', '');
-    afficherMessage('msg-annonce', 'Annonce publiée !', 'ok');
-    chargerAnnonces();
-  });
-
-  let tourAnnonces = 0; // évite d'afficher plusieurs fois la même liste
-  async function chargerAnnonces() {
-    const monTour = ++tourAnnonces;
-    const liste = $('liste-annonces');
-    const { data, error } = await db.from('annonces')
-      .select('id, type, titre, description, created_at, auteur_id')
-      .order('created_at', { ascending: false });
-    if (monTour !== tourAnnonces) return; // un chargement plus récent a pris le relais
-    liste.innerHTML = '';
-    if (error) { liste.textContent = 'Impossible de charger les annonces.'; return; }
-    if (data.length === 0) { liste.textContent = 'Aucune annonce pour l\'instant.'; return; }
-    data.forEach((a) => {
-      const carte = el('div', 'carte annonce');
-      carte.appendChild(el('span', 'badge ' + a.type, a.type === 'propose' ? 'Propose' : 'Cherche'));
-      carte.appendChild(el('h3', '', a.titre));
-      carte.appendChild(el('p', '', a.description || ''));
-      carte.appendChild(el('div', 'date', 'Publiée le ' + new Date(a.created_at).toLocaleDateString('fr-FR')));
-
-      if (a.auteur_id === moi.id) {
-        carte.appendChild(el('p', 'info', 'C\'est ton annonce.'));
-      } else if (mesDemandesEnvoyees[a.id]) {
-        carte.appendChild(el('p', 'info', 'Demande envoyée : ' + STATUTS[mesDemandesEnvoyees[a.id]]));
-      } else {
-        const bouton = el('button', 'principal', 'Demander le contact');
-        bouton.addEventListener('click', () => { bouton.disabled = true; demanderContact(a); });
-        carte.appendChild(bouton);
-      }
-      liste.appendChild(carte);
-    });
+  if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  async function lireTextePDF(f) {
+    const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise; let t = '';
+    for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) { const c = await (await pdf.getPage(i)).getTextContent(); t += c.items.map((x) => x.str).join(' ') + '\n'; }
+    return t.trim();
   }
+  $('depot').addEventListener('click', () => $('cv').click());
+  $('cv').addEventListener('change', async () => {
+    const f = $('cv').files[0]; if (!f) return;
+    $('nom-cv').textContent = f.name;
+    if (f.type !== 'application/pdf') return $('etat-cv').textContent = 'Le fichier doit être un PDF.';
+    if (f.size > 5 * 1024 * 1024) return $('etat-cv').textContent = 'Le PDF est trop lourd (5 Mo maximum).';
+    $('chips').innerHTML = '<span class="squelette"></span><span class="squelette"></span><span class="squelette" style="width:160px"></span>';
+    try {
+      $('etat-cv').textContent = 'Lecture du CV…';
+      const texte = await lireTextePDF(f);
+      if (texte.length < 20) { afficherChips(); return $('etat-cv').textContent = 'CV presque vide ou scanné : ajoute tes compétences à la main.'; }
+      $('etat-cv').textContent = "L'IA analyse ton CV…";
+      const r = await appelerIA('profil', texte);
+      if (!r.competences.length) { afficherChips(); return $('etat-cv').textContent = "L'IA n'a rien trouvé : ajoute-les à la main."; }
+      competences = r.competences; afficherChips();
+      $('etat-cv').textContent = 'Relis, corrige, puis valide. Rien n’est enregistré avant.';
+      toast(`L'IA a trouvé ${r.competences.length} compétences. Relis-les !`, 'etoile', '#ddccf3');
+    } catch (err) { afficherChips(); $('etat-cv').textContent = err.message + ' Tu peux les ajouter à la main.'; }
+    $('cv').value = '';
+  });
+  $('btn-profil').addEventListener('click', async (e) => {
+    const { error } = await db.from('profils').upsert({ user_id: moi.id, competences, updated_at: new Date().toISOString() });
+    if (error) return toast('Enregistrement impossible : ' + error.message, 'etoile', '#f8dbe3');
+    confettis(e); toast('Profil enregistré !', 'etoile', '#eef07a');
+  });
 
-  db.auth.onAuthStateChange((evenement, session) => { if ((session ? session.user.id : null) !== (moi ? moi.id : null)) rafraichirEcran(); });
-  rafraichirEcran();
+  rafraichir();
 </script>
 </body>
 </html>
