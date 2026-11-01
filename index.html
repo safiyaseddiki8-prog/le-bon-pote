@@ -212,25 +212,33 @@
   // ---------- Demandes de contact ----------
   let mesDemandesEnvoyees = {}; // annonce_id -> statut
 
+  let tourDemandes = 0; // évite d'afficher plusieurs fois la même liste
   async function chargerDemandes() {
+    const monTour = ++tourDemandes;
     const { data, error } = await db.from('demandes')
       .select('id, statut, created_at, annonce_id, demandeur_id, proprietaire_id, annonces(titre)')
       .order('created_at', { ascending: false });
     const recues = $('liste-recues');
     const envoyees = $('liste-envoyees');
-    recues.innerHTML = '';
-    envoyees.innerHTML = '';
-    mesDemandesEnvoyees = {};
-    if (error) { recues.textContent = 'Impossible de charger les demandes.'; return; }
+    if (error) {
+      if (monTour !== tourDemandes) return;
+      recues.textContent = 'Impossible de charger les demandes.';
+      return;
+    }
 
     const listeRecues = data.filter((d) => d.proprietaire_id === moi.id);
     const listeEnvoyees = data.filter((d) => d.demandeur_id === moi.id);
-    listeEnvoyees.forEach((d) => { mesDemandesEnvoyees[d.annonce_id] = d.statut; });
 
     // Coordonnées des personnes avec qui une demande est acceptée
     const idsAcceptes = data.filter((d) => d.statut === 'acceptee')
       .map((d) => d.proprietaire_id === moi.id ? d.demandeur_id : d.proprietaire_id);
     const coords = await coordonneesDe(idsAcceptes);
+
+    if (monTour !== tourDemandes) return; // un chargement plus récent a pris le relais
+    recues.innerHTML = '';
+    envoyees.innerHTML = '';
+    mesDemandesEnvoyees = {};
+    listeEnvoyees.forEach((d) => { mesDemandesEnvoyees[d.annonce_id] = d.statut; });
 
     // Demandes reçues (je suis l'auteur de l'annonce)
     if (listeRecues.length === 0) recues.appendChild(el('p', 'info', 'Aucune demande reçue pour l\'instant.'));
@@ -299,11 +307,14 @@
     chargerAnnonces();
   });
 
+  let tourAnnonces = 0; // évite d'afficher plusieurs fois la même liste
   async function chargerAnnonces() {
+    const monTour = ++tourAnnonces;
     const liste = $('liste-annonces');
     const { data, error } = await db.from('annonces')
       .select('id, type, titre, description, created_at, auteur_id')
       .order('created_at', { ascending: false });
+    if (monTour !== tourAnnonces) return; // un chargement plus récent a pris le relais
     liste.innerHTML = '';
     if (error) { liste.textContent = 'Impossible de charger les annonces.'; return; }
     if (data.length === 0) { liste.textContent = 'Aucune annonce pour l\'instant.'; return; }
