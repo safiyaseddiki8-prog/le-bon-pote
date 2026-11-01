@@ -462,7 +462,7 @@
     });
   }
 
-  db.auth.onAuthStateChange(() => rafraichirEcran());
+  db.auth.onAuthStateChange((evenement, session) => { if ((session ? session.user.id : null) !== (moi ? moi.id : null)) rafraichirEcran(); });
   rafraichirEcran();
 </script>
 </body>
