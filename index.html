@@ -405,6 +405,7 @@
       const resultat = await appelerIA('annonce', sens + mots);
       $('titre').value = resultat.titre;
       $('description').value = resultat.description;
+      afficherMessage('msg-annonce', '');
       afficherMessage('msg-ia', 'Proposition de l\'IA : relis et modifie le titre et la description si besoin, puis clique sur « Publier ».', 'ok');
     } catch (e) {
       afficherMessage('msg-ia', e.message + ' Tu peux écrire ton annonce à la main.', 'erreur');
