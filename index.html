@@ -31,6 +31,7 @@
     .date { font-size: .8rem; color: #888; margin-top: 8px; }
     .coordonnees { margin-top: 10px; padding: 10px; border-radius: 8px; background: #eefaf2; }
     .cadenas { margin-top: 10px; padding: 10px; border-radius: 8px; background: #f2f2f2; color: #555; }
+    .ia { background: #eef2ff; color: #1e2a78; }
     .cache { display: none; }
   </style>
 </head>
@@ -70,6 +71,19 @@
     </div>
 
     <div class="carte">
+      <h2>Mon profil</h2>
+      <p class="info">Dépose ton CV en PDF : l'IA propose tes compétences, tu relis et tu corriges avant de valider. Tu peux aussi les écrire à la main.</p>
+      <label for="cv">Mon CV (PDF)</label>
+      <input id="cv" type="file" accept="application/pdf">
+      <button id="btn-analyser" class="ia">✨ Analyser mon CV avec l'IA</button>
+      <p id="msg-profil" class="message"></p>
+      <label for="competences">Mes compétences (une par ligne) : relis et corrige</label>
+      <textarea id="competences" placeholder="Ex.&#10;Photo&#10;Montage vidéo"></textarea>
+      <button id="btn-profil" class="principal">Valider mon profil</button>
+      <p id="msg-profil-ok" class="message"></p>
+    </div>
+
+    <div class="carte">
       <h2>Demandes reçues</h2>
       <div id="liste-recues"></div>
     </div>
@@ -86,6 +100,10 @@
         <option value="propose">propose un service</option>
         <option value="cherche">cherche un service</option>
       </select>
+      <label for="mots">Quelques mots pour l'IA (facultatif)</label>
+      <input id="mots" maxlength="200" placeholder="Ex. covoit Lyon vendredi">
+      <button id="btn-rediger" class="ia">✨ Rédiger avec l'IA</button>
+      <p id="msg-ia" class="message"></p>
       <label for="titre">Titre</label>
       <input id="titre" maxlength="100" placeholder="Ex. Photos pour vos événements">
       <label for="description">Description</label>
@@ -100,6 +118,7 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
   // Adresse du projet et clé PUBLIQUE (publishable). Jamais la clé secrète ici.
   const SUPABASE_URL = 'https://vvmjwavdgynoxcwonulh.supabase.co';
@@ -140,6 +159,7 @@
 
   async function chargerTout() {
     await chargerMesCoordonnees();
+    await chargerMonProfil();
     await chargerDemandes();
     await chargerAnnonces();
   }
@@ -292,6 +312,107 @@
     chargerTout();
   }
 
+  // ---------- IA (passe par le serveur /api/ia : la clé reste cachée chez Vercel) ----------
+  async function appelerIA(tache, texte) {
+    const { data } = await db.auth.getSession();
+    const controleur = new AbortController();
+    const minuterie = setTimeout(() => controleur.abort(), 30000); // 30 s maximum
+    try {
+      const r = await fetch('/api/ia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.session.access_token },
+        body: JSON.stringify({ tache, texte }),
+        signal: controleur.signal
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.erreur || 'L\'IA ne répond pas pour le moment.');
+      return j;
+    } catch (e) {
+      if (e.name === 'AbortError') throw new Error('L\'IA met trop de temps à répondre.');
+      throw e;
+    } finally {
+      clearTimeout(minuterie);
+    }
+  }
+
+  // ---------- Mon profil depuis le CV ----------
+  if (window.pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+
+  async function lireTextePDF(fichier) {
+    const pdf = await pdfjsLib.getDocument({ data: await fichier.arrayBuffer() }).promise;
+    let texte = '';
+    for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
+      const page = await pdf.getPage(i);
+      const contenu = await page.getTextContent();
+      texte += contenu.items.map((it) => it.str).join(' ') + '\n';
+    }
+    return texte.trim();
+  }
+
+  async function chargerMonProfil() {
+    const { data } = await db.from('profils').select('competences').eq('user_id', moi.id).maybeSingle();
+    $('competences').value = data ? data.competences.join('\n') : '';
+  }
+
+  $('btn-analyser').addEventListener('click', async () => {
+    const fichier = $('cv').files[0];
+    if (!fichier) return afficherMessage('msg-profil', 'Choisis d\'abord ton CV en PDF.', 'erreur');
+    if (fichier.type !== 'application/pdf') return afficherMessage('msg-profil', 'Le fichier doit être un PDF.', 'erreur');
+    if (fichier.size > 5 * 1024 * 1024) return afficherMessage('msg-profil', 'Le PDF est trop lourd (5 Mo maximum).', 'erreur');
+    const bouton = $('btn-analyser');
+    bouton.disabled = true;
+    try {
+      afficherMessage('msg-profil', 'Lecture du CV…');
+      const texte = await lireTextePDF(fichier);
+      if (texte.length < 20) {
+        return afficherMessage('msg-profil', 'Ce CV est presque vide (ou scanné en image) : l\'IA ne peut pas le lire. Écris tes compétences à la main ci-dessous.', 'erreur');
+      }
+      afficherMessage('msg-profil', 'L\'IA analyse ton CV… (quelques secondes)');
+      const resultat = await appelerIA('profil', texte);
+      if (resultat.competences.length === 0) {
+        return afficherMessage('msg-profil', 'L\'IA n\'a trouvé aucune compétence. Écris-les à la main ci-dessous.', 'erreur');
+      }
+      $('competences').value = resultat.competences.join('\n');
+      afficherMessage('msg-profil', 'Voici les compétences proposées par l\'IA. Relis, corrige, puis clique sur « Valider mon profil ». Rien n\'est enregistré tant que tu n\'as pas validé.', 'ok');
+    } catch (e) {
+      afficherMessage('msg-profil', e.message + ' Tu peux écrire tes compétences à la main ci-dessous.', 'erreur');
+    } finally {
+      bouton.disabled = false;
+    }
+  });
+
+  $('btn-profil').addEventListener('click', async () => {
+    const competences = [...new Set($('competences').value.split('\n').map((c) => c.trim().slice(0, 40)).filter((c) => c))].slice(0, 15);
+    const { error } = await db.from('profils').upsert({
+      user_id: moi.id, competences, updated_at: new Date().toISOString()
+    });
+    if (error) return afficherMessage('msg-profil-ok', 'Enregistrement impossible : ' + error.message, 'erreur');
+    $('competences').value = competences.join('\n');
+    afficherMessage('msg-profil-ok', 'Profil validé et enregistré !', 'ok');
+  });
+
+  // ---------- Annonce rédigée par l'IA ----------
+  $('btn-rediger').addEventListener('click', async () => {
+    const mots = $('mots').value.trim();
+    if (mots.length < 2) return afficherMessage('msg-ia', 'Écris d\'abord quelques mots (ex. « photo soirée asso »).', 'erreur');
+    const bouton = $('btn-rediger');
+    bouton.disabled = true;
+    afficherMessage('msg-ia', 'L\'IA rédige ton annonce… (quelques secondes)');
+    try {
+      const sens = $('type').value === 'propose' ? 'Je propose : ' : 'Je cherche : ';
+      const resultat = await appelerIA('annonce', sens + mots);
+      $('titre').value = resultat.titre;
+      $('description').value = resultat.description;
+      afficherMessage('msg-ia', 'Proposition de l\'IA : relis et modifie le titre et la description si besoin, puis clique sur « Publier ».', 'ok');
+    } catch (e) {
+      afficherMessage('msg-ia', e.message + ' Tu peux écrire ton annonce à la main.', 'erreur');
+    } finally {
+      bouton.disabled = false;
+    }
+  });
+
   // ---------- Annonces ----------
   $('btn-publier').addEventListener('click', async () => {
     const titre = $('titre').value.trim();
@@ -303,6 +424,8 @@
     if (error) return afficherMessage('msg-annonce', 'Publication impossible : ' + error.message, 'erreur');
     $('titre').value = '';
     $('description').value = '';
+    $('mots').value = '';
+    afficherMessage('msg-ia', '');
     afficherMessage('msg-annonce', 'Annonce publiée !', 'ok');
     chargerAnnonces();
   });
