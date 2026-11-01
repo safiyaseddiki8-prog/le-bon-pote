@@ -32,6 +32,12 @@
     .coordonnees { margin-top: 10px; padding: 10px; border-radius: 8px; background: #eefaf2; }
     .cadenas { margin-top: 10px; padding: 10px; border-radius: 8px; background: #f2f2f2; color: #555; }
     .ia { background: #eef2ff; color: #1e2a78; }
+    .conversation { margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee; }
+    .fil { display: flex; flex-direction: column; max-height: 320px; overflow-y: auto; margin-bottom: 8px; }
+    .bulle { padding: 8px 12px; border-radius: 12px; margin: 4px 0; max-width: 85%; white-space: pre-wrap; word-wrap: break-word; }
+    .bulle.moi { background: #111; color: #fff; align-self: flex-end; }
+    .bulle.autre { background: #f2f2f2; color: #111; align-self: flex-start; }
+    .bulle small { display: block; font-size: .72rem; opacity: .7; margin-bottom: 2px; }
     .cache { display: none; }
   </style>
 </head>
@@ -278,6 +284,7 @@
         carte.appendChild(ligne);
       } else if (d.statut === 'acceptee') {
         carte.appendChild(blocCoordonnees(coords[d.demandeur_id]));
+        carte.appendChild(boutonConversation(d));
       }
       recues.appendChild(carte);
     });
@@ -289,7 +296,10 @@
       const titre = d.annonces ? d.annonces.titre : 'une annonce';
       carte.appendChild(el('p', '', 'Annonce « ' + titre + ' »'));
       carte.appendChild(el('p', 'info', 'État : ' + STATUTS[d.statut]));
-      if (d.statut === 'acceptee') carte.appendChild(blocCoordonnees(coords[d.proprietaire_id]));
+      if (d.statut === 'acceptee') {
+        carte.appendChild(blocCoordonnees(coords[d.proprietaire_id]));
+        carte.appendChild(boutonConversation(d));
+      }
       if (d.statut === 'en_attente') carte.appendChild(el('div', 'cadenas', '🔒 Les coordonnées seront visibles si la personne accepte.'));
       envoyees.appendChild(carte);
     });
@@ -310,6 +320,77 @@
     const { error } = await db.from('demandes').update({ statut }).eq('id', idDemande);
     if (error) alert('Réponse impossible : ' + error.message);
     chargerTout();
+  }
+
+  // ---------- Messagerie (palier 2) ----------
+  // Règle d'or n°3 : la base ne renvoie les messages qu'aux deux participants de la demande.
+  const conversationsOuvertes = new Set(); // demandes dont la conversation est ouverte
+  const brouillons = {};                    // texte en cours de saisie, par demande
+
+  function boutonConversation(d) {
+    const zone = el('div');
+    const ouverte = conversationsOuvertes.has(d.id);
+    const bouton = el('button', 'secondaire', ouverte ? 'Fermer la conversation' : '💬 Ouvrir la conversation');
+    bouton.addEventListener('click', () => {
+      if (conversationsOuvertes.has(d.id)) conversationsOuvertes.delete(d.id);
+      else conversationsOuvertes.add(d.id);
+      zone.replaceWith(boutonConversation(d));
+    });
+    zone.appendChild(bouton);
+    if (ouverte) zone.appendChild(blocConversation(d));
+    return zone;
+  }
+
+  function blocConversation(d) {
+    const bloc = el('div', 'conversation');
+    const fil = el('div', 'fil');
+    const saisie = el('textarea');
+    saisie.maxLength = 1000;
+    saisie.placeholder = 'Écris ton message…';
+    saisie.value = brouillons[d.id] || '';
+    saisie.addEventListener('input', () => { brouillons[d.id] = saisie.value; });
+    const ligne = el('div', 'ligne');
+    const envoyer = el('button', 'principal', 'Envoyer');
+    const actualiser = el('button', 'secondaire', '↻ Actualiser');
+    const info = el('p', 'message');
+    ligne.append(envoyer, actualiser);
+    bloc.append(fil, saisie, ligne, info);
+
+    actualiser.addEventListener('click', () => chargerMessages(d.id, fil, info));
+    envoyer.addEventListener('click', async () => {
+      const contenu = saisie.value.trim();
+      if (!contenu) { info.textContent = 'Écris un message avant d\'envoyer.'; info.className = 'message erreur'; return; }
+      envoyer.disabled = true;
+      const { error } = await db.from('messages').insert({ demande_id: d.id, contenu });
+      envoyer.disabled = false;
+      if (error) { info.textContent = 'Envoi impossible : ' + error.message; info.className = 'message erreur'; return; }
+      saisie.value = '';
+      brouillons[d.id] = '';
+      info.textContent = '';
+      chargerMessages(d.id, fil, info);
+    });
+
+    chargerMessages(d.id, fil, info);
+    return bloc;
+  }
+
+  async function chargerMessages(idDemande, fil, info) {
+    const { data, error } = await db.from('messages')
+      .select('id, auteur_id, contenu, created_at')
+      .eq('demande_id', idDemande)
+      .order('created_at', { ascending: true });
+    fil.innerHTML = '';
+    if (error) { info.textContent = 'Impossible de charger la conversation.'; info.className = 'message erreur'; return; }
+    if (data.length === 0) { fil.appendChild(el('p', 'info', 'Aucun message pour l\'instant. Lance la conversation !')); return; }
+    data.forEach((m) => {
+      const deMoi = m.auteur_id === moi.id;
+      const bulle = el('div', 'bulle ' + (deMoi ? 'moi' : 'autre'));
+      const quand = new Date(m.created_at).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      bulle.appendChild(el('small', '', (deMoi ? 'Moi' : 'L\'autre étudiant') + ' · ' + quand));
+      bulle.appendChild(document.createTextNode(m.contenu));
+      fil.appendChild(bulle);
+    });
+    fil.scrollTop = fil.scrollHeight;
   }
 
   // ---------- IA (passe par le serveur /api/ia : la clé reste cachée chez Vercel) ----------
