@@ -7,7 +7,13 @@ const SUPABASE_URL = 'https://vvmjwavdgynoxcwonulh.supabase.co';
 const SUPABASE_CLE_PUBLIQUE = 'sb_publishable_9C6yu87w8il49xSCxpisRA_13jgF0wf';
 
 // Modèles essayés dans l'ordre (si l'un est saturé, on passe au suivant)
-const MODELES = [process.env.GEMINI_MODEL, 'gemini-flash-latest', 'gemini-3.6-flash', 'gemini-3.5-flash-lite'].filter(Boolean);
+// (sans doublon ; les modèles qui n'existent plus sont simplement sautés)
+const MODELES = [...new Set([process.env.GEMINI_MODEL, 'gemini-flash-latest', 'gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'].filter(Boolean))];
+
+// Budget de temps total : le navigateur abandonne à 30 s, on s'arrête donc avant (22 s)
+const BUDGET_MS = 22000;
+const DELAI_PAR_ESSAI_MS = 8000;
+const pause = (ms) => new Promise((ok) => setTimeout(ok, ms));
 
 const LONGUEUR_MAX = { profil: 15000, annonce: 300 };
 
@@ -22,26 +28,39 @@ async function utilisateurConnecte(req) {
 
 async function appelerGemini(prompt, texte) {
   let derniereErreur = 'aucun modèle disponible';
-  for (const modele of MODELES) {
-    try {
-      const r = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/' + modele + ':generateContent',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: prompt.systeme }] },
-            contents: [{ role: 'user', parts: [{ text: prompt.prefixe + texte + prompt.suffixe }] }],
-            generationConfig: { responseMimeType: 'application/json', temperature: 0.4 }
-          })
+  const debut = Date.now();
+  // Jusqu'à 2 tours sur la liste des modèles, tant qu'il reste du temps (Google se libère souvent en quelques secondes)
+  for (let tour = 0; tour < 2; tour++) {
+    for (const modele of MODELES) {
+      const reste = BUDGET_MS - (Date.now() - debut);
+      if (reste < 2500) throw new Error(derniereErreur);
+      try {
+        const r = await fetch(
+          'https://generativelanguage.googleapis.com/v1beta/models/' + modele + ':generateContent',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY },
+            signal: AbortSignal.timeout(Math.min(DELAI_PAR_ESSAI_MS, reste)),
+            body: JSON.stringify({
+              systemInstruction: { parts: [{ text: prompt.systeme }] },
+              contents: [{ role: 'user', parts: [{ text: prompt.prefixe + texte + prompt.suffixe }] }],
+              generationConfig: { responseMimeType: 'application/json', temperature: 0.4 }
+            })
+          }
+        );
+        if (!r.ok) {
+          derniereErreur = modele + ' : ' + r.status + ' ' + (await r.text()).slice(0, 300);
+          console.error('Essai IA raté :', derniereErreur);
+          if (r.status === 503 || r.status === 429) await pause(400); // modèle saturé : petite pause avant le suivant
+          continue;
         }
-      );
-      if (!r.ok) { derniereErreur = modele + ' : ' + r.status + ' ' + (await r.text()).slice(0, 300); console.error('Essai IA raté :', derniereErreur); continue; }
-      const data = await r.json();
-      const brut = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
-      return JSON.parse(brut);
-    } catch (e) {
-      derniereErreur = modele + ' : ' + e.message;
+        const data = await r.json();
+        const brut = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
+        return JSON.parse(brut);
+      } catch (e) {
+        derniereErreur = modele + ' : ' + (e.name === 'TimeoutError' ? 'trop lent' : e.message);
+        console.error('Essai IA raté :', derniereErreur);
+      }
     }
   }
   throw new Error(derniereErreur);
@@ -86,6 +105,6 @@ module.exports = async (req, res) => {
     return res.status(200).json(nettoyer(tache, resultat));
   } catch (e) {
     console.error('Erreur IA :', e.message);
-    return res.status(503).json({ erreur: "L'IA ne répond pas pour le moment. Tu peux remplir à la main." });
+    return res.status(503).json({ erreur: "L'IA est très sollicitée en ce moment. Réessaie dans une minute, ou remplis à la main." });
   }
 };
