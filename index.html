@@ -139,7 +139,7 @@
     textarea { height: auto; padding: 12px 16px; resize: vertical; }
     input:focus, textarea:focus, select:focus { outline: none; background: var(--blanc); border-color: var(--violet); box-shadow: 0 0 0 4px rgba(148,101,205,.16); }
     .champ-mdp { position: relative; }
-    .champ-mdp button { position: absolute; right: 8px; top: 8px; height: 34px; padding: 0 12px; border: 0; border-radius: 10px; background: none; color: var(--gris); font-family: var(--titres); font-weight: 600; font-size: .82rem; cursor: pointer; }
+    .champ-mdp button { position: absolute; right: 6px; top: 5px; height: 40px; min-width: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: none; color: var(--gris); font-family: var(--titres); font-weight: 600; font-size: .82rem; cursor: pointer; }
     .champ-mdp button:hover { background: var(--gris-clair); color: var(--texte); }
     .lien-oubli { display: block; margin: 10px 0 0 auto; padding: 8px 0; min-height: 44px; border: 0; background: none; color: var(--violet-fonce); font-family: var(--titres); font-weight: 600; font-size: .88rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
     .lien-oubli[hidden] { display: none; }
@@ -416,7 +416,8 @@
     .coord { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 14px; border-radius: 999px; background: var(--jaune-pale); font-weight: 600; font-size: .94rem; animation: pop .5s var(--rebond); }
     .fil { display: flex; flex-direction: column; gap: 8px; margin: 18px 0; min-height: 140px; max-height: 320px; overflow-y: auto; }
     .bulle { max-width: 76%; padding: 10px 15px; border-radius: 20px; font-size: .96rem; animation: pop .45s var(--rebond) both; }
-    .bulle small { display: block; font-size: .72rem; opacity: .65; margin-bottom: 2px; }
+    .bulle small { display: block; font-size: .78rem; font-weight: 500; opacity: .95; margin-bottom: 3px; }
+    .bulle.autre small { color: var(--gris); }
     .bulle.moi { align-self: flex-end; background: var(--violet); color: var(--blanc); border-bottom-right-radius: 6px; }
     .bulle.autre { align-self: flex-start; background: var(--surface); border-bottom-left-radius: 6px; }
     .ecrit { align-self: flex-start; display: inline-flex; gap: 4px; padding: 12px 14px; border-radius: 18px; background: var(--surface); }
@@ -507,6 +508,9 @@
       .titre-page .btn { display: none; }
       .fab { display: grid; place-items: center; position: fixed; right: 20px; bottom: 92px; width: 58px; height: 58px; border-radius: 50%; background: var(--jaune); border: 0; font-size: 1.8rem; box-shadow: 0 14px 30px rgba(42,35,32,.18); z-index: 41; cursor: pointer; color: var(--encre); }
       .toasts { bottom: 96px; }
+      body[data-onglet]:not([data-onglet="annonces"]) .fab { display: none; }
+      .appli { padding-bottom: 110px; }
+      .nav .btn { height: 40px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -1238,6 +1242,7 @@
   function ouvrirOnglet(nom) {
     segment.querySelectorAll('.onglet').forEach((x) => x.classList.toggle('actif', x.dataset.ecran === nom));
     document.querySelectorAll('.ecran').forEach((x) => x.classList.toggle('actif', x.id === nom));
+    document.body.dataset.onglet = nom; /* le bouton « + » n'est visible que sur Annonces */
     placerCurseur(); scrollTo({ top: 0, behavior: 'smooth' });
     if (nom === 'contacts') chargerDemandes();
   }
@@ -1394,7 +1399,10 @@
   async function ouvrirConv(id, titre, silencieux) {
     convOuverte = id; $('conv-vide').hidden = true; $('conv').hidden = false; $('conv-titre').textContent = titre;
     await chargerMessages();
-    if (!silencieux && innerWidth < 1000) $('panneau-conv').scrollIntoView({ behavior: 'smooth' });
+    if (!silencieux) {
+      if (innerWidth < 1000) $('panneau-conv').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => $('msg').focus({ preventScroll: true }), 450);
+    }
   }
   async function chargerMessages() {
     if (!convOuverte) return;
