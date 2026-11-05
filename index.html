@@ -141,6 +141,14 @@
     .champ-mdp { position: relative; }
     .champ-mdp button { position: absolute; right: 8px; top: 8px; height: 34px; padding: 0 12px; border: 0; border-radius: 10px; background: none; color: var(--gris); font-family: var(--titres); font-weight: 600; font-size: .82rem; cursor: pointer; }
     .champ-mdp button:hover { background: var(--gris-clair); color: var(--texte); }
+    .lien-oubli { display: block; margin: 10px 0 0 auto; padding: 8px 0; min-height: 44px; border: 0; background: none; color: var(--violet-fonce); font-family: var(--titres); font-weight: 600; font-size: .88rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+    .lien-oubli[hidden] { display: none; }
+    .lien-oubli:disabled { opacity: .5; cursor: default; text-decoration: none; }
+    .carte-mdp [hidden] { display: none; }
+    .fond-mdp { position: fixed; inset: 0; z-index: 120; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(47,42,38,.55); }
+    .fond-mdp.ouvert { display: flex; }
+    .carte-mdp { width: 100%; max-width: 420px; background: var(--blanc); border-radius: 30px; padding: 32px 28px 26px; box-shadow: var(--ombre-forte); }
+    .carte-mdp h2 { margin: 0 0 6px; }
 
     /* ================= NAV ================= */
     .nav { position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(1.4) blur(14px); background: rgba(255,255,255,.82); border-bottom: 1px solid transparent; transition: border-color .3s; }
@@ -563,7 +571,8 @@
         <label for="email">E-mail étudiant</label><input id="email" type="email" placeholder="prenom@ecole.fr" autocomplete="email">
         <label for="mdp">Mot de passe</label>
         <div class="champ-mdp"><input id="mdp" type="password" placeholder="6 caractères minimum" autocomplete="current-password"><button type="button" id="voir-mdp">Afficher</button></div>
-        <div style="margin-top:20px"><button type="submit" class="btn plein" id="btn-entrer"><span id="txt-entrer">Se connecter</span> <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
+        <button type="button" class="lien-oubli" id="lien-oubli">Mot de passe oublié ?</button>
+        <div style="margin-top:10px"><button type="submit" class="btn plein" id="btn-entrer"><span id="txt-entrer">Se connecter</span> <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
         <p class="msg-co" id="msg-co" role="status"></p>
         </form>
         <p class="aide"><svg class="ico"><use href="#i-lock"/></svg>Tes coordonnées ne sont visibles qu'après ton accord.</p>
@@ -767,6 +776,40 @@
 </aside>
 
 <div class="toasts" id="toasts"></div>
+
+<div class="fond-mdp" id="fond-oubli" role="dialog" aria-modal="true" aria-labelledby="titre-oubli">
+  <div class="carte-mdp">
+    <form id="form-oubli" novalidate>
+      <div id="oubli-etape1">
+        <h2 id="titre-oubli">Mot de passe oublié ?</h2>
+        <p class="sous">Pas de panique ! Entre ton e-mail étudiant et on t'envoie un lien pour en choisir un nouveau.</p>
+        <label for="oubli-email">E-mail étudiant</label>
+        <input id="oubli-email" type="email" placeholder="prenom@ecole.fr" autocomplete="email">
+        <div style="margin-top:20px"><button type="submit" class="btn plein" id="btn-oubli"><span>Envoyer le lien</span> <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
+        <p class="msg-co" id="msg-oubli" role="status"></p>
+        <button type="button" class="lien-oubli" id="oubli-retour" style="margin:6px auto 0">Retour à la connexion</button>
+      </div>
+      <div id="oubli-etape2" hidden>
+        <h2>Regarde ta boîte mail 📬</h2>
+        <p class="sous">Si un compte existe pour <strong id="oubli-adresse"></strong>, tu vas recevoir un lien dans une minute ou deux.</p>
+        <p class="sous" style="margin-top:12px">Rien reçu ? Regarde dans tes spams. Le lien est en anglais, c'est normal.</p>
+        <div style="margin-top:20px"><button type="button" class="btn plein" id="oubli-fermer"><span>J'ai compris</span> <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
+        <button type="button" class="lien-oubli" id="oubli-renvoyer" style="margin:6px auto 0" disabled>Renvoyer le lien</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="fond-mdp" id="fond-mdp" role="dialog" aria-modal="true" aria-labelledby="titre-nouveau">
+  <form class="carte-mdp" id="form-nouveau" novalidate>
+    <h2 id="titre-nouveau">Choisis un nouveau mot de passe</h2>
+    <p class="sous">Il doit faire 6 caractères minimum.</p>
+    <label for="nouveau-mdp">Nouveau mot de passe</label>
+    <input id="nouveau-mdp" type="password" autocomplete="new-password" placeholder="6 caractères minimum">
+    <div style="margin-top:20px"><button type="submit" class="btn plein" id="btn-nouveau"><span>Enregistrer</span> <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
+    <p class="msg-co" id="msg-nouveau" role="status"></p>
+  </form>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -1102,6 +1145,7 @@
     $('titre-co').textContent = i ? 'Bienvenue, futur pote !' : 'Content de te revoir !';
     $('sous-co').textContent = i ? 'Crée ton compte en 30 secondes.' : 'Connecte-toi avec ton e-mail étudiant.';
     $('txt-entrer').textContent = i ? 'Créer mon compte' : 'Se connecter';
+    $('lien-oubli').hidden = i === 1;
     msgCo('');
   }));
   const msgCo = (t, type) => { const el = $('msg-co'); el.textContent = t; el.className = 'msg-co ' + (type || ''); };
@@ -1122,6 +1166,52 @@
     confettis(e);
   }
   $('form-co').addEventListener('submit', entrer);
+  /* ---------- Mot de passe oublié ---------- */
+  let attenteRenvoi = null;
+  const msgOubli = (t, type) => { const el = $('msg-oubli'); el.textContent = t; el.className = 'msg-co ' + (type || ''); };
+  function ouvrirOubli() {
+    $('oubli-email').value = $('email').value.trim();
+    $('oubli-etape1').hidden = false; $('oubli-etape2').hidden = true; msgOubli('');
+    $('fond-oubli').classList.add('ouvert');
+    setTimeout(() => $('oubli-email').focus(), 100);
+  }
+  function fermerOubli() { $('fond-oubli').classList.remove('ouvert'); clearInterval(attenteRenvoi); }
+  async function envoyerLien(e) {
+    if (e) e.preventDefault();
+    const email = $('oubli-email').value.trim();
+    if (!/^\S+@\S+\.\S+$/.test(email)) return msgOubli('Ton e-mail n\'a pas l\'air complet. Exemple : prenom@ecole.fr', 'erreur');
+    const b = $('btn-oubli'); b.disabled = true; msgOubli('');
+    const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    b.disabled = false;
+    if (error) return msgOubli(/rate|seconds|too many/i.test(error.message) ? 'Tu as déjà demandé un lien à l\'instant. Patiente une minute puis réessaie.' : 'Envoi impossible pour le moment. Réessaie dans quelques minutes.', 'erreur');
+    $('oubli-adresse').textContent = email;
+    $('oubli-etape1').hidden = true; $('oubli-etape2').hidden = false;
+    $('oubli-fermer').focus();
+    const r = $('oubli-renvoyer'); let reste = 60; r.disabled = true; r.textContent = 'Renvoyer le lien (60 s)';
+    clearInterval(attenteRenvoi);
+    attenteRenvoi = setInterval(() => { reste--; if (reste <= 0) { clearInterval(attenteRenvoi); r.disabled = false; r.textContent = 'Renvoyer le lien'; } else r.textContent = 'Renvoyer le lien (' + reste + ' s)'; }, 1000);
+  }
+  $('lien-oubli').addEventListener('click', ouvrirOubli);
+  $('form-oubli').addEventListener('submit', envoyerLien);
+  $('oubli-renvoyer').addEventListener('click', () => { $('oubli-etape1').hidden = false; $('oubli-etape2').hidden = true; envoyerLien(); });
+  $('oubli-fermer').addEventListener('click', fermerOubli);
+  $('oubli-retour').addEventListener('click', fermerOubli);
+  $('fond-oubli').addEventListener('click', (e) => { if (e.target === $('fond-oubli')) fermerOubli(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('fond-oubli').classList.contains('ouvert')) fermerOubli(); });
+  const msgNouveau = (t, type) => { const el = $('msg-nouveau'); el.textContent = t; el.className = 'msg-co ' + (type || ''); };
+  function ouvrirNouveauMdp() { $('fond-mdp').classList.add('ouvert'); setTimeout(() => $('nouveau-mdp').focus(), 100); }
+  $('form-nouveau').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const p = $('nouveau-mdp').value;
+    if (p.length < 6) return msgNouveau('6 caractères minimum, s\'il te plaît.', 'erreur');
+    const b = $('btn-nouveau'); b.disabled = true;
+    const { error } = await db.auth.updateUser({ password: p });
+    b.disabled = false;
+    if (error) return msgNouveau('Impossible de changer le mot de passe : ' + error.message, 'erreur');
+    $('nouveau-mdp').value = ''; msgNouveau('');
+    $('fond-mdp').classList.remove('ouvert');
+    toast('Mot de passe changé !');
+  });
   function allerConnexion() {
     $('connexion').scrollIntoView({ behavior: 'smooth', block: 'center' });
     setTimeout(() => $('email').focus({ preventScroll: true }), 500);
@@ -1139,7 +1229,7 @@
     await Promise.all([chargerCoordonnees(), chargerProfil()]);
     await chargerDemandes(); await chargerAnnonces();
   }
-  db.auth.onAuthStateChange((ev, session) => { if ((session ? session.user.id : null) !== (moi ? moi.id : null)) rafraichir(); });
+  db.auth.onAuthStateChange((ev, session) => { if (ev === 'PASSWORD_RECOVERY') ouvrirNouveauMdp(); if ((session ? session.user.id : null) !== (moi ? moi.id : null)) rafraichir(); });
   $('btn-deco').addEventListener('click', async () => { await db.auth.signOut(); scrollTo(0, 0); });
 
   /* ---------- Onglets ---------- */
