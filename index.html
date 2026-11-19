@@ -569,6 +569,131 @@
     .av-p, button.avatar { overflow: hidden; }
     .actions-compte { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .btn.danger { --fg: #c0262d; }
+
+    /* ---------- Mon compte : bandeau d'accueil, stats, panneau d'affichage ---------- */
+    .bienvenue { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr; gap: 8px 24px; align-items: center; padding: 38px 38px 0; border-radius: 34px; background: linear-gradient(135deg, var(--lavande) 0%, #f3e9fb 48%, var(--jaune-pale) 100%); box-shadow: var(--ombre); }
+    .bienvenue::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.75) 1.6px, transparent 1.7px); background-size: 20px 20px; pointer-events: none; -webkit-mask: linear-gradient(120deg, #000 0%, transparent 70%); mask: linear-gradient(120deg, #000 0%, transparent 70%); }
+    .bienvenue > * { position: relative; }
+    .bv-texte { padding-bottom: 8px; }
+    .bv-date { font-family: var(--titres); font-weight: 600; font-size: .9rem; color: var(--violet-fonce); }
+    .bienvenue h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: 1.02; margin-top: 6px; }
+    .bienvenue h1 mark { background: linear-gradient(transparent 60%, var(--jaune) 60%); color: inherit; padding: 0 4px; }
+    .bv-phrase { margin-top: 12px; max-width: 520px; font-size: 1.08rem; line-height: 1.45; color: var(--texte2); }
+    .bv-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .bv-mascotte { position: relative; width: 190px; align-self: end; margin-right: 10px; }
+    .pousse { width: 100%; display: block; overflow: visible; }
+    .p-corps { transform-origin: 80px 158px; animation: pouSaute 3.4s var(--ease) infinite; }
+    .p-ombre { transform-origin: 80px 158px; animation: pouOmbre 3.4s var(--ease) infinite; }
+    .p-feuille { transform-origin: 84px 20px; animation: pouFeuille 2.6s ease-in-out infinite; }
+    .p-yeux { transform-origin: 80px 70px; animation: cligne 4.6s infinite; }
+    .p-bras { transform-origin: 113px 119px; animation: pouSalut 3.4s ease-in-out infinite; }
+    @keyframes pouSaute { 0%, 55%, 100% { transform: none; } 62% { transform: scale(1.05, .93); } 74% { transform: translateY(-14px) scale(.97, 1.04); } 86% { transform: scale(1.03, .96); } }
+    @keyframes pouOmbre { 0%, 55%, 100% { transform: none; } 74% { transform: scaleX(.8); opacity: .08; } }
+    @keyframes pouFeuille { 50% { transform: rotate(10deg); } }
+    @keyframes pouSalut { 0%, 50%, 100% { transform: rotate(0); } 60%, 80% { transform: rotate(-62deg); } 70% { transform: rotate(-38deg); } }
+    .bv-bulle { position: absolute; z-index: 2; left: -78px; top: -2px; max-width: 150px; padding: 9px 14px; border-radius: 18px 18px 4px 18px; background: var(--blanc); box-shadow: var(--ombre); font-family: var(--titres); font-weight: 700; font-size: .9rem; line-height: 1.2; animation: pop .7s var(--rebond) .6s both; }
+    .bv-deco { position: absolute !important; width: 54px; opacity: .95; animation: flotteD 6s ease-in-out infinite; pointer-events: none; }
+    .bv-deco.d1 { right: 150px; top: 30px; width: 64px; } .bv-deco.d2 { right: 48px; top: 96px; width: 52px; animation-delay: -2s; } .bv-deco.d3 { right: 190px; bottom: 90px; width: 46px; animation-delay: -4s; }
+    @keyframes flotteD { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-10px) rotate(6deg); } }
+    .bv-niveau { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; margin: 6px -38px 0; padding: 16px 38px; background: rgba(255,255,255,.72); backdrop-filter: blur(6px); border-top: 1px solid rgba(111,69,176,.12); }
+    .niv-badge { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px 7px 8px; border-radius: 999px; background: var(--violet); color: #fff; font-family: var(--titres); font-weight: 700; font-size: .92rem; }
+    .niv-badge b { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--jaune); color: var(--encre); font-size: .85rem; }
+    .niv-barre { flex: 1; min-width: 0; }
+    .niv-barre .progres { margin: 0; height: 10px; background: rgba(111,69,176,.14); }
+    .niv-barre small { display: block; margin-top: 6px; color: var(--gris); font-size: .82rem; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0 0; }
+    .stat { position: relative; padding: 16px 18px; border-radius: 24px; background: var(--c, var(--blanc)); display: grid; gap: 2px; transition: transform .3s var(--rebond); }
+    .stat:hover { transform: translateY(-3px) rotate(-.6deg); }
+    .stat b { font-family: var(--titres); font-size: 2.3rem; letter-spacing: -.05em; line-height: 1; }
+    .stat span { font-family: var(--titres); font-weight: 600; font-size: .9rem; color: var(--texte2); }
+    .stat .sticker { position: absolute; right: 12px; top: 10px; width: 40px; opacity: .9; }
+    .affichage { margin-top: 28px; }
+    .aff-tete { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+    .aff-tete h2, .h-section { font-size: 1.7rem; letter-spacing: -.04em; }
+    .panneau-liege { position: relative; padding: 26px 22px 24px; border-radius: 30px; background: #f7f1e3; background-image: radial-gradient(rgba(176,140,90,.16) 1.4px, transparent 1.5px); background-size: 14px 14px; box-shadow: inset 0 0 0 3px #e8dcc3, var(--ombre); display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px 18px; }
+    .papier { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 22px 16px 16px; border-radius: 6px 6px 16px 16px; background: var(--c, #fff); box-shadow: 0 6px 14px rgba(90,64,30,.16); transform: rotate(var(--r, 0deg)); transition: transform .35s var(--rebond); text-align: left; border: 0; font: inherit; color: inherit; cursor: pointer; }
+    .papier:hover { transform: rotate(0) translateY(-4px); }
+    .papier::before { content: ''; position: absolute; top: -7px; left: 50%; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff 0 12%, var(--pin, #e5484d) 14%); box-shadow: 0 3px 4px rgba(0,0,0,.25); }
+    .papier .tag { align-self: flex-start; }
+    .papier b { font-family: var(--titres); font-size: 1.08rem; line-height: 1.2; letter-spacing: -.02em; }
+    .papier small { color: var(--gris); font-size: .82rem; margin-top: auto; }
+    .papier.nouveau { background: transparent; box-shadow: none; border: 2px dashed #cdbb97; align-items: center; justify-content: center; text-align: center; min-height: 150px; color: #8a7350; }
+    .papier.nouveau::before { display: none; }
+    .papier.nouveau .plus { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--jaune); color: var(--encre); font-size: 1.6rem; font-weight: 700; }
+    .papier.idee small { margin-top: 0; }
+    .aff-intro { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; color: #7a6540; font-family: var(--titres); font-weight: 600; }
+    .aff-intro .sticker { width: 46px; flex: none; }
+    .badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 12px; margin-top: 14px; }
+    .badge { display: grid; justify-items: center; gap: 6px; padding: 12px 6px; border-radius: 20px; background: var(--c, var(--surface)); text-align: center; font-family: var(--titres); font-weight: 600; font-size: .78rem; line-height: 1.15; transition: transform .3s var(--rebond); }
+    .badge .sticker { width: 52px; }
+    .badge.cache { background: var(--surface); color: #9b958d; }
+    .badge.cache .sticker { filter: grayscale(1) opacity(.4); }
+    .badge:not(.cache):hover { transform: translateY(-3px) rotate(-3deg); }
+    .todo .pts { margin-left: auto; padding: 2px 9px; border-radius: 999px; background: var(--jaune-pale); color: #6b6a1d; font-family: var(--titres); font-weight: 700; font-size: .78rem; }
+    .todo li.fait .pts { background: var(--lavande); color: var(--violet-fonce); }
+    .todo li { width: 100%; }
+    .todo li .lien-texte, .todo li > span.lien-texte { flex: 0 1 auto; }
+    @media (max-width: 1000px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .bienvenue { grid-template-columns: 1fr; padding: 26px 20px 0; border-radius: 28px; }
+      .bv-mascotte { width: 130px; justify-self: end; margin: -10px 4px 0 0; order: 2; }
+      .bv-bulle { left: -110px; top: 6px; }
+      .bv-niveau { margin: 6px -20px 0; padding: 14px 20px; flex-wrap: wrap; order: 3; }
+      .bv-deco { display: none; }
+      .panneau-liege { grid-template-columns: 1fr 1fr; padding: 22px 14px; gap: 20px 12px; }
+    }
+    @media (max-width: 440px) { .panneau-liege { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: reduce) { .p-corps, .p-ombre, .p-feuille, .p-bras, .bv-deco { animation: none !important; } }
+
+    /* ---------- Analyse du CV mise en avant ---------- */
+    .cv-promo { position: relative; overflow: hidden; display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; align-items: center; margin-top: 14px; padding: 30px 34px; border-radius: 32px; background: var(--violet-fonce); background-image: radial-gradient(rgba(255,255,255,.12) 1.4px, transparent 1.5px), linear-gradient(135deg, #6f45b0, #4b2d80); background-size: 18px 18px, auto; color: #fff; box-shadow: var(--ombre-forte); }
+    .cvp-kicker { display: inline-block; padding: 6px 13px; border-radius: 999px; background: var(--jaune); color: var(--encre); font-family: var(--titres); font-weight: 700; font-size: .82rem; }
+    .cv-promo h2 { color: #fff; font-size: clamp(1.9rem, 3.6vw, 2.7rem); letter-spacing: -.045em; line-height: 1.04; margin-top: 12px; }
+    .cv-promo p { color: rgba(255,255,255,.86); margin-top: 10px; line-height: 1.45; max-width: 480px; }
+    .cvp-points { list-style: none; display: grid; gap: 9px; margin: 16px 0 0; padding: 0; }
+    .cvp-points li { display: flex; align-items: center; gap: 10px; font-family: var(--titres); font-weight: 600; font-size: .96rem; }
+    .cvp-points li span { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.18); font-size: .82rem; }
+    .cv-promo .cvp-garantie { display: flex; align-items: center; gap: 7px; margin-top: 14px; font-size: .85rem; color: rgba(255,255,255,.7); }
+    .cvp-depot { display: grid; justify-items: center; gap: 8px; padding: 26px 20px; border-radius: 26px; border: 2px dashed rgba(255,255,255,.42); background: rgba(255,255,255,.08); text-align: center; cursor: pointer; transition: background .25s, border-color .25s, transform .3s var(--rebond); }
+    .cvp-depot:hover, .cvp-depot.survol { background: rgba(255,255,255,.17); border-color: var(--jaune); transform: scale(1.015); }
+    .cvp-depot .sticker { width: 64px; animation: flotteD 5s ease-in-out infinite; }
+    .cvp-depot b { font-family: var(--titres); font-size: 1.25rem; letter-spacing: -.02em; }
+    .cvp-ou { font-size: .85rem; color: rgba(255,255,255,.65); }
+    .cvp-depot small { color: rgba(255,255,255,.65); }
+    .cvp-btn { pointer-events: none; }
+    .cv-promo.fait { background-image: radial-gradient(rgba(255,255,255,.12) 1.4px, transparent 1.5px), linear-gradient(135deg, #7a52b8, #5a3a94); }
+    /* ---------- Coordonnées multi-réseaux ---------- */
+    .cd-liste { display: grid; gap: 10px; margin-top: 14px; }
+    .cd-ligne { display: flex; align-items: center; gap: 10px; padding: 10px 10px 10px 12px; border-radius: 18px; background: var(--surface); animation: pop .4s var(--rebond) both; }
+    .cd-ico { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--c, var(--lavande)); color: var(--encre); font-family: var(--titres); font-weight: 800; font-size: .78rem; letter-spacing: -.02em; }
+    .cd-ico.sm { width: 26px; height: 26px; border-radius: 9px; font-size: .66rem; }
+    .cd-champ { flex: 1; min-width: 0; display: grid; gap: 2px; }
+    .cd-champ label { margin: 0; font-size: .74rem; color: var(--gris); font-weight: 600; }
+    .cd-champ input { width: 100%; border: 0; background: transparent; padding: 2px 0; font: inherit; font-weight: 600; color: var(--texte); outline: none; min-width: 0; }
+    .cd-champ input:focus { box-shadow: none; background: transparent; border: 0; }
+    .cd-champ input::placeholder { font-weight: 400; color: #9b958d; }
+    .cd-ligne:focus-within { box-shadow: 0 0 0 2px var(--violet); background: #faf7fe; }
+    .cd-x { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 0; background: transparent; color: var(--gris); font-size: 1.2rem; cursor: pointer; }
+    .cd-x:hover { background: var(--rose); color: #c0262d; }
+    .cd-titre-ajout { margin-top: 16px; font-family: var(--titres); font-weight: 600; font-size: .88rem; color: var(--texte2); }
+    .cd-ajout { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .chip-add { display: inline-flex; align-items: center; gap: 7px; padding: 5px 13px 5px 6px; border-radius: 999px; border: 1.5px dashed #cfc8da; background: var(--blanc); font: inherit; font-family: var(--titres); font-weight: 600; font-size: .86rem; color: var(--texte2); cursor: pointer; transition: transform .25s var(--rebond), border-color .2s, background .2s; }
+    .chip-add:hover { border-color: var(--violet); background: #faf7fe; transform: translateY(-2px); }
+    .chip-add i { font-style: normal; color: var(--violet); font-weight: 800; }
+    .cd-apercu { margin-top: 16px; padding: 12px 14px; border-radius: 18px; border: 1px dashed var(--gris-clair); }
+    .cd-pied { display: flex; align-items: center; gap: 14px; margin-top: 16px; flex-wrap: wrap; }
+    .coords-liste { display: grid; gap: 8px; margin-top: 12px; }
+    .coords-liste .coords-titre { color: var(--gris); font-size: .76rem; font-weight: 600; }
+    .coord-ligne { display: flex; align-items: center; gap: 10px; padding: 9px 10px 9px 11px; border-radius: 16px; background: var(--surface); border: 1px solid var(--gris-clair); animation: pop .5s var(--rebond) both; }
+    .coord-ligne .cd-ico { width: 34px; height: 34px; }
+    .coord-ligne div { flex: 1; min-width: 0; display: grid; }
+    .coord-ligne small { color: var(--gris); font-size: .74rem; font-weight: 500; }
+    .coord-ligne b { font-family: var(--titres); font-weight: 700; word-break: break-word; }
+    .coord-ligne .petit-act { flex: none; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--gris-clair); background: var(--blanc); font: inherit; font-family: var(--titres); font-weight: 600; font-size: .8rem; color: var(--violet-fonce); cursor: pointer; text-decoration: none; }
+    .coord-ligne .petit-act:hover { background: var(--lavande); }
+    @media (max-width: 860px) { .cv-promo { grid-template-columns: 1fr; padding: 24px 20px; border-radius: 28px; } }
     .pvue { display: none; }
     .pvue.actif { display: block; animation: monte .6s var(--ease) both; }
     .actions-titre { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -1037,8 +1162,53 @@
     <section class="ecran" id="profil">
       <!-- Vue 1 : mon profil (récap) -->
       <div class="pvue actif" id="pv-recap">
-        <div class="titre-page entre">
-          <div><h1>Mon profil</h1><div class="compteur" id="mon-email"></div></div>
+        <section class="bienvenue" id="bienvenue" aria-label="Bienvenue">
+          <span class="bv-deco d1 sticker" data-s="etoile" data-c="#eef07a" aria-hidden="true"></span>
+          <span class="bv-deco d2 sticker" data-s="bulle" data-c="#ffffff" aria-hidden="true"></span>
+          <span class="bv-deco d3 sticker" data-s="coeur" data-c="#f8dbe3" aria-hidden="true"></span>
+          <div class="bv-texte">
+            <p class="bv-date" id="bv-date"></p>
+            <h1 id="bv-titre">Bonjour !</h1>
+            <p class="bv-phrase" id="bv-phrase"></p>
+            <div class="bv-actions">
+              <button type="button" class="btn jaune" onclick="ouvrirTiroir()">Publier un service <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
+              <button type="button" class="btn clair sans" data-pv="cv">✨ Analyser mon CV</button>
+            </div>
+          </div>
+          <div class="bv-niveau" id="bv-niveau"></div>
+        </section>
+
+        <section class="cv-promo" id="cv-promo" aria-labelledby="t-cv-promo">
+          <div class="cvp-texte">
+            <span class="cvp-kicker">✨ Avec l'IA · 10 secondes</span>
+            <h2 id="t-cv-promo">Ton CV devient ton profil</h2>
+            <p id="cvp-sous">Dépose ton CV : l'IA en sort tes compétences, tu gardes celles que tu veux. Plus de profil à remplir à la main.</p>
+            <ul class="cvp-points">
+              <li><span>1</span>Tu déposes ton CV en PDF</li>
+              <li><span>2</span>L'IA repère tes compétences</li>
+              <li><span>3</span>Tu valides, rien n'est enregistré sans toi</li>
+            </ul>
+            <p class="cvp-garantie"><svg class="ico" style="width:15px;height:15px"><use href="#i-lock"/></svg>Ton CV n'est jamais conservé.</p>
+          </div>
+          <div class="cvp-depot" id="cvp-depot" role="button" tabindex="0" aria-label="Choisir mon CV en PDF">
+            <input type="file" id="cv-promo-fichier" accept="application/pdf" hidden>
+            <span class="sticker" data-s="livre" data-c="#eef07a"></span>
+            <b>Glisse ton CV ici</b>
+            <span class="cvp-ou">ou</span>
+            <span class="btn jaune cvp-btn" id="cvp-btn">Analyser mon CV <span class="fleche"><svg><use href="#i-fleche"/></svg></span></span>
+            <small>PDF · 5 Mo maximum</small>
+          </div>
+        </section>
+
+        <div class="stats" id="stats"></div>
+
+        <section class="affichage entre" aria-labelledby="t-affichage">
+          <div class="aff-tete"><h2 id="t-affichage">Mon panneau d'affichage</h2><span class="meta" id="aff-sous"></span></div>
+          <div class="panneau-liege" id="mon-panneau"></div>
+        </section>
+
+        <div class="titre-page entre" style="margin-top:34px">
+          <div><h2 class="h-section">Mon profil</h2><div class="compteur" id="mon-email"></div></div>
           <div class="actions-titre">
             <button type="button" class="btn clair sans" data-pv="cv">Importer mon CV</button>
             <button type="button" class="btn jaune" data-pv="edit">Modifier mon profil <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
@@ -1047,16 +1217,26 @@
         <div class="profil-grille">
           <div class="carte-profil entre" id="carte-profil"></div>
           <div class="entre">
-            <div class="panneau">
-              <h2>Ton profil est complet à <span id="pct">0</span>%</h2>
+            <div class="panneau missions">
+              <h2>Tes missions</h2>
+              <p class="sous">Chaque mission te rapporte des points pote. Profil complet à <b><span id="pct">0</span>%</b>.</p>
               <div class="progres"><i id="barre-pct"></i></div>
               <ul class="todo" id="todo"></ul>
             </div>
             <div class="panneau">
+              <h2>Ma collection de stickers</h2>
+              <p class="sous" id="badges-sous"></p>
+              <div class="badges" id="badges"></div>
+            </div>
+            <div class="panneau">
               <h2>Mes coordonnées</h2>
               <p class="sous">Visibles uniquement par les personnes dont tu acceptes la demande.</p>
-              <label for="contact">Téléphone, Insta, e-mail…</label><input id="contact" maxlength="200" placeholder="Ex. 06 12 34 56 78 ou @mon.insta">
-              <div style="margin-top:16px"><button class="btn sans" id="btn-coord">Enregistrer</button></div>
+              <input id="contact" type="hidden">
+              <div class="cd-liste" id="cd-liste"></div>
+              <p class="cd-titre-ajout" id="cd-titre-ajout">Choisis comment on peut te joindre</p>
+              <div class="cd-ajout" id="cd-ajout"></div>
+              <div class="cd-apercu" id="cd-apercu-bloc" hidden><span class="meta">Ce que verra la personne que tu acceptes</span><div id="cd-apercu"></div></div>
+              <div class="cd-pied"><button class="btn sans" id="btn-coord">Enregistrer</button><span class="meta" id="cd-compteur"></span></div>
             </div>
             <div class="panneau">
               <h2>Mon compte et mes données</h2>
@@ -1550,6 +1730,10 @@
      ===================================================================== */
   const SUPABASE_URL = 'https://vvmjwavdgynoxcwonulh.supabase.co';
   const SUPABASE_CLE_PUBLIQUE = 'sb_publishable_9C6yu87w8il49xSCxpisRA_13jgF0wf';
+  // Lien de confirmation d'e-mail : on le repère AVANT que Supabase ne lise l'adresse
+  const _lien = location.hash + location.search;
+  const arriveParLien = !/type=recovery/.test(_lien) && /access_token=|[?&]code=|type=(signup|email_change|invite|magiclink)/.test(_lien);
+  const typeConfirmation = /type=(signup|email_change|invite)/.test(_lien);
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_CLE_PUBLIQUE);
   const $ = (id) => document.getElementById(id);
   let moi = null;
@@ -1603,6 +1787,11 @@
     else res = await db.auth.signInWithPassword({ email, password });
     b.disabled = false; b.innerHTML = BTN_ENTRER;
     if (modeInscription) $('txt-entrer').textContent = 'Créer mon compte';
+    if (res.error) {
+      const m = (res.error.message || '').toLowerCase();
+      if (/rate limit|too many/.test(m)) return msgCo('Trop de tentatives pour le moment : patiente environ une heure avant de réessayer.', 'erreur');
+      if (/already|registered/.test(m)) return msgCo('Cette adresse a déjà un compte : passe sur « Connexion ».', 'erreur');
+    }
     if (res.error) return msgCo(modeInscription ? 'Inscription impossible : ' + res.error.message : 'E-mail ou mot de passe incorrect, ou compte pas encore confirmé.', 'erreur');
     if (modeInscription && !res.data.session) return msgCo('Compte créé ! Clique sur le lien reçu par e-mail pour le confirmer, puis connecte-toi.', 'ok');
     confettis(e);
@@ -1661,7 +1850,24 @@
   }
 
   /* ---------- Session ---------- */
+  // E-mail confirmé : on déconnecte tout de suite, la personne doit se connecter elle-même
+  const attenteConfirmation = !arriveParLien ? null : (async () => {
+    const { data } = await db.auth.getSession();
+    const u = data.session && data.session.user;
+    if (!u) return;
+    const recent = u.email_confirmed_at && (Date.now() - new Date(u.email_confirmed_at)) < 10 * 60 * 1000;
+    if (!typeConfirmation && !recent) return;      // ex. ancien compte : on ne touche à rien
+    history.replaceState(null, '', location.pathname);
+    await db.auth.signOut();
+    moi = null; document.body.classList.remove('connecte');
+    bascule.querySelectorAll('button')[0].click();
+    if (u.email) $('email').value = u.email;
+    msgCo('Adresse confirmée ! Connecte-toi avec ton e-mail et ton mot de passe.', 'ok');
+    toast('Adresse confirmée ! Connecte-toi pour entrer.', 'etoile', '#eef07a');
+    scrollTo(0, 0); setTimeout(() => mdp.focus({ preventScroll: true }), 600);
+  })();
   async function rafraichir() {
+    if (attenteConfirmation) await attenteConfirmation;
     const { data } = await db.auth.getSession();
     moi = data.session ? data.session.user : null;
     document.body.classList.toggle('connecte', !!moi);
@@ -1671,7 +1877,7 @@
     $('mon-avatar').textContent = (moi.email || '?')[0].toUpperCase();
     $('mon-email').textContent = moi.email;
     $('menu-email').textContent = moi.email; $('co-email').textContent = moi.email;
-    scrollTo(0, 0); requestAnimationFrame(placerCurseur);
+    scrollTo(0, 0); ouvrirOnglet('profil'); requestAnimationFrame(placerCurseur);
     await Promise.all([chargerCoordonnees(), chargerProfil()]);
     await chargerDemandes(); await chargerAnnonces();
   }
@@ -1712,6 +1918,7 @@
     if (nom === 'profil') voirPv('recap');
   }
   segment.querySelectorAll('.onglet').forEach((o) => o.addEventListener('click', () => ouvrirOnglet(o.dataset.ecran)));
+  document.addEventListener('click', (e) => { const b = e.target.closest('[data-aller], #bv-voir'); if (b) ouvrirOnglet(b.dataset.aller || 'annonces'); });
   addEventListener('resize', placerCurseur);
 
   /* ---------- Annonces ---------- */
@@ -1750,7 +1957,7 @@
     const { data, error } = await db.from('annonces').select('id, type, titre, description, created_at, auteur_id, prix_type, prix_euros, categorie, campus').order('created_at', { ascending: false });
     if (t !== tourA) return;
     if (error) { $('liste').innerHTML = '<p class="meta">Impossible de charger les annonces.</p>'; return; }
-    annonces = data; afficherAnnonces();
+    annonces = data; afficherAnnonces(); majTodo();
   }
   const formatEuros = (n) => (Number(n) % 1 === 0 ? String(Number(n)) : Number(n).toFixed(2).replace('.', ',')) + ' €';
   const etiquettePrix = (a) => {
@@ -1905,7 +2112,53 @@
   const lireVu = () => { try { return JSON.parse(localStorage.getItem(cleVu()) || '{}'); } catch (e) { return {}; } };
   const marquerVu = (id) => { try { const v = lireVu(); v[id] = new Date().toISOString(); localStorage.setItem(cleVu(), JSON.stringify(v)); } catch (e) { /* pas grave */ } };
   const nonLu = (c) => { const m = dernierMsg[c.id]; if (!m || m.auteur_id === moi.id) return false; const vu = lireVu()[c.id]; return !vu || new Date(m.created_at) > new Date(vu); };
-  const blocCoord = (c) => c ? `<span class="coord"><small>Coordonnées</small><b>${esc(c)}</b></span>` : '<span class="verrou">Cette personne n’a pas encore renseigné ses coordonnées.</span>';
+  /* ---------- Coordonnées : plusieurs moyens de contact ---------- */
+  const RESEAUX = {
+    ig: ['Instagram', '@ton.pseudo', '#f8dbe3', 'IG'], tel: ['Téléphone', '06 12 34 56 78', '#dcf1e4', 'Tél'], wa: ['WhatsApp', 'Ton numéro WhatsApp', '#dcf1e4', 'WA'],
+    sn: ['Snapchat', 'Ton pseudo Snapchat', '#eef07a', 'SC'], tt: ['TikTok', '@ton.pseudo', '#dcedf6', 'TT'], li: ['LinkedIn', 'linkedin.com/in/ton-profil', '#dcedf6', 'in'],
+    dc: ['Discord', 'Ton pseudo Discord', '#ddccf3', 'DC'], mail: ['E-mail', 'prenom@mail.fr', '#f8e2c8', '@'], autre: ['Autre', 'Précise ton moyen de contact', '#ebe7de', '+']
+  };
+  const parseCoord = (s) => String(s || '').split('\n').map((l) => l.trim()).filter(Boolean).map((l) => { const m = l.match(/^([a-z]{2,5})=(.*)$/); return m && RESEAUX[m[1]] ? { k: m[1], v: m[2].trim() } : { k: 'autre', v: l }; });
+  const serialCoord = (arr) => arr.filter((x) => x.v.trim()).map((x) => x.k + '=' + x.v.trim().replace(/\n/g, ' ')).join('\n');
+  const pseudoNet = (v) => v.trim().replace(/^@/, '').replace(/^https?:\/\/(www\.)?[^/]+\//, '').replace(/[/?#].*$/, '');
+  const lienCoord = (k, v) => {
+    v = v.trim();
+    if (k === 'tel') return v.replace(/[^\d+]/g, '').length >= 6 ? 'tel:' + v.replace(/[^\d+]/g, '') : '';
+    if (k === 'wa') { const n = v.replace(/\D/g, ''); return n.length >= 8 ? 'https://wa.me/' + n.replace(/^0/, '33') : ''; }
+    if (k === 'ig') { const u = pseudoNet(v); return /^[\w.]{1,30}$/.test(u) ? 'https://instagram.com/' + u : ''; }
+    if (k === 'sn') { const u = pseudoNet(v); return /^[\w.\-]{3,30}$/.test(u) ? 'https://snapchat.com/add/' + u : ''; }
+    if (k === 'tt') { const u = pseudoNet(v); return /^[\w.]{1,30}$/.test(u) ? 'https://tiktok.com/@' + u : ''; }
+    if (k === 'mail') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? 'mailto:' + v : '';
+    if (k === 'li') { const m = v.match(/^(?:https?:\/\/)?((?:[\w-]+\.)?linkedin\.com\/in\/[\w\-%]+)/i); return m ? 'https://' + m[1] : ''; }
+    return '';
+  };
+  const blocCoord = (c) => {
+    const l = parseCoord(c); if (!l.length) return '<span class="verrou">Cette personne n’a pas encore renseigné ses coordonnées.</span>';
+    return `<div class="coords-liste"><span class="coords-titre">Coordonnées</span>${l.map((x) => { const r = RESEAUX[x.k], lien = lienCoord(x.k, x.v);
+      return `<div class="coord-ligne"><span class="cd-ico" style="--c:${r[2]}">${r[3]}</span><div><small>${r[0]}</small><b>${esc(x.v)}</b></div>${lien ? `<a class="petit-act" href="${esc(lien)}" target="_blank" rel="noopener noreferrer">Ouvrir</a>` : ''}<button type="button" class="petit-act" data-copier="${esc(x.v)}">Copier</button></div>`; }).join('')}</div>`;
+  };
+  document.addEventListener('click', (e) => { const b = e.target.closest('[data-copier]'); if (!b) return; (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.copier) : Promise.reject()).then(() => toast('Copié !', 'etoile', '#eef07a'), () => toast('Copie impossible, sélectionne le texte à la main.', 'etoile', '#f8dbe3')); });
+  let coordLignes = [];
+  const ORDRE_RESEAUX = ['ig', 'tel', 'wa', 'sn', 'tt', 'li', 'dc', 'mail', 'autre'];
+  function majContact() {
+    const s = serialCoord(coordLignes); $('contact').value = s;
+    $('cd-compteur').textContent = s.length + '/200';
+    $('cd-apercu-bloc').hidden = !s; $('cd-apercu').innerHTML = s ? blocCoord(s) : '';
+    majTodo();
+  }
+  function dessinerCoord(focusDernier) {
+    $('cd-liste').innerHTML = coordLignes.map((x, i) => { const r = RESEAUX[x.k];
+      return `<div class="cd-ligne"><span class="cd-ico" style="--c:${r[2]}">${r[3]}</span><div class="cd-champ"><label for="cd-${i}">${r[0]}</label><input id="cd-${i}" data-i="${i}" value="${esc(x.v)}" placeholder="${esc(r[1])}" maxlength="80" autocomplete="off"></div><button type="button" class="cd-x" data-x="${i}" aria-label="Retirer ${r[0]}">×</button></div>`; }).join('');
+    const dispo = ORDRE_RESEAUX.filter((k) => !coordLignes.some((x) => x.k === k));
+    $('cd-ajout').innerHTML = dispo.map((k) => `<button type="button" class="chip-add" data-add="${k}"><span class="cd-ico sm" style="--c:${RESEAUX[k][2]}">${RESEAUX[k][3]}</span>${RESEAUX[k][0]} <i>+</i></button>`).join('');
+    $('cd-titre-ajout').textContent = coordLignes.length ? 'Ajouter un autre moyen de contact' : 'Choisis comment on peut te joindre';
+    $('cd-titre-ajout').hidden = !dispo.length;
+    if (focusDernier) { const ins = $('cd-liste').querySelectorAll('input'); if (ins.length) ins[ins.length - 1].focus(); }
+    majContact();
+  }
+  $('cd-ajout').addEventListener('click', (e) => { const b = e.target.closest('[data-add]'); if (!b) return; coordLignes.push({ k: b.dataset.add, v: '' }); dessinerCoord(true); });
+  $('cd-liste').addEventListener('input', (e) => { const i = e.target.dataset.i; if (i === undefined) return; coordLignes[+i].v = e.target.value; majContact(); });
+  $('cd-liste').addEventListener('click', (e) => { const b = e.target.closest('[data-x]'); if (!b) return; coordLignes.splice(+b.dataset.x, 1); dessinerCoord(); });
   async function chargerDemandes() {
     const t = ++tourD;
     const { data, error } = await db.from('demandes').select('id, statut, created_at, annonce_id, demandeur_id, proprietaire_id, annonces(titre)').order('created_at', { ascending: false });
@@ -1937,7 +2190,7 @@
         <div class="txt"><b>Un·e étudiant·e veut te contacter</b><p>pour « ${esc(titreD(d))} » · ${quand(d.created_at)}</p></div>
         <div class="actions-dem"><button class="btn petit sans" onclick="repondre('${d.id}', 'acceptee', event)">Accepter</button><button class="btn petit clair" onclick="repondre('${d.id}', 'refusee')">Refuser</button></div>
       </div>`).join('');
-    afficherListeConv();
+    afficherListeConv(); majTodo();
     $('bloc-attente').hidden = !envoyeesAttente.length;
     $('titre-attente').textContent = `Mes demandes en attente (${envoyeesAttente.length})`;
     $('liste-attente').innerHTML = envoyeesAttente.map((d) => `
@@ -2024,11 +2277,15 @@
   }
   async function chargerCoordonnees() {
     const { data } = await db.from('coordonnees').select('contact').eq('user_id', moi.id).maybeSingle();
-    $('contact').value = data ? data.contact : ''; majTodo();
+    coordLignes = parseCoord(data ? data.contact : ''); dessinerCoord();
   }
   $('btn-coord').addEventListener('click', async () => {
-    const contact = $('contact').value.trim();
-    if (contact.length < 3) return toast('Entre au moins 3 caractères.', 'cadenas', '#f8dbe3');
+    const remplies = coordLignes.filter((x) => x.v.trim());
+    if (!remplies.length) return toast('Ajoute au moins un moyen de contact.', 'cadenas', '#f8dbe3');
+    const mauvais = remplies.find((x) => x.v.trim().length < 3 || (x.k === 'mail' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.v.trim())) || ((x.k === 'tel' || x.k === 'wa') && x.v.replace(/\D/g, '').length < 8));
+    if (mauvais) return toast('Vérifie ' + RESEAUX[mauvais.k][0] + ' : la valeur semble incomplète.', 'cadenas', '#f8dbe3');
+    const contact = serialCoord(coordLignes);
+    if (contact.length > 200) return toast('Trop long : retire un moyen de contact ou raccourcis (200 caractères max).', 'cadenas', '#f8dbe3');
     const { error } = await db.from('coordonnees').upsert({ user_id: moi.id, contact, updated_at: new Date().toISOString() });
     if (error) return toast('Enregistrement impossible : ' + error.message, 'cadenas', '#f8dbe3');
     toast('Coordonnées enregistrées', 'cadenas', '#eef07a'); majTodo();
@@ -2058,19 +2315,82 @@
     $('mon-avatar').style.background = c[0]; $('mon-avatar').style.color = c[1];
     majTodo();
   }
+  const NIVEAUX = [[0, 'Nouvelle arrivée'], [40, 'Habitant·e'], [100, 'Voisin·e sympa'], [180, 'Pote de campus'], [280, 'Pote en or']];
+  const IDEES = [
+    ['appareil', '#ffffff', 'var(--peche)', 'Photos de soirée', 'Je fais des photos pour vos soirées et événements'],
+    ['livre', '#eef07a', 'var(--jaune-pale)', 'Coup de pouce en cours', 'Je t’aide à réviser tes partiels'],
+    ['voiture', '#f19a7c', 'var(--ciel)', 'Covoiturage', 'Covoit’ entre campus ce week-end'],
+    ['ordi', '#ffffff', 'var(--menthe)', 'Petit site web', 'Je crée un site pour ton asso ou ton projet']
+  ];
+  function ideeAnnonce(i) { $('mots').value = IDEES[i][4]; ouvrirTiroir(); }
   function majTodo() {
+    if (!moi) return;
+    const mes = annonces.filter((a) => a.auteur_id === moi.id), nbPotes = (typeof convs !== 'undefined' ? convs : []).length;
     const e = [
-      ['Ajoute ton prénom ou pseudo', !!profil.pseudo, 'edit'],
-      ['Choisis ton campus et ta filière', !!(profil.filiere && profil.campus), 'edit'],
-      ['Ajoute ta photo', photoOk(profil.photo), 'edit'],
-      ['Écris une courte présentation', !!profil.bio, 'edit'],
-      ['Ajoute tes compétences', profil.competences.length > 0, 'cv'],
-      ['Précise tes disponibilités', profil.dispos.length > 0, 'edit'],
-      ['Renseigne tes coordonnées', $('contact').value.trim().length >= 3, 'coord']
+      ['Ajoute ton prénom ou pseudo', !!profil.pseudo, 'edit', 10],
+      ['Choisis ton campus et ta filière', !!(profil.filiere && profil.campus), 'edit', 10],
+      ['Ajoute ta photo', photoOk(profil.photo), 'edit', 15],
+      ['Écris une courte présentation', !!profil.bio, 'edit', 10],
+      ['Analyse ton CV : l’IA trouve tes compétences', profil.competences.length > 0, 'cv', 20],
+      ['Précise tes disponibilités', profil.dispos.length > 0, 'edit', 5],
+      ['Renseigne tes coordonnées', $('contact').value.trim().length >= 3, 'coord', 15],
+      ['Publie ton premier service', mes.length > 0, 'pub', 30],
+      ['Crée ton premier lien avec un pote', nbPotes > 0, 'msg', 30]
     ];
-    const pct = Math.round(e.filter((x) => x[1]).length / e.length * 100);
+    const nc = profil.competences.length;
+    $('cvp-sous').textContent = nc ? `Tu as ${nc} compétence${nc > 1 ? 's' : ''} dans ton profil. Dépose un CV à jour : l’IA en repère de nouvelles et tu choisis lesquelles ajouter.` : 'Dépose ton CV : l’IA en sort tes compétences, tu gardes celles que tu veux. Plus de profil à remplir à la main.';
+    $('cv-promo').classList.toggle('fait', nc > 0);
+    const profilE = e.slice(0, 7), pct = Math.round(profilE.filter((x) => x[1]).length / profilE.length * 100);
     $('pct').textContent = pct; $('barre-pct').style.width = pct + '%';
-    $('todo').innerHTML = e.map((x) => `<li class="${x[1] ? 'fait' : ''}"><span class="coche">&#10003;</span>${x[1] ? `<span class="lien-texte">${x[0]}</span>` : `<button type="button" class="lien-texte" data-pv="${x[2]}">${x[0]}</button>`}</li>`).join('');
+    $('todo').innerHTML = e.map((x) => {
+      const lien = x[1] ? `<span class="lien-texte">${x[0]}</span>` : `<button type="button" class="lien-texte" data-pv="${x[2]}">${x[0]}</button>`;
+      return `<li class="${x[1] ? 'fait' : ''}"><span class="coche">&#10003;</span>${lien}<span class="pts">+${x[3]}</span></li>`;
+    }).join('');
+    /* points et niveau */
+    const pts = e.filter((x) => x[1]).reduce((s, x) => s + x[3], 0) + 15 * Math.max(0, mes.length - 1) + 25 * Math.max(0, nbPotes - 1);
+    let niv = 0; NIVEAUX.forEach((n, i) => { if (pts >= n[0]) niv = i; });
+    const suivant = NIVEAUX[niv + 1];
+    $('bv-niveau').innerHTML = `<span class="niv-badge"><b>${niv + 1}</b>${NIVEAUX[niv][1]}</span>
+      <div class="niv-barre"><div class="progres"><i style="width:${suivant ? Math.round((pts - NIVEAUX[niv][0]) / (suivant[0] - NIVEAUX[niv][0]) * 100) : 100}%"></i></div>
+      <small>${pts} points pote${suivant ? ` · encore ${suivant[0] - pts} pour devenir « ${suivant[1]} »` : ' · niveau maximum, bravo !'}</small></div>`;
+    /* salutation */
+    const hr = new Date().getHours(), salut = hr < 5 || hr >= 18 ? 'Bonsoir' : (hr < 12 ? 'Bonjour' : 'Bon après-midi');
+    const nom = profil.pseudo || (moi.email || '').split('@')[0].split('.')[0];
+    const jour = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+    $('bv-date').textContent = jour.charAt(0).toUpperCase() + jour.slice(1) + (profil.campus ? ' · ESP ' + profil.campus : '');
+    $('bv-titre').innerHTML = `${salut}, <mark>${esc(nom.charAt(0).toUpperCase() + nom.slice(1))}</mark> !`;
+    const rot = ['Un petit service aujourd’hui ? Quelqu’un sur ton campus en a peut-être besoin.', 'Ce que tu sais faire fait gagner du temps à quelqu’un d’autre.', 'Un service rendu, c’est un pote de gagné. Qui sera le prochain ?', 'Ton panneau d’affichage est ta vitrine : plus il est garni, plus on te contacte.'];
+    const j = Math.floor(Date.now() / 86400000);
+    $('bv-phrase').textContent = !profil.pseudo ? 'Dis-nous comment t’appeler : tes futurs potes te reconnaîtront plus vite.' : (!mes.length ? 'Ton panneau d’affichage est vide pour l’instant. Qu’est-ce que tu sais faire que les autres cherchent ?' : rot[j % rot.length]);
+    /* stats */
+    const st = [
+      [mes.length, mes.length > 1 ? 'annonces en ligne' : 'annonce en ligne', 'var(--peche)', 'etoile', '#ffffff'],
+      [nbPotes, nbPotes > 1 ? 'potes' : 'pote', 'var(--rose)', 'coeur', '#ffffff'],
+      [Object.values(mesDemandes).filter((s) => s === 'en_attente').length, 'demandes envoyées', 'var(--ciel)', 'bulle', '#ffffff'],
+      [pts, 'points pote', 'var(--jaune-pale)', 'ecole', '#eef07a']
+    ];
+    $('stats').innerHTML = st.map((s) => `<div class="stat" style="--c:${s[2]}"><span class="sticker">${sticker(s[3], s[4])}</span><b>${s[0]}</b><span>${s[1]}</span></div>`).join('');
+    /* panneau d'affichage */
+    const fonds = ['#fff', 'var(--jaune-pale)', 'var(--lavande)', 'var(--menthe)', 'var(--peche)', 'var(--ciel)'], rots = [-2, 1.5, -1, 2, -1.5, 1];
+    $('aff-sous').textContent = mes.length ? `${mes.length} annonce${mes.length > 1 ? 's' : ''} épinglée${mes.length > 1 ? 's' : ''}` : 'Rien d’épinglé pour l’instant';
+    $('mon-panneau').innerHTML = mes.length
+      ? mes.map((a, i) => `<button type="button" class="papier" data-aller="annonces" style="--c:${fonds[i % 6]};--r:${rots[i % 6]}deg"><span class="tag ${a.type}"><span class="pt"></span>${a.type === 'propose' ? 'Propose' : 'Cherche'}</span><b>${esc(a.titre)}</b>${etiquettePrix(a)}<small>Publiée ${quand(a.created_at).toLowerCase()}</small></button>`).join('')
+        + '<button type="button" class="papier nouveau" onclick="ouvrirTiroir()"><span class="plus">+</span><b>Épingler une annonce</b></button>'
+      : `<p class="aff-intro"><span class="sticker">${sticker('etoile', '#eef07a')}</span>Rien ici pour l’instant. Pars d’une idée, tu pourras la modifier avant de publier :</p>`
+        + IDEES.map((d, i) => `<button type="button" class="papier idee" style="--c:${d[2]};--r:${rots[i]}deg" onclick="ideeAnnonce(${i})"><span class="sticker" style="width:46px">${sticker(d[0], d[1])}</span><b>${d[3]}</b><small>${d[4]}</small></button>`).join('')
+        + '<button type="button" class="papier nouveau" onclick="ouvrirTiroir()"><span class="plus">+</span><b>Écrire la mienne</b></button>';
+    /* stickers à collectionner */
+    const B = [
+      ['Premier pas', 'etoile', '#eef07a', 'var(--jaune-pale)', !!profil.pseudo],
+      ['Photogénique', 'appareil', '#ffffff', 'var(--peche)', photoOk(profil.photo)],
+      ['Sur le panneau', 'crayon', '#eef07a', 'var(--menthe)', mes.length >= 1],
+      ['Bon voisin', 'maison', '#ffffff', 'var(--ciel)', mes.length >= 3],
+      ['Premier pote', 'coeur', '#f8dbe3', 'var(--rose)', nbPotes >= 1],
+      ['Réseau de potes', 'bulle', '#ddccf3', 'var(--lavande)', nbPotes >= 3],
+      ['Profil au top', 'ecole', '#eef07a', 'var(--jaune-pale)', pct === 100]
+    ];
+    $('badges-sous').textContent = `${B.filter((x) => x[4]).length} sur ${B.length} débloqués. Chaque action te rapproche du suivant.`;
+    $('badges').innerHTML = B.map((x) => `<div class="badge ${x[4] ? '' : 'cache'}" style="--c:${x[3]}" title="${x[0]}"><span class="sticker">${sticker(x[1], x[2])}</span>${x[4] ? x[0] : '?'}</div>`).join('');
   }
   async function chargerProfil() {
     const { data } = await db.from('profils').select('competences, pseudo, bio, filiere, campus, photo, dispos, couleur').eq('user_id', moi.id).maybeSingle();
@@ -2091,7 +2411,9 @@
   }
   document.addEventListener('click', (e) => {
     const b = e.target.closest('[data-pv]'); if (!b) return;
-    if (b.dataset.pv === 'coord') { voirPv('recap'); return setTimeout(() => $('contact').focus(), 300); }
+    if (b.dataset.pv === 'pub') return ouvrirTiroir();
+    if (b.dataset.pv === 'msg') return ouvrirOnglet('annonces');
+    if (b.dataset.pv === 'coord') { voirPv('recap'); return setTimeout(() => { const el = $('cd-liste').querySelector('input') || $('cd-ajout').querySelector('button'); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.focus({ preventScroll: true }); } }, 300); }
     voirPv(b.dataset.pv);
   });
   /* édition */
@@ -2170,6 +2492,14 @@
   ['dragleave', 'drop'].forEach((ev) => $('depot').addEventListener(ev, (e) => { e.preventDefault(); $('depot').classList.remove('survol'); }));
   $('depot').addEventListener('drop', (e) => traiterCV(e.dataTransfer.files[0]));
   $('btn-cv-autre').addEventListener('click', () => { reinitCV(); $('cv').click(); });
+  /* carte « Analyse ton CV » sur Mon compte : dépôt direct */
+  const cvp = $('cvp-depot'), lancerCV = (f) => { if (!f) return; voirPv('cv'); traiterCV(f); };
+  cvp.addEventListener('click', () => $('cv-promo-fichier').click());
+  cvp.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('cv-promo-fichier').click(); } });
+  $('cv-promo-fichier').addEventListener('change', (e) => { lancerCV(e.target.files[0]); e.target.value = ''; });
+  ['dragenter', 'dragover'].forEach((ev) => cvp.addEventListener(ev, (e) => { e.preventDefault(); cvp.classList.add('survol'); }));
+  ['dragleave', 'drop'].forEach((ev) => cvp.addEventListener(ev, (e) => { e.preventDefault(); cvp.classList.remove('survol'); }));
+  cvp.addEventListener('drop', (e) => lancerCV(e.dataTransfer.files[0]));
   $('btn-cv-ajouter').addEventListener('click', async (e) => {
     const choisies = brouillonCV.filter((c) => c.on).map((c) => c.nom);
     const fusion = [...new Set([...profil.competences, ...choisies])].slice(0, 15);
