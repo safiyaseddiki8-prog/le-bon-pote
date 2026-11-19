@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Le Bon Pote</title>
+  <meta name="description" content="Le réseau d'entraide des étudiants de l'ESP : propose ce que tu sais faire, trouve qui peut t'aider.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
   <style>
@@ -45,7 +46,7 @@
     .conteneur { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
     .gris { color: var(--gris); }
     h2 .gris { position: relative; display: inline-block; color: var(--violet); z-index: 0; }
-    h2 .gris .m { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .08em; }
+    h2 .gris .m { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 .08em .16em 0; margin-right: -.08em; }
     h2 .gris .m > span { display: inline-block; transform: translateY(110%) rotate(6deg); transition: transform .9s var(--rebond); transition-delay: var(--dm); }
     h2 .gris::after { content: ''; position: absolute; left: -1%; right: -1%; bottom: .1em; height: .22em; background: var(--jaune); border-radius: 6px; z-index: -1; transform: scaleX(0) rotate(-1deg); transform-origin: left; transition: transform .8s var(--ease) .55s; }
     .vu h2 .gris .m > span, h2.vu .gris .m > span { transform: none; }
@@ -149,6 +150,18 @@
     .fond-mdp.ouvert { display: flex; }
     .carte-mdp { width: 100%; max-width: 420px; background: var(--blanc); border-radius: 30px; padding: 32px 28px 26px; box-shadow: var(--ombre-forte); }
     .carte-mdp h2 { margin: 0 0 6px; }
+    .carte-legal { max-width: 760px; max-height: 88vh; overflow-y: auto; padding: 28px 30px 30px; }
+    .carte-legal .haut { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; position: sticky; top: -28px; background: var(--blanc); padding: 4px 0 10px; z-index: 1; }
+    .carte-legal .fermer { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--gris-clair); font-size: 1.4rem; cursor: pointer; }
+    .legal-texte h3 { font-size: 1.05rem; margin: 22px 0 6px; letter-spacing: -.02em; }
+    .legal-texte p, .legal-texte li { color: var(--texte2); font-size: .94rem; line-height: 1.6; }
+    .legal-texte p { margin-top: 6px; }
+    .legal-texte ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 6px; }
+    .legal-texte a { color: var(--violet-fonce); text-underline-offset: 3px; }
+    .legal-maj { margin-top: 22px; font-size: .82rem; color: var(--gris); }
+    .consent { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-size: .86rem; font-weight: 400; color: var(--texte2); line-height: 1.45; }
+    .consent input { width: 20px; height: 20px; flex: none; margin: 1px 0 0; accent-color: var(--violet); }
+    .consent .lien-texte { font-size: inherit; }
 
     /* ================= NAV ================= */
     .nav { position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(1.4) blur(14px); background: rgba(255,255,255,.82); border-bottom: 1px solid transparent; transition: border-color .3s; }
@@ -160,9 +173,19 @@
     .hero { position: relative; padding: 64px 0 0; overflow: hidden; }
     .hero::before { display: none; content: ''; position: absolute; left: 50%; top: -30%; width: 1600px; height: 1600px; margin-left: -800px; background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(148,101,205,.05) 0 4deg, transparent 4deg 12deg); -webkit-mask: radial-gradient(circle, #000 0, transparent 60%); mask: radial-gradient(circle, #000 0, transparent 60%); animation: rayons 120s linear infinite; pointer-events: none; }
     @keyframes rayons { to { transform: rotate(360deg); } }
-    .hero .conteneur { position: relative; display: grid; grid-template-columns: 1.25fr .75fr; gap: 48px; align-items: start; }
-    .hero-gauche { min-width: 0; }
-    .col-droite { min-width: 0; }
+    .hero .conteneur { position: relative; display: grid; grid-template-columns: 1.2fr .8fr; grid-template-areas: "texte form" "confiance form" "histoire histoire"; grid-template-rows: auto 1fr auto; gap: 28px 48px; align-items: stretch; }
+    .hero-texte { grid-area: texte; min-width: 0; display: flex; flex-direction: column; }
+    .col-droite { grid-area: form; min-width: 0; }
+    .hero .histoire { grid-area: histoire; }
+    .surtitre { align-self: flex-start; margin-bottom: 14px; font-family: var(--titres); font-weight: 600; font-size: 1.1rem; letter-spacing: -.01em; color: var(--violet-fonce); }
+    .surtitre mark { position: relative; z-index: 0; padding: 0 .12em; margin: 0 -.12em; background: none; color: var(--encre); }
+    .surtitre mark::after { content: ''; position: absolute; left: 0; right: 0; bottom: .08em; height: .5em; background: var(--jaune); border-radius: 5px; z-index: -1; transform: rotate(-1deg); }
+    .campus-liste { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .campus-liste .cl-titre { width: 100%; font-family: var(--titres); font-weight: 600; font-size: .85rem; color: var(--gris); margin-bottom: 2px; }
+    .campus-liste span.v { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px 7px 9px; border-radius: 999px; background: var(--blanc); box-shadow: var(--ombre); font-family: var(--titres); font-weight: 600; font-size: .84rem; color: var(--encre, #1d1b20); }
+    .campus-liste span.v::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--violet); }
+    .campus-liste span.v:nth-of-type(2n)::before { background: #e3e65a; }
+    .campus-liste span.v:nth-of-type(3n)::before { background: #f1b79a; }
     .cta-hero { display: none; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
     .hero h1 { font-size: clamp(2.6rem, 4.9vw, 4.6rem); letter-spacing: -.05em; line-height: .92; }
     .hero h1 .mot { display: inline-block; opacity: 0; transform: translateY(32px) rotate(4deg); animation: mot .9s var(--rebond) forwards; }
@@ -171,11 +194,12 @@
     @keyframes mot { to { opacity: 1; transform: none; } }
     @keyframes trace { to { transform: scaleX(1) rotate(-1.5deg); } }
     .hero .intro { max-width: 520px; margin-top: 16px; font-size: 1.15rem; line-height: 1.5; color: #2f2a26; font-weight: 500; opacity: 0; animation: monte .8s var(--ease) .8s forwards; }
-    .confiance { display: grid; gap: 0; margin-top: 16px; padding: 6px 8px; background: var(--blanc); border-radius: 26px; box-shadow: var(--ombre); opacity: 0; animation: monte .8s var(--ease) 1s forwards; }
-    .confiance > span { display: flex; align-items: center; gap: 14px; padding: 12px 14px; cursor: default; font-family: var(--titres); font-weight: 600; font-size: .95rem; }
-    .confiance > span + span { border-top: 1px solid var(--gris-clair); }
-    .confiance .ico-rond { width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center; transition: transform .5s var(--rebond); }
-    .confiance .ico-rond svg { width: 18px; height: 18px; stroke: #4b2d80; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .confiance { grid-area: confiance; align-self: end; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 0; padding-top: 24px; opacity: 0; animation: monte .8s var(--ease) 1s forwards; }
+    .confiance > span { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 20px 18px 22px; border-radius: 22px; background: var(--blanc); box-shadow: var(--ombre); cursor: default; font-family: var(--titres); font-weight: 600; font-size: .98rem; line-height: 1.2; }
+    .confiance > span b { font-weight: 700; }
+    .confiance > span small { font-family: var(--texte-f, inherit); font-weight: 400; font-size: .86rem; line-height: 1.4; color: var(--gris); }
+    .confiance .ico-rond { width: 44px; height: 44px; margin-bottom: 18px; flex: none; border-radius: 50%; display: grid; place-items: center; transition: transform .5s var(--rebond); }
+    .confiance .ico-rond svg { width: 19px; height: 19px; stroke: #4b2d80; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .confiance > span:hover .ico-rond { transform: rotate(-12deg) scale(1.1); }
     @keyframes monte { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
@@ -204,7 +228,7 @@
     /* ================= DIRECT (ticker) ================= */
     .direct { border-top: 1px solid var(--gris-clair); border-bottom: 1px solid var(--gris-clair); background: var(--blanc); padding: 12px 0; display: flex; align-items: center; gap: 0; overflow: hidden; }
     .direct .label { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 0 18px 0 24px; font-family: var(--titres); font-weight: 700; font-size: .85rem; color: var(--violet); background: var(--blanc); position: relative; z-index: 2; }
-    .direct .label i { width: 8px; height: 8px; border-radius: 50%; background: #3fbf72; animation: pulse 2s infinite; }
+    .direct .label i { width: 8px; height: 8px; border-radius: 2px; background: var(--violet); transform: rotate(45deg); }
     .direct .defil { overflow: hidden; flex: 1; -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
     .direct .piste { display: flex; gap: 12px; width: max-content; animation: defile 46s linear infinite; }
     .direct:hover .piste { animation-play-state: paused; }
@@ -243,9 +267,9 @@
     .defile-indic i { width: 18px; height: 28px; border: 2px solid currentColor; border-radius: 10px; position: relative; }
     .defile-indic i::after { content: ''; position: absolute; left: 50%; top: 5px; width: 3px; height: 6px; margin-left: -1.5px; border-radius: 2px; background: currentColor; animation: molette 1.6s infinite; }
     @keyframes molette { 0% { opacity: 1; transform: none; } 80% { opacity: 0; transform: translateY(9px); } 100% { opacity: 0; } }
-    .histoire { margin-top: 22px; background: var(--surface); border-radius: 30px; padding: 16px 18px 14px; box-shadow: var(--ombre); position: relative; overflow: hidden; }
+    .histoire { margin-top: 0; background: var(--surface); border-radius: 30px; padding: 16px 18px 14px; box-shadow: var(--ombre); position: relative; overflow: hidden; }
     .histoire::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(148,101,205,.14) 1.2px, transparent 1.3px); background-size: 18px 18px; -webkit-mask: radial-gradient(ellipse at center, #000 30%, transparent 75%); mask: radial-gradient(ellipse at center, #000 30%, transparent 75%); pointer-events: none; }
-    .scene { position: relative; display: grid; grid-template-columns: 1fr 150px 1fr; align-items: center; justify-items: center; gap: 4px; }
+    .scene { position: relative; max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr 150px 1fr; align-items: center; justify-items: center; gap: 4px; }
     .tel { width: 212px; height: 380px; border-radius: 40px; background: var(--surface); border: 8px solid var(--blanc); box-shadow: 0 0 0 1px var(--gris-clair), var(--ombre-forte); display: flex; flex-direction: column; overflow: hidden; position: relative; transition: transform .5s var(--rebond); }
     .tel.vibre { animation: vibre .5s; }
     @keyframes vibre { 20%, 60% { transform: translateX(-4px) rotate(-1deg); } 40%, 80% { transform: translateX(4px) rotate(1deg); } }
@@ -307,7 +331,13 @@
     .etape-a.faite .rond { background: var(--violet); border-color: var(--violet); color: #fff; }
     .etape-a.active .rond { background: var(--jaune); border-color: var(--violet); color: var(--encre); transform: scale(1.18); box-shadow: 0 0 0 6px rgba(148,101,205,.15); }
     .etape-a.active b, .etape-a.faite b { color: var(--texte); }
-    .legende { text-align: center; margin-top: 12px; min-height: 44px; font-size: 1rem; line-height: 1.35; font-weight: 500; color: var(--texte2); }
+    .legende-bar { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 12px; }
+    .legende { flex: 1; max-width: 560px; text-align: center; margin: 0; min-height: 50px; display: flex; align-items: center; justify-content: center; font-family: var(--titres); font-size: 1.12rem; line-height: 1.3; font-weight: 600; letter-spacing: -.01em; color: var(--texte); }
+    .fleche { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--blanc); box-shadow: var(--ombre); color: var(--violet-fonce); display: grid; place-items: center; cursor: pointer; transition: transform .2s var(--rebond), background .2s; }
+    .fleche:hover { background: var(--jaune); transform: scale(1.08); }
+    .fleche:disabled { opacity: .35; cursor: default; transform: none; background: var(--blanc); }
+    .astuce-h { text-align: center; margin-top: 2px; font-size: .78rem; color: var(--gris); }
+    .histoire { touch-action: pan-y; }
     .legende span { display: inline-block; animation: pop .5s var(--rebond); }
 
     /* ================= ÉVENTAIL ================= */
@@ -349,7 +379,13 @@
     .question .reponse p { padding: 0 22px 20px; color: var(--texte2); }
 
     footer { border-top: 1px solid var(--gris-clair); padding: 34px 0; }
-    footer .conteneur { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; color: var(--gris); font-size: .88rem; }
+    footer .pied { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px 40px; align-items: start; color: var(--gris); font-size: .88rem; }
+    .pied-g p { margin-top: 12px; line-height: 1.55; }
+    .pied-g p b { color: var(--texte); }
+    .pied-liens { display: flex; flex-wrap: wrap; gap: 6px 22px; justify-content: flex-end; padding-top: 8px; }
+    .pied-liens button, .pied-liens a { border: 0; background: none; padding: 6px 0; font: inherit; font-family: var(--titres); font-weight: 600; color: var(--texte); cursor: pointer; text-decoration: underline; text-decoration-color: var(--lavande2); text-underline-offset: 4px; }
+    .pied-liens button:hover, .pied-liens a:hover { color: var(--violet-fonce); text-decoration-color: var(--violet); }
+    .pied-c { grid-column: 1 / -1; padding-top: 14px; border-top: 1px solid var(--gris-clair); font-size: .8rem; }
 
     .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
     .reveal.vu { opacity: 1; transform: none; }
@@ -396,8 +432,8 @@
     .ecran.actif .entre:nth-child(2) { animation-delay: .06s; } .ecran.actif .entre:nth-child(3) { animation-delay: .12s; }
     .titre-page { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
     .titre-page h1 { font-size: clamp(2.6rem, 5.5vw, 4.4rem); letter-spacing: -.05em; }
-    .compteur { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; color: var(--gris); font-size: .96rem; }
-    .compteur i { width: 8px; height: 8px; border-radius: 50%; background: #3fbf72; animation: pulse 2s infinite; }
+    .compteur { display: inline-flex; align-items: center; gap: 9px; margin-top: 12px; padding: 6px 14px 6px 12px; border-radius: 999px; background: var(--lavande); color: var(--violet-fonce); font-family: var(--titres); font-weight: 600; font-size: .88rem; }
+    .compteur i { flex: none; width: 8px; height: 8px; border-radius: 2px; background: var(--violet); transform: rotate(45deg); }
 
     .outils { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
     .filtres { display: inline-flex; background: var(--gris-clair); border-radius: 999px; padding: 4px; gap: 2px; }
@@ -406,12 +442,23 @@
     .recherche { position: relative; width: 300px; }
     .recherche input { padding-left: 44px; height: 46px; background: var(--blanc); }
     .recherche svg { position: absolute; left: 15px; top: 14px; color: var(--gris); }
-    .categories { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-    .categories button { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px 0 8px; border-radius: 999px; border: 1px solid var(--gris-clair); background: var(--blanc); font-family: var(--titres); font-weight: 600; font-size: .9rem; cursor: pointer; transition: all .3s var(--rebond); color: var(--texte); }
-    .categories button .sticker { width: 26px; }
-    .categories button:hover { transform: translateY(-2px); }
-    .categories button.actif { background: var(--lavande); border-color: var(--violet); color: var(--violet-fonce); }
+    .categories { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .categories .cat { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--gris-clair); background: var(--blanc); font-family: var(--titres); font-weight: 600; font-size: .9rem; color: var(--texte); cursor: pointer; white-space: nowrap; transition: all .3s var(--ease); }
+    .categories .cat b { font-weight: 700; font-size: .78rem; color: var(--gris); }
+    .categories .cat:hover { border-color: var(--violet); }
+    .categories .cat.actif { background: var(--lavande); border-color: var(--violet); color: var(--violet-fonce); }
+    .categories .cat.actif b { color: var(--violet-fonce); }
+    .barre-filtres { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; padding: 14px 16px; border-radius: 22px; background: var(--surface); }
+    .selecteur { display: grid; gap: 4px; margin: 0; }
+    .selecteur span { font-family: var(--titres); font-weight: 600; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); }
+    .selecteur select { height: 42px; min-width: 160px; padding: 0 36px 0 14px; border-radius: 14px; border: 1px solid var(--gris-clair); background-color: var(--blanc); font: inherit; font-weight: 500; font-size: .92rem; color: var(--texte); cursor: pointer; }
+    .nb-res { margin-left: auto; align-self: center; font-family: var(--titres); font-weight: 600; font-size: .88rem; color: var(--gris); }
+    .barre-filtres .btn { align-self: center; }
+    .meta-annonce { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 8px; font-size: .8rem; color: var(--gris); font-weight: 500; }
+    .meta-annonce span + span::before { content: '\00B7'; margin-right: 10px; color: var(--violet); }
+    select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236f6a64' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
 
+    .deux-champs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .annonces { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .annonce { background: var(--blanc); border-radius: 26px; padding: 10px; box-shadow: var(--ombre); transition: transform .45s var(--rebond), box-shadow .45s var(--ease); animation: monte .6s var(--ease) both; display: flex; flex-direction: column; }
     .annonce:hover { transform: translateY(-8px); box-shadow: var(--ombre-forte); }
@@ -513,6 +560,15 @@
     .inbox-fil .ecrire { margin: 0 16px 16px; }
 
     /* ================= PROFIL (3 vues) ================= */
+    .photo-edit { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .photo-apercu { width: 96px; height: 96px; flex: none; }
+    .photo-apercu .av-p { --t: 96px; box-shadow: 0 0 0 4px var(--blanc), 0 0 0 5px var(--gris-clair); }
+    .photo-actions { display: flex; flex-wrap: wrap; gap: 8px; max-width: 360px; }
+    .photo-actions small { flex-basis: 100%; }
+    .av-p img, .cp-avatar img, .compte .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+    .av-p, button.avatar { overflow: hidden; }
+    .actions-compte { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .btn.danger { --fg: #c0262d; }
     .pvue { display: none; }
     .pvue.actif { display: block; animation: monte .6s var(--ease) both; }
     .actions-titre { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -601,6 +657,8 @@
     .champ-prix input { width: 130px; font-family: var(--titres); font-weight: 700; font-size: 1.1rem; text-align: right; }
     .champ-prix b { font-family: var(--titres); font-size: 1.3rem; }
     .champ-prix small { color: var(--gris); }
+    .champ-prix.erreur input { border-color: #c0262d; box-shadow: 0 0 0 3px rgba(192,38,45,.12); }
+    .champ-prix.erreur small { color: #c0262d; font-weight: 500; }
     .prix { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 999px; font-family: var(--titres); font-weight: 700; font-size: .82rem; background: var(--surface); color: var(--texte); border: 1px solid var(--gris-clair); }
     .prix.gratuit { background: var(--menthe); border-color: transparent; color: #1f7a48; }
     .prix.fixe { background: var(--jaune-pale); border-color: transparent; color: #4e4d0a; }
@@ -626,6 +684,9 @@
       .nav .liens { display: none; }
       .hero { padding-top: 40px; }
       .hero .conteneur, .grille2, .faq { grid-template-columns: 1fr; gap: 28px; }
+      .hero .conteneur { grid-template-areas: "texte" "form" "histoire" "confiance"; grid-template-rows: none; }
+      footer .pied { grid-template-columns: 1fr; }
+      .pied-liens { justify-content: flex-start; padding-top: 0; }
       .cta-hero { display: flex; }
       .profil-grille, .edit-grille { grid-template-columns: 1fr; }
       .inbox { grid-template-columns: 1fr; }
@@ -650,6 +711,14 @@
     @media (max-width: 600px) {
       .nav .btn { height: 36px; padding: 0 14px; font-size: .85rem; }
       .hero h1 { font-size: 2.7rem; }
+      .confiance { grid-template-columns: 1fr; }
+      .confiance > span { padding: 16px; }
+      .confiance .ico-rond { margin-bottom: 4px; }
+      .barre-filtres { padding: 12px; }
+      .selecteur { flex: 1 1 140px; }
+      .selecteur select { width: 100%; min-width: 0; }
+      .categories { flex-wrap: nowrap; overflow-x: auto; margin-right: -20px; padding-right: 20px; scrollbar-width: none; }
+      .nb-res { margin-left: 0; flex-basis: 100%; }
       .hero .intro { font-size: 1.05rem; }
       .pile { gap: 10px; margin-top: 30px; }
       .pastille { padding: 9px 16px; }
@@ -727,43 +796,49 @@
 
   <header class="hero">
     <div class="conteneur">
-      <div class="hero-gauche">
+      <div class="hero-texte">
+        <p class="surtitre">Le réseau d'entraide des étudiants de <mark>l'ESP</mark></p>
         <h1 id="titre-hero">Un service rendu, un <span class="surligne">pote</span> gagné.</h1>
-        <p class="intro">Propose ce que tu sais faire, trouve qui peut t'aider. Photo, montage, coloc, covoit' : tout se passe entre étudiants du campus.</p>
+        <p class="intro">Propose ce que tu sais faire, trouve qui peut t'aider : photo, montage, coloc, covoit'. Tout se passe entre étudiants de l'ESP, sur ton campus.</p>
+        <div class="campus-liste" aria-label="Campus de l'ESP"><span class="cl-titre">Présent sur 7 campus</span><span class="v">Paris</span><span class="v">Lyon</span><span class="v">Bordeaux</span><span class="v">Toulouse</span><span class="v">Nantes</span><span class="v">Lille</span><span class="v">Strasbourg</span></div>
         <div class="cta-hero">
           <button type="button" class="btn sans" onclick="allerConnexion('connexion')">Se connecter</button>
           <button type="button" class="btn clair" onclick="allerConnexion('inscription')">Créer un compte</button>
         </div>
-
-        <!-- L'histoire animée : elle tourne toute seule, en boucle -->
-        <div class="histoire" id="histoire" role="img" aria-label="Animation : Léa publie une annonce, Sam demande le contact, Léa accepte, ils discutent, le service est rendu.">
-          <div class="demo-entete"><b>Regarde comment ça marche</b><span class="live"><i></i>Léa &amp; Sam</span></div>
-          <div class="scene">
-            <div class="tel" id="tel-lea">
-              <div class="barre"><span class="av" style="background:var(--rose)">L</span><div><b>Léa</b><small>Étudiante en com'</small></div></div>
-              <div class="flux" id="flux-lea"></div>
-            </div>
-            <div class="milieu">
-              <div class="fil-lien"></div>
-              <span class="pouls"></span>
-              <span class="voyageur sticker" id="voyageur"></span>
-              <div class="badge-final" id="badge-final"><span class="sticker" data-s="coeur" data-c="#f8dbe3" style="width:64px"></span><b>Un service rendu,<br>un pote gagné !</b><span class="plus1">+1 pote</span></div>
-            </div>
-            <div class="tel" id="tel-sam">
-              <div class="barre"><span class="av" style="background:var(--lavande)">S</span><div><b>Sam</b><small>Photographe amateur</small></div></div>
-              <div class="flux" id="flux-sam"></div>
-            </div>
+      </div>
+      <!-- L'histoire animée : elle tourne toute seule, en boucle -->
+      <div class="histoire" id="histoire" role="img" aria-label="Animation : Léa publie une annonce, Sam demande le contact, Léa accepte, ils discutent, le service est rendu.">
+        <div class="demo-entete"><b>Regarde comment ça marche</b></div>
+        <div class="scene">
+          <div class="tel" id="tel-lea">
+            <div class="barre"><span class="av" style="background:var(--rose)">L</span><div><b>Léa</b><small>Étudiante en com'</small></div></div>
+            <div class="flux" id="flux-lea"></div>
           </div>
-          <div class="etapes-anim" id="etapes">
-            <div class="rail"><i id="rail"></i></div>
-            <button type="button" class="etape-a" data-e="0"><span class="rond">1</span><b>Annonce</b></button>
-            <button type="button" class="etape-a" data-e="1"><span class="rond">2</span><b>Demande</b></button>
-            <button type="button" class="etape-a" data-e="2"><span class="rond">3</span><b>Accord</b></button>
-            <button type="button" class="etape-a" data-e="3"><span class="rond">4</span><b>Discussion</b></button>
-            <button type="button" class="etape-a" data-e="4"><span class="rond">5</span><b>Service rendu</b></button>
+          <div class="milieu">
+            <div class="fil-lien"></div>
+            <span class="pouls"></span>
+            <span class="voyageur sticker" id="voyageur"></span>
+            <div class="badge-final" id="badge-final"><span class="sticker" data-s="coeur" data-c="#f8dbe3" style="width:64px"></span><b>Un service rendu,<br>un pote gagné !</b><span class="plus1">+1 pote</span></div>
           </div>
-          <p class="legende" id="legende" aria-live="off"></p>
+          <div class="tel" id="tel-sam">
+            <div class="barre"><span class="av" style="background:var(--lavande)">S</span><div><b>Sam</b><small>Photographe amateur</small></div></div>
+            <div class="flux" id="flux-sam"></div>
+          </div>
         </div>
+        <div class="etapes-anim" id="etapes">
+          <div class="rail"><i id="rail"></i></div>
+          <button type="button" class="etape-a" data-e="0"><span class="rond">1</span><b>Annonce</b></button>
+          <button type="button" class="etape-a" data-e="1"><span class="rond">2</span><b>Demande</b></button>
+          <button type="button" class="etape-a" data-e="2"><span class="rond">3</span><b>Accord</b></button>
+          <button type="button" class="etape-a" data-e="3"><span class="rond">4</span><b>Discussion</b></button>
+          <button type="button" class="etape-a" data-e="4"><span class="rond">5</span><b>Service rendu</b></button>
+        </div>
+        <div class="legende-bar">
+          <button type="button" class="fleche" id="h-prec" aria-label="Étape précédente"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <p class="legende" id="legende" aria-live="off"></p>
+          <button type="button" class="fleche" id="h-suiv" aria-label="Étape suivante"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+        <p class="astuce-h">Clique, glisse ou fais défiler pour changer d'étape</p>
       </div>
 
       <div class="col-droite">
@@ -776,6 +851,11 @@
         <label for="email">E-mail étudiant</label><input id="email" type="email" placeholder="prenom@ecole.fr" autocomplete="email">
         <label for="mdp">Mot de passe</label>
         <div class="champ-mdp"><input id="mdp" type="password" placeholder="6 caractères minimum" autocomplete="current-password"><button type="button" id="voir-mdp">Afficher</button></div>
+        <div id="champs-insc" hidden>
+          <label for="campus-insc">Ton campus de l'ESP</label>
+          <select id="campus-insc"><option value="">Choisis ton campus</option><option value="Paris">Paris</option><option value="Lyon">Lyon</option><option value="Bordeaux">Bordeaux</option><option value="Toulouse">Toulouse</option><option value="Nantes">Nantes</option><option value="Lille">Lille</option><option value="Strasbourg">Strasbourg</option></select>
+          <label class="consent"><input type="checkbox" id="consent"><span>J'ai lu la <button type="button" class="lien-texte" data-legal="confidentialite">politique de confidentialité</button> et j'accepte que mes données servent au fonctionnement du site.</span></label>
+        </div>
         <button type="button" class="lien-oubli" id="lien-oubli">Mot de passe oublié ?</button>
         <div style="margin-top:10px"><button type="submit" class="btn plein" id="btn-entrer"><span id="txt-entrer">Se connecter</span> <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
         <p class="msg-co" id="msg-co" role="status"></p>
@@ -788,11 +868,11 @@
           <button type="button" class="lien-oubli" id="co-deco" style="margin:8px auto 0">Se déconnecter</button>
         </div>
       </div>
-      <div class="confiance">
-        <span><span class="ico-rond" style="background:var(--jaune)"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="16" r="1.2" fill="#4b2d80"/></svg></span>Coordonnées privées</span>
-        <span><span class="ico-rond" style="background:var(--lavande)"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9z"/></svg></span>Gratuit ou à petit prix</span>
-        <span><span class="ico-rond" style="background:var(--peche)"><svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v5"/></svg></span>Réservé au campus</span>
       </div>
+      <div class="confiance">
+        <span><span class="ico-rond" style="background:var(--jaune)"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="16" r="1.2" fill="#4b2d80"/></svg></span><b>Coordonnées privées</b><small>Visibles seulement après ton accord.</small></span>
+        <span><span class="ico-rond" style="background:var(--lavande)"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9z"/></svg></span><b>Gratuit ou à petit prix</b><small>De 0 à 300 €, sans paiement dans l'appli.</small></span>
+        <span><span class="ico-rond" style="background:var(--peche)"><svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v5"/></svg></span><b>Réservé aux étudiants de l'ESP</b><small>7 campus, une seule communauté.</small></span>
       </div>
     </div>
     <div class="pile" id="pile" aria-hidden="true"></div>
@@ -806,8 +886,8 @@
   <section class="bloc" id="campus">
     <div class="conteneur">
       <div class="entete reveal">
-        <h2>Cette semaine<br><span class="gris">sur le campus.</span></h2>
-        <p>Des étudiants proposent leurs talents, d'autres cherchent un coup de main. Peut-être toi ?</p>
+        <h2>Cette semaine<br><span class="gris">sur les campus ESP.</span></h2>
+        <p>Des étudiants de l'ESP proposent leurs talents, d'autres cherchent un coup de main. Peut-être toi ?</p>
       </div>
       <div class="eventail" id="eventail" aria-hidden="true">
         <div class="mini" style="--x:-440px; --y:46px; --r:-15deg; --d:0s"><div class="vis" style="background:var(--lavande)"><span class="sticker" data-s="appareil" data-c="#ffffff"></span></div><span class="tag propose">Propose</span><b>Photos pour vos soirées d'asso</b></div>
@@ -845,17 +925,27 @@
       </div>
       <div class="reveal d1">
         <div class="question ouverte"><button>C'est vraiment gratuit ?<span class="plus">+</span></button><div class="reponse"><div><p>L'appli est 100 % gratuite et n'encaisse jamais d'argent. Chaque annonce indique si le service est gratuit, à prix fixe ou à discuter, et vous vous arrangez entre vous.</p></div></div></div>
+        <div class="question"><button>Qui peut s'inscrire ?<span class="plus">+</span></button><div class="reponse"><div><p>Les étudiants de l'ESP, sur les 7 campus : Paris, Lyon, Bordeaux, Toulouse, Nantes, Lille et Strasbourg. Le Bon Pote est un projet étudiant indépendant, ce n'est pas un service officiel de l'école.</p></div></div></div>
         <div class="question"><button>Qui peut voir mon numéro ?<span class="plus">+</span></button><div class="reponse"><div><p>Personne, tant que tu n'as pas accepté une demande de contact. Et seule la personne acceptée le voit.</p></div></div></div>
         <div class="question"><button>Que fait l'IA avec mon CV ?<span class="plus">+</span></button><div class="reponse"><div><p>Elle te propose tes compétences. Tu relis, tu corriges, et c'est toi qui valides.</p></div></div></div>
+        <div class="question"><button>Que deviennent mes données ?<span class="plus">+</span></button><div class="reponse"><div><p>Elles servent uniquement au fonctionnement du site. Tu peux les télécharger ou supprimer ton compte quand tu veux, depuis ton profil. Tout est détaillé dans la politique de confidentialité, en bas de page.</p></div></div></div>
         <div class="question"><button>Je peux supprimer mon annonce ?<span class="plus">+</span></button><div class="reponse"><div><p>Oui, à tout moment. Et personne d'autre que toi ne peut la modifier ou la supprimer.</p></div></div></div>
       </div>
     </div>
   </section>
 
   <footer>
-    <div class="conteneur">
-      <a class="logo" href="#" aria-label="le bon pote"><span class="mot-logo" data-logo>le bon pote</span><span class="point">.</span></a>
-      <span>Projet étudiant · Module Vibe Coding · ESP</span>
+    <div class="conteneur pied">
+      <div class="pied-g">
+        <a class="logo" href="#" aria-label="le bon pote"><span class="mot-logo" data-logo>le bon pote</span><span class="point">.</span></a>
+        <p>Site créé par <b>Safiya Seddiki</b>.<br>Projet étudiant · Module Vibe Coding · ESP. Site indépendant, non édité par l'ESP.</p>
+      </div>
+      <nav class="pied-liens" aria-label="Informations légales">
+        <button type="button" data-legal="mentions">Mentions légales</button>
+        <button type="button" data-legal="confidentialite">Confidentialité et données</button>
+        <a href="mailto:safiya.seddiki@mail-esd.com">Contact</a>
+      </nav>
+      <p class="pied-c">© 2026 Safiya Seddiki</p>
     </div>
   </footer>
 </div>
@@ -881,6 +971,7 @@
             <button role="menuitem" data-go="contacts"><svg class="ico"><use href="#i-chat"/></svg>Mes messages</button>
             <button role="menuitem" data-go="accueil"><svg class="ico"><use href="#i-home"/></svg>Page d'accueil</button>
             <hr>
+            <button role="menuitem" data-legal="confidentialite"><svg class="ico"><use href="#i-lock"/></svg>Confidentialité</button>
             <button role="menuitem" data-go="deco"><svg class="ico"><use href="#i-lock"/></svg>Se déconnecter</button>
           </div>
         </div>
@@ -896,8 +987,16 @@
         <button class="btn jaune" onclick="ouvrirTiroir()">Publier une annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
       </div>
       <div class="outils entre">
-        <div class="filtres" id="filtres"><button class="actif" data-f="tout">Tout</button><button data-f="propose">Propose</button><button data-f="cherche">Cherche</button><button data-f="gratuit">Gratuit</button></div>
-        <div class="recherche"><svg class="ico"><use href="#i-loupe"/></svg><input id="recherche" placeholder="Photo, coloc, maths…"></div>
+        <div class="filtres" id="filtres" role="group" aria-label="Type d'annonce"><button class="actif" data-f="tout">Toutes</button><button data-f="propose">Propositions</button><button data-f="cherche">Recherches</button></div>
+        <div class="recherche"><svg class="ico"><use href="#i-loupe"/></svg><input id="recherche" placeholder="Photo, coloc, maths…" aria-label="Rechercher une annonce"></div>
+      </div>
+      <div class="categories entre" id="categories" role="group" aria-label="Catégorie"></div>
+      <div class="barre-filtres entre">
+        <label class="selecteur"><span>Campus</span><select id="f-campus"><option value="tout">Tous les campus</option><option value="Paris">Paris</option><option value="Lyon">Lyon</option><option value="Bordeaux">Bordeaux</option><option value="Toulouse">Toulouse</option><option value="Nantes">Nantes</option><option value="Lille">Lille</option><option value="Strasbourg">Strasbourg</option></select></label>
+        <label class="selecteur"><span>Prix</span><select id="f-prix"><option value="tout">Tous les prix</option><option value="gratuit">Gratuit</option><option value="10">Jusqu'à 10 €</option><option value="20">Jusqu'à 20 €</option><option value="50">Jusqu'à 50 €</option><option value="discuter">À discuter</option></select></label>
+        <label class="selecteur"><span>Trier par</span><select id="f-tri"><option value="recent">Plus récentes</option><option value="prix_asc">Prix croissant</option><option value="prix_desc">Prix décroissant</option></select></label>
+        <span class="nb-res" id="nb-res" aria-live="polite"></span>
+        <button type="button" class="btn petit clair sans" id="f-reset" hidden>Tout effacer</button>
       </div>
       <div class="annonces" id="liste"></div>
     </section>
@@ -941,7 +1040,7 @@
         <div class="titre-page entre">
           <div><h1>Mon profil</h1><div class="compteur" id="mon-email"></div></div>
           <div class="actions-titre">
-            <button type="button" class="btn clair" data-pv="cv">Importer mon CV</button>
+            <button type="button" class="btn clair sans" data-pv="cv">Importer mon CV</button>
             <button type="button" class="btn jaune" data-pv="edit">Modifier mon profil <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
           </div>
         </div>
@@ -960,9 +1059,14 @@
               <div style="margin-top:16px"><button class="btn sans" id="btn-coord">Enregistrer</button></div>
             </div>
             <div class="panneau">
-              <h2>Mon compte</h2>
-              <p class="sous">Tu peux te déconnecter à tout moment.</p>
-              <div style="margin-top:14px"><button class="btn petit clair" id="btn-deco">Se déconnecter</button></div>
+              <h2>Mon compte et mes données</h2>
+              <p class="sous">Tu gardes la main sur tout ce que tu partages.</p>
+              <div class="actions-compte">
+                <button type="button" class="btn petit clair sans" id="btn-export">Télécharger mes données</button>
+                <button type="button" class="btn petit clair sans" id="btn-deco">Se déconnecter</button>
+                <button type="button" class="btn petit clair sans danger" id="btn-suppr">Supprimer mon compte</button>
+              </div>
+              <p class="meta" style="margin-top:14px"><button type="button" class="lien-texte" data-legal="confidentialite">Politique de confidentialité</button> · <button type="button" class="lien-texte" data-legal="mentions">Mentions légales</button></p>
             </div>
           </div>
         </div>
@@ -973,10 +1077,21 @@
         <div class="retour-barre"><button type="button" class="btn petit clair" data-pv="recap">&larr; Mon profil</button><h1>Modifier mon profil</h1></div>
         <div class="edit-grille">
           <form class="panneau" id="form-edit" novalidate>
-            <label for="e-pseudo" style="margin-top:0">Prénom ou pseudo</label><input id="e-pseudo" maxlength="30" placeholder="Ex. Léa" autocomplete="nickname">
-            <label for="e-filiere">Filière et année</label><input id="e-filiere" maxlength="60" placeholder="Ex. M2 Data, ESP">
+            <label style="margin-top:0">Ta photo</label>
+            <div class="photo-edit">
+              <div id="e-photo-apercu" class="photo-apercu"></div>
+              <div class="photo-actions">
+                <input type="file" id="e-photo" accept="image/png,image/jpeg,image/webp" hidden>
+                <button type="button" class="btn petit clair sans" id="btn-photo">Importer une photo</button>
+                <button type="button" class="btn petit clair sans" id="btn-photo-retirer" hidden>Retirer la photo</button>
+                <small class="meta">JPG, PNG ou WebP. Elle est recadrée en rond et visible uniquement par tes contacts acceptés.</small>
+              </div>
+            </div>
+            <label for="e-pseudo">Prénom ou pseudo</label><input id="e-pseudo" maxlength="30" placeholder="Ex. Léa" autocomplete="nickname">
+            <label for="e-campus">Campus</label><select id="e-campus"><option value="">Choisis ton campus</option><option value="Paris">Paris</option><option value="Lyon">Lyon</option><option value="Bordeaux">Bordeaux</option><option value="Toulouse">Toulouse</option><option value="Nantes">Nantes</option><option value="Lille">Lille</option><option value="Strasbourg">Strasbourg</option></select>
+            <label for="e-filiere">Filière et année</label><input id="e-filiere" maxlength="60" placeholder="Ex. Bachelor Marketing digital, 2e année">
             <label for="e-bio">Courte présentation <span class="compte-car" id="c-bio">0/160</span></label><textarea id="e-bio" rows="3" maxlength="160" placeholder="Une ou deux phrases sur toi : ce que tu aimes faire, ce que tu cherches…"></textarea>
-            <label>Couleur de ton avatar</label><div class="couleurs" id="e-couleurs"></div>
+            <label>Arrière-plan de ton profil</label><div class="couleurs" id="e-couleurs"></div>
             <label>Quand es-tu disponible ?</label><div class="dispos" id="e-dispos"></div>
             <label>Tes compétences</label>
             <div class="chips" id="chips"></div>
@@ -1030,6 +1145,10 @@
   </div>
   <label for="mots">En quelques mots (facultatif)</label>
   <div class="ia-ligne"><input id="mots" maxlength="200" placeholder="Ex. covoit Lyon vendredi"><button class="btn btn-ia sans" id="btn-rediger">✨ Rédiger</button></div>
+  <div class="deux-champs">
+    <div><label for="t-cat">Catégorie</label><select id="t-cat"></select></div>
+    <div><label for="t-campus">Campus</label><select id="t-campus"><option value="">Tous les campus</option><option value="Paris">Paris</option><option value="Lyon">Lyon</option><option value="Bordeaux">Bordeaux</option><option value="Toulouse">Toulouse</option><option value="Nantes">Nantes</option><option value="Lille">Lille</option><option value="Strasbourg">Strasbourg</option></select></div>
+  </div>
   <label for="t-titre">Titre</label><input id="t-titre" maxlength="100" placeholder="Le titre de ton annonce">
   <label for="t-desc">Description</label><textarea id="t-desc" rows="4" maxlength="1000" placeholder="Quelques phrases pour expliquer"></textarea>
   <label>Prix</label>
@@ -1038,11 +1157,29 @@
     <label><input type="radio" name="prix" value="fixe"><span>Prix fixe</span></label>
     <label><input type="radio" name="prix" value="discuter"><span>À discuter</span></label>
   </div>
-  <div class="champ-prix" id="champ-prix"><input id="t-prix" type="number" inputmode="decimal" min="1" max="9999" step="0.5" placeholder="15" aria-label="Prix en euros"><b>€</b><small>Aucun paiement dans l'appli : vous vous arrangez entre vous.</small></div>
+  <div class="champ-prix" id="champ-prix"><input id="t-prix" type="number" inputmode="decimal" min="1" max="300" step="0.5" placeholder="15" aria-label="Prix en euros"><b>€</b><small id="aide-prix">De 1 à 300 €. Aucun paiement dans l'appli : vous vous arrangez entre vous.</small></div>
   <div style="margin-top:20px"><button class="btn plein" id="btn-publier">Publier l'annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
 </aside>
 
 <div class="toasts" id="toasts"></div>
+
+<div class="fond-mdp" id="fond-legal" role="dialog" aria-modal="true" aria-labelledby="legal-titre">
+  <div class="carte-mdp carte-legal">
+    <div class="haut"><h2 id="legal-titre"></h2><button type="button" class="fermer" id="legal-fermer" aria-label="Fermer">×</button></div>
+    <div class="legal-texte" id="legal-texte"></div>
+  </div>
+</div>
+
+<div class="fond-mdp" id="fond-suppr" role="dialog" aria-modal="true" aria-labelledby="titre-suppr">
+  <form class="carte-mdp" id="form-suppr" novalidate>
+    <h2 id="titre-suppr">Supprimer mon compte</h2>
+    <p class="sous">Ton profil, tes annonces, tes demandes, tes messages et tes coordonnées seront effacés définitivement. Cette action est irréversible.</p>
+    <label for="suppr-mot">Pour confirmer, écris <b>SUPPRIMER</b></label>
+    <input id="suppr-mot" autocomplete="off" placeholder="SUPPRIMER">
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap"><button type="submit" class="btn sans danger" id="btn-suppr-ok" style="--bg:#fbe9ea">Supprimer définitivement</button><button type="button" class="btn clair sans" id="suppr-annuler">Annuler</button></div>
+    <p class="msg-co" id="msg-suppr" role="status"></p>
+  </form>
+</div>
 
 <div class="fond-mdp" id="fond-oubli" role="dialog" aria-modal="true" aria-labelledby="titre-oubli">
   <div class="carte-mdp">
@@ -1234,7 +1371,7 @@
   (() => {
     const pile = document.getElementById('pile');
     const couleurs = ['var(--lavande)', 'var(--jaune)', 'var(--peche)', 'var(--ciel)', 'var(--rose)', 'var(--menthe)', 'var(--lavande2)'];
-    const mots = ['Photo', 'Montage vidéo', 'Coloc', "Covoit'", 'Dev web', 'Maths', 'Anglais', 'Graphisme', 'Prise de parole', 'Déménagement', 'Relecture de CV', 'Excel', 'Guitare', 'Cuisine', 'Community management', 'Révisions'];
+    const mots = ['Photo', 'Montage vidéo', 'Coloc', "Covoit'", 'Dev web', 'Maths', 'Anglais', 'Graphisme', 'Prise de parole', 'Déménagement', 'Relecture de CV', 'Excel', 'Guitare', 'Cuisine', 'Community management', 'Révisions', 'Branding', 'Motion design', 'Rédaction', 'Growth'];
     pile.innerHTML = mots.map((m, i) => {
       const r = ((i * 37) % 13) - 6;
       return `<span class="pastille" style="--r:${r}deg; --d:${(i * 0.06).toFixed(2)}s; --fd:${(5 + (i % 5) * 0.9).toFixed(1)}s; --fdl:${(-i * 0.7).toFixed(1)}s; --fx:${(i % 2 ? 4 : -4)}px; background:${couleurs[i % couleurs.length]}"><span class="flot">${m}</span></span>`;
@@ -1299,39 +1436,72 @@
     const marquer = (e) => {
       etapes.forEach((b, i) => { b.classList.toggle('faite', i < e); b.classList.toggle('active', i === e); });
       rail.style.transform = `scaleX(${e / (etapes.length - 1)})`;
+      courant = e; prec.disabled = e === 0; suiv.disabled = e === etapes.length - 1;
       if (leg.dataset.e !== String(e)) { leg.dataset.e = e; leg.innerHTML = `<span>${LEGENDES[e]}</span>`; }
     };
+    let courant = 0, manuel = false;
+    const prec = document.getElementById('h-prec'), suiv = document.getElementById('h-suiv');
     const reset = () => { fl.innerHTML = ''; fs.innerHTML = ''; badge.classList.remove('visible'); voy.className = 'voyageur sticker'; };
     // L'histoire se joue toute seule, en boucle, tant qu'elle est visible à l'écran
     let jeton = 0, minuteur = null, enCours = false;
     const attendre = (ms) => new Promise((ok) => { minuteur = setTimeout(ok, ms); });
-    async function jouer(depuis, moi) {
+    async function jouer(depuis, moi, fin = null) {
       reset();
       for (let i = 0; i < depuis; i++) BEATS[i][2]();           // on rattrape instantanément ce qui précède
       marquer(depuis === 0 ? 0 : BEATS[depuis - 1][0]);
       for (let i = depuis; i < BEATS.length; i++) {
+        if (fin !== null && BEATS[i][0] > fin) return;
         await attendre(BEATS[i][1]); if (moi !== jeton) return;
         BEATS[i][2](); marquer(BEATS[i][0]);
       }
+      if (fin !== null) return;
       await attendre(5000); if (moi !== jeton) return;
       jouer(0, moi);                                             // et on recommence
     }
     const arreter = () => { enCours = false; jeton++; clearTimeout(minuteur); };
-    const lancer = (depuis = 0) => { enCours = true; jeton++; clearTimeout(minuteur); jouer(depuis, jeton); };
+    const lancer = (depuis = 0, fin = null) => { enCours = true; jeton++; clearTimeout(minuteur); jouer(depuis, jeton, fin); };
     const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduit) { BEATS.forEach((b) => b[2]()); marquer(4); }
     else {
       let visible = false;
-      const decider = () => { if (visible && document.visibilityState === 'visible') { if (!enCours) lancer(0); } else if (enCours) arreter(); };
-      new IntersectionObserver(([e]) => { visible = e.isIntersecting; decider(); }, { threshold: 0.2 }).observe(conteneur);
+      const decider = () => { if (visible && document.visibilityState === 'visible') { if (!enCours && !manuel) lancer(0); } else if (enCours) arreter(); };
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (!visible) manuel = false; decider(); }, { threshold: 0.2 }).observe(conteneur);
       document.addEventListener('visibilitychange', decider);
     }
-    // Clic sur une étape : on saute directement à ce moment de l'histoire
-    etapes.forEach((b, i) => b.addEventListener('click', () => {
+    // Navigation à la main : clic, flèches, clavier, glisser du doigt, molette
+    const aller = (e) => {
       if (reduit) return;
-      const premier = BEATS.findIndex((x) => x[0] === i);
-      lancer(Math.max(0, premier));
-    }));
+      e = Math.max(0, Math.min(etapes.length - 1, e));
+      manuel = true;
+      lancer(Math.max(0, BEATS.findIndex((x) => x[0] === e)), e);
+    };
+    etapes.forEach((b, i) => b.addEventListener('click', () => aller(i)));
+    prec.addEventListener('click', () => aller(courant - 1));
+    suiv.addEventListener('click', () => aller(courant + 1));
+    conteneur.setAttribute('tabindex', '0');
+    conteneur.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowRight') { ev.preventDefault(); aller(courant + 1); }
+      if (ev.key === 'ArrowLeft') { ev.preventDefault(); aller(courant - 1); }
+    });
+    let tx = 0, ty = 0;
+    conteneur.addEventListener('touchstart', (ev) => { tx = ev.touches[0].clientX; ty = ev.touches[0].clientY; }, { passive: true });
+    conteneur.addEventListener('touchend', (ev) => {
+      const dx = ev.changedTouches[0].clientX - tx, dy = ev.changedTouches[0].clientY - ty;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) aller(courant + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+    // Molette : toujours en horizontal ; en vertical dès que tu as pris la main, sans bloquer la page aux extrémités
+    let dernier = 0;
+    conteneur.addEventListener('wheel', (ev) => {
+      const horiz = Math.abs(ev.deltaX) > Math.abs(ev.deltaY);
+      if (!horiz && !manuel) return;
+      const d = horiz ? ev.deltaX : ev.deltaY;
+      if (Math.abs(d) < 8) return;
+      const cible = courant + (d > 0 ? 1 : -1);
+      if (cible < 0 || cible > etapes.length - 1) return;
+      ev.preventDefault();
+      const t = Date.now(); if (t - dernier < 650) return; dernier = t;
+      aller(cible);
+    }, { passive: false });
     return { lancer: () => {} };
   })();
 
@@ -1415,7 +1585,7 @@
     $('titre-co').textContent = i ? 'Bienvenue, futur pote !' : 'Content de te revoir !';
     $('sous-co').textContent = i ? 'Crée ton compte en 30 secondes.' : 'Connecte-toi avec ton e-mail étudiant.';
     $('txt-entrer').textContent = i ? 'Créer mon compte' : 'Se connecter';
-    $('lien-oubli').hidden = i === 1;
+    $('lien-oubli').hidden = i === 1; $('champs-insc').hidden = i !== 1;
     msgCo('');
   }));
   const msgCo = (t, type) => { const el = $('msg-co'); el.textContent = t; el.className = 'msg-co ' + (type || ''); };
@@ -1424,10 +1594,12 @@
     e.preventDefault();
     const email = $('email').value.trim(), password = mdp.value;
     if (!email || password.length < 6) return msgCo('Entre ton e-mail et un mot de passe de 6 caractères minimum.', 'erreur');
+    if (modeInscription && !$('campus-insc').value) return msgCo('Choisis ton campus de l\'ESP.', 'erreur');
+    if (modeInscription && !$('consent').checked) return msgCo('Coche la case pour accepter la politique de confidentialité.', 'erreur');
     const b = $('btn-entrer'); b.disabled = true;
     b.innerHTML = '<span>Un instant…</span><span class="fleche"><span class="spin"></span></span>';
     let res;
-    if (modeInscription) res = await db.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
+    if (modeInscription) res = await db.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin, data: { campus: $('campus-insc').value } } });
     else res = await db.auth.signInWithPassword({ email, password });
     b.disabled = false; b.innerHTML = BTN_ENTRER;
     if (modeInscription) $('txt-entrer').textContent = 'Créer mon compte';
@@ -1520,6 +1692,7 @@
   document.addEventListener('click', (e) => { if (!menuCompte.hidden && !menuCompte.contains(e.target)) fermerMenu(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menuCompte.hidden) { fermerMenu(); avatarBtn.focus(); } });
   menuCompte.addEventListener('click', (e) => {
+    if (e.target.closest('[data-legal]')) fermerMenu();
     const b = e.target.closest('[data-go]'); if (!b) return; fermerMenu();
     const v = b.dataset.go;
     if (v === 'accueil') allerAccueil(); else if (v === 'deco') $('btn-deco').click(); else ouvrirOnglet(v);
@@ -1543,11 +1716,38 @@
 
   /* ---------- Annonces ---------- */
   let annonces = [], mesDemandes = {};
-  const filtre = { f: 'tout', q: '' };
+  const CAMPUS = ['Paris', 'Lyon', 'Bordeaux', 'Toulouse', 'Nantes', 'Lille', 'Strasbourg'];
+  const CATS = [['photo', 'Photo & vidéo'], ['design', 'Design & graphisme'], ['digital', 'Web & digital'], ['cours', 'Cours & révisions'], ['logement', 'Logement & coloc'], ['transport', 'Covoit & transport'], ['autre', 'Autre']];
+  const labelCat = (k) => (CATS.find((c) => c[0] === k) || CATS[6])[1];
+  const deviner = (t) => {
+    t = t.toLowerCase();
+    if (/photo|vid[ée]o|montage|film|drone|reportage/.test(t)) return 'photo';
+    if (/design|logo|affiche|graph|illustr|canva|figma|maquette|branding|motion/.test(t)) return 'design';
+    if (/covoit|voiture|trajet|train|navette/.test(t)) return 'transport';
+    if (/coloc|logement|studio|chambre|d[ée]m[ée]nag|appart/.test(t)) return 'logement';
+    if (/cours|math|r[ée]vis|anglais|langue|partiel|rattrapage|soutien|entretien|cv\b/.test(t)) return 'cours';
+    if (/site|web|dev|code|app\b|communit|r[ée]seaux|insta|tiktok|seo|growth|data|excel|marketing/.test(t)) return 'digital';
+    return 'autre';
+  };
+  const FILTRE0 = { f: 'tout', q: '', cat: 'tout', campus: 'tout', prix: 'tout', tri: 'recent' };
+  const filtre = Object.assign({}, FILTRE0);
+  const prixDe = (a) => { const t = a.prix_type || 'gratuit'; return t === 'gratuit' ? 0 : (t === 'fixe' ? Number(a.prix_euros) : null); };
+  function passe(a, sauf) {
+    const q = filtre.q.toLowerCase();
+    if (filtre.f !== 'tout' && a.type !== filtre.f) return false;
+    if (q && !(a.titre + ' ' + (a.description || '')).toLowerCase().includes(q)) return false;
+    if (sauf !== 'cat' && filtre.cat !== 'tout' && (a.categorie || 'autre') !== filtre.cat) return false;
+    if (filtre.campus !== 'tout' && a.campus && a.campus !== filtre.campus) return false;
+    const p = prixDe(a);
+    if (filtre.prix === 'gratuit') return p === 0;
+    if (filtre.prix === 'discuter') return a.prix_type === 'discuter';
+    if (filtre.prix !== 'tout') return p !== null && p <= Number(filtre.prix);
+    return true;
+  }
   let tourA = 0;
   async function chargerAnnonces() {
     const t = ++tourA;
-    const { data, error } = await db.from('annonces').select('id, type, titre, description, created_at, auteur_id, prix_type, prix_euros').order('created_at', { ascending: false });
+    const { data, error } = await db.from('annonces').select('id, type, titre, description, created_at, auteur_id, prix_type, prix_euros, categorie, campus').order('created_at', { ascending: false });
     if (t !== tourA) return;
     if (error) { $('liste').innerHTML = '<p class="meta">Impossible de charger les annonces.</p>'; return; }
     annonces = data; afficherAnnonces();
@@ -1561,11 +1761,22 @@
   };
   function afficherAnnonces() {
     const n = annonces.length;
-    $('nb-annonces').textContent = n + (n > 1 ? ' annonces en ligne sur le campus' : ' annonce en ligne sur le campus');
-    const q = filtre.q.toLowerCase();
-    const res = annonces.filter((a) => (filtre.f === 'tout' || (filtre.f === 'gratuit' ? (a.prix_type || 'gratuit') === 'gratuit' : a.type === filtre.f)) && (!q || (a.titre + ' ' + (a.description || '')).toLowerCase().includes(q)));
+    $('nb-annonces').textContent = n + (n > 1 ? ' annonces en ligne sur les campus de l’ESP' : ' annonce en ligne sur les campus de l’ESP');
+    /* catégories avec leur nombre d'annonces */
+    const parCat = {}; annonces.filter((a) => passe(a, 'cat')).forEach((a) => { const k = a.categorie || 'autre'; parCat[k] = (parCat[k] || 0) + 1; });
+    const total = Object.values(parCat).reduce((s, x) => s + x, 0);
+    $('categories').innerHTML = `<button type="button" class="cat ${filtre.cat === 'tout' ? 'actif' : ''}" data-c="tout">Toutes <b>${total}</b></button>` +
+      CATS.filter((c) => parCat[c[0]] || filtre.cat === c[0]).map((c) => `<button type="button" class="cat ${filtre.cat === c[0] ? 'actif' : ''}" data-c="${c[0]}">${c[1]} <b>${parCat[c[0]] || 0}</b></button>`).join('');
+    const res = annonces.filter((a) => passe(a));
+    if (filtre.tri !== 'recent') {
+      const cle = (a) => { const p = prixDe(a); return p === null ? Infinity : p; };
+      res.sort((x, y) => filtre.tri === 'prix_asc' ? cle(x) - cle(y) : (cle(y) === Infinity ? -1 : (cle(x) === Infinity ? 1 : cle(y) - cle(x))));
+    }
+    const actif = Object.keys(FILTRE0).some((k) => k !== 'tri' && filtre[k] !== FILTRE0[k]);
+    $('f-reset').hidden = !actif;
+    $('nb-res').textContent = res.length + (res.length > 1 ? ' résultats' : ' résultat');
     if (!res.length) {
-      $('liste').innerHTML = `<div class="vide"><span class="sticker" style="width:80px">${sticker('etoile', '#eef07a')}</span><h3>${n ? 'Aucune annonce ne correspond' : 'Pas encore d’annonce'}</h3><p>${n ? 'Essaie un autre mot, ou publie ta propre annonce.' : 'Sois le premier ou la première à publier !'}</p><div style="margin-top:16px"><button class="btn jaune" onclick="ouvrirTiroir()">Publier une annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div></div>`;
+      $('liste').innerHTML = `<div class="vide"><span class="sticker" style="width:80px">${sticker('etoile', '#eef07a')}</span><h3>${n ? 'Aucune annonce ne correspond' : 'Pas encore d’annonce'}</h3><p>${n ? 'Essaie d’autres filtres, ou publie ta propre annonce.' : 'Sois le premier ou la première à publier !'}</p><div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">${actif ? '<button class="btn clair sans" onclick="effacerFiltres()">Tout effacer</button>' : ''}<button class="btn jaune" onclick="ouvrirTiroir()">Publier une annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div></div>`;
       return;
     }
     $('liste').innerHTML = res.map((a, i) => {
@@ -1579,11 +1790,22 @@
         <div class="vis" style="background:${FONDS[i % FONDS.length]}">${nouveau ? '<span class="tag nouveau">Nouveau</span>' : ''}<span class="sticker">${sticker(s, c)}</span></div>
         <div class="corps">
           <div class="ligne-tags"><span class="tag ${a.type}"><span class="pt"></span>${a.type === 'propose' ? 'Propose' : 'Cherche'}</span>${etiquettePrix(a)}</div>
-          <h3>${esc(a.titre)}</h3><p>${esc(a.description)}</p>
+          <h3>${esc(a.titre)}</h3>
+          <div class="meta-annonce"><span>${labelCat(a.categorie)}</span>${a.campus ? `<span>${esc(a.campus)}</span>` : ''}</div>
+          <p>${esc(a.description)}</p>
           <div class="pied"><span class="meta">${a.auteur_id === moi.id ? 'Ton annonce · ' : ''}${quand(a.created_at)}</span>${action}</div>
         </div></article>`;
     }).join('');
   }
+  function effacerFiltres() {
+    Object.assign(filtre, FILTRE0);
+    $('filtres').querySelectorAll('button').forEach((x) => x.classList.toggle('actif', x.dataset.f === 'tout'));
+    $('recherche').value = ''; $('f-campus').value = 'tout'; $('f-prix').value = 'tout'; $('f-tri').value = 'recent';
+    afficherAnnonces();
+  }
+  $('f-reset').addEventListener('click', effacerFiltres);
+  $('categories').addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (!b) return; filtre.cat = b.dataset.c; afficherAnnonces(); });
+  [['f-campus', 'campus'], ['f-prix', 'prix'], ['f-tri', 'tri']].forEach(([id, k]) => $(id).addEventListener('change', (e) => { filtre[k] = e.target.value; afficherAnnonces(); }));
   $('filtres').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
     $('filtres').querySelectorAll('button').forEach((x) => x.classList.remove('actif')); b.classList.add('actif');
@@ -1609,7 +1831,11 @@
   }
 
   /* ---------- Publier (tiroir + IA) ---------- */
-  function ouvrirTiroir() { document.body.classList.add('publie'); setTimeout(() => $('mots').focus(), 400); }
+  $('t-cat').innerHTML = CATS.map((c) => `<option value="${c[0]}">${c[1]}</option>`).join('');
+  let catManuelle = false;
+  $('t-cat').addEventListener('change', () => { catManuelle = true; });
+  ['t-titre', 't-desc', 'mots'].forEach((id) => $(id).addEventListener('input', () => { if (!catManuelle) $('t-cat').value = deviner($('mots').value + ' ' + $('t-titre').value + ' ' + $('t-desc').value); }));
+  function ouvrirTiroir() { $('t-campus').value = profil.campus || ''; document.body.classList.add('publie'); setTimeout(() => $('mots').focus(), 400); }
   function fermerTiroir() { document.body.classList.remove('publie'); }
   addEventListener('keydown', (e) => { if (e.key === 'Escape') fermerTiroir(); });
 
@@ -1639,6 +1865,13 @@
     } catch (err) { toast(err.message + ' Tu peux écrire à la main.', 'crayon', '#f8dbe3'); }
     b.disabled = false; b.innerHTML = '✨ Rédiger';
   });
+  const PRIX_MAX = 300;
+  const AIDE_PRIX = $('aide-prix').textContent;
+  $('t-prix').addEventListener('input', () => {
+    const v = parseFloat(String($('t-prix').value).replace(',', '.')), trop = v > PRIX_MAX || v < 0;
+    $('champ-prix').classList.toggle('erreur', trop);
+    $('aide-prix').textContent = trop ? `Maximum ${PRIX_MAX} € entre étudiants. Pour plus, choisis « À discuter ».` : AIDE_PRIX;
+  });
   $('choix-prix').addEventListener('change', () => {
     const fixe = document.querySelector('input[name=prix]:checked').value === 'fixe';
     $('champ-prix').classList.toggle('visible', fixe); if (fixe) setTimeout(() => $('t-prix').focus(), 50);
@@ -1650,13 +1883,13 @@
     let prixEuros = null;
     if (prixType === 'fixe') {
       prixEuros = Math.round(parseFloat(String($('t-prix').value).replace(',', '.')) * 100) / 100;
-      if (!(prixEuros > 0 && prixEuros <= 9999)) { $('t-prix').focus(); return toast('Indique un prix entre 1 et 9999 €.', 'crayon', '#f8dbe3'); }
+      if (!(prixEuros >= 1 && prixEuros <= PRIX_MAX)) { $('t-prix').focus(); return toast(`Indique un prix entre 1 et ${PRIX_MAX} €. Pour plus, choisis « À discuter ».`, 'crayon', '#f8dbe3'); }
     }
     const b = $('btn-publier'); b.disabled = true;
-    const { error } = await db.from('annonces').insert({ type: document.querySelector('input[name=sens]:checked').value, titre, description, prix_type: prixType, prix_euros: prixEuros });
+    const { error } = await db.from('annonces').insert({ type: document.querySelector('input[name=sens]:checked').value, titre, description, prix_type: prixType, prix_euros: prixEuros, categorie: $('t-cat').value, campus: $('t-campus').value || null });
     b.disabled = false;
     if (error) return toast('Publication impossible : ' + error.message, 'crayon', '#f8dbe3');
-    $('t-titre').value = ''; $('t-desc').value = ''; $('mots').value = ''; $('t-prix').value = '';
+    $('t-titre').value = ''; $('t-desc').value = ''; $('mots').value = ''; $('t-prix').value = ''; $('champ-prix').classList.remove('erreur'); $('aide-prix').textContent = AIDE_PRIX; catManuelle = false; $('t-cat').value = 'autre';
     document.querySelector('input[name=prix][value=gratuit]').checked = true; $('champ-prix').classList.remove('visible');
     fermerTiroir(); confettis(e); toast('Ton annonce est en ligne !', 'etoile', '#eef07a');
     ouvrirOnglet('annonces'); chargerAnnonces();
@@ -1665,7 +1898,8 @@
   /* ---------- Messages : boîte de réception ---------- */
   let convOuverte = null, tourD = 0, convs = [], autres = {}, dernierMsg = {}, coordsCache = {}, rechConv = '';
   const COULEURS = { violet: ['#ddccf3', '#4b2d80'], jaune: ['#eef07a', '#4e4d0a'], peche: ['#f8e2c8', '#7a4a14'], ciel: ['#dcedf6', '#1d5a7a'], rose: ['#f8dbe3', '#8a2a4a'], menthe: ['#dcf1e4', '#1f7a48'] };
-  const avatarP = (nom, couleur, t) => { const c = COULEURS[couleur] || COULEURS.violet; return `<span class="av-p" style="--bg:${c[0]};--fg:${c[1]};--t:${t || 44}px">${esc((nom || '?').trim()[0] || '?').toUpperCase()}</span>`; };
+  const photoOk = (s) => typeof s === 'string' && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(s);
+  const avatarP = (nom, couleur, t, photo) => { const c = COULEURS[couleur] || COULEURS.violet; return `<span class="av-p" style="--bg:${c[0]};--fg:${c[1]};--t:${t || 44}px">${photoOk(photo) ? `<img src="${photo}" alt="">` : esc((nom || '?').trim()[0] || '?').toUpperCase()}</span>`; };
   const nomDe = (id) => (autres[id] && autres[id].pseudo) || 'Étudiant·e';
   const cleVu = () => 'lbp-vu-' + (moi ? moi.id : '');
   const lireVu = () => { try { return JSON.parse(localStorage.getItem(cleVu()) || '{}'); } catch (e) { return {}; } };
@@ -1683,7 +1917,7 @@
     const idsD = acceptees.map((d) => d.id);
     const [coords, rp, rm] = await Promise.all([
       coordonneesDe(ids),
-      ids.length ? db.from('profils').select('user_id, pseudo, bio, filiere, dispos, couleur, competences').in('user_id', ids) : { data: [] },
+      ids.length ? db.from('profils').select('user_id, pseudo, bio, filiere, campus, photo, dispos, couleur, competences').in('user_id', ids) : { data: [] },
       idsD.length ? db.from('messages').select('demande_id, auteur_id, contenu, created_at').in('demande_id', idsD).order('created_at', { ascending: false }).limit(300) : { data: [] }
     ]);
     if (t !== tourD) return;
@@ -1721,7 +1955,7 @@
     $('liste-conv').innerHTML = liste.length ? liste.map((c) => {
       const m = dernierMsg[c.id], p = autres[c.autre];
       const apercu = m ? (m.auteur_id === moi.id ? 'Toi : ' : '') + m.contenu : 'Nouvelle conversation : dis bonjour !';
-      return `<button class="ligne-conv ${c.id === convOuverte ? 'actif' : ''} ${nonLu(c) ? 'non-lu' : ''}" data-c="${c.id}">${avatarP(nomDe(c.autre), p && p.couleur, 46)}
+      return `<button class="ligne-conv ${c.id === convOuverte ? 'actif' : ''} ${nonLu(c) ? 'non-lu' : ''}" data-c="${c.id}">${avatarP(nomDe(c.autre), p && p.couleur, 46, p && p.photo)}
         <span class="lc-txt"><span class="lc-haut"><span class="lc-nom">${esc(nomDe(c.autre))}</span><span class="lc-date">${quand(c.date)}</span></span>
         <span class="lc-annonce" style="display:block">${esc(c.titre)}</span><span class="lc-apercu" style="display:block">${esc(apercu)}</span></span></button>`;
     }).join('') : `<div class="vide-liste">${convs.length ? 'Aucun résultat.' : 'Pas encore de conversation. Accepte une demande, ou fais-en une depuis les annonces.'}</div>`;
@@ -1737,7 +1971,7 @@
   }
   function entete(c) {
     const p = autres[c.autre];
-    $('conv-avatar').innerHTML = avatarP(nomDe(c.autre), p && p.couleur, 46);
+    $('conv-avatar').innerHTML = avatarP(nomDe(c.autre), p && p.couleur, 46, p && p.photo);
     $('conv-nom').textContent = nomDe(c.autre); $('conv-titre').textContent = 'À propos de « ' + c.titre + ' »';
     $('conv-voir').hidden = !p;
     $('conv-infos').innerHTML = blocCoord(coordsCache[c.autre]);
@@ -1802,15 +2036,15 @@
 
   /* ---------- Profil : récap, modification, import du CV ---------- */
   const DISPOS = ['Matins', 'Midis', 'Après-midis', 'Soirs', 'Semaine', 'Week-ends'];
-  let profil = { pseudo: '', bio: '', filiere: '', dispos: [], couleur: 'violet', competences: [] };
+  let profil = { pseudo: '', bio: '', filiere: '', campus: '', photo: '', dispos: [], couleur: 'violet', competences: [] }, photoEdit = '';
   let competences = [], brouillonCV = [];
   const carteProfil = (p, perso) => {
     const c = COULEURS[p.couleur] || COULEURS.violet, nom = p.pseudo || (perso ? 'Ton prénom ou pseudo' : 'Étudiant·e');
     const comps = (p.competences || []), dispos = (p.dispos || []);
     return `<div class="carte-profil" style="--bg:${c[0]};--fg:${c[1]}"><div class="cp-banniere"></div><div class="cp-corps">
-      <div class="cp-avatar">${esc((p.pseudo || '?').trim()[0] || '?').toUpperCase()}</div>
+      <div class="cp-avatar">${photoOk(p.photo) ? `<img src="${p.photo}" alt="Photo de profil">` : esc((p.pseudo || '?').trim()[0] || '?').toUpperCase()}</div>
       <h2 class="cp-nom ${p.pseudo ? '' : 'fantome'}">${esc(nom)}</h2>
-      ${p.filiere ? `<div class="cp-sous">${esc(p.filiere)}</div>` : (perso ? '<div class="cp-sous fantome">Ta filière et ton année</div>' : '')}
+      ${(p.campus || p.filiere) ? `<div class="cp-sous">${[p.campus ? 'ESP ' + esc(p.campus) : '', esc(p.filiere || '')].filter(Boolean).join(' · ')}</div>` : (perso ? '<div class="cp-sous fantome">Ton campus, ta filière et ton année</div>' : '')}
       ${p.bio ? `<p class="cp-bio">${esc(p.bio)}</p>` : (perso ? '<p class="cp-bio fantome">Une courte présentation donne envie de te répondre.</p>' : '')}
       <div class="cp-bloc"><h3>Compétences</h3>${comps.length ? `<div class="chips">${comps.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : '<p class="fantome">Aucune compétence pour l’instant.</p>'}</div>
       <div class="cp-bloc"><h3>Disponibilités</h3>${dispos.length ? `<div class="pills-dispo">${dispos.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : '<p class="fantome">Pas encore indiquées.</p>'}</div>
@@ -1820,14 +2054,15 @@
   function afficherRecap() {
     $('carte-profil').innerHTML = carteProfil(profil, true);
     const c = COULEURS[profil.couleur] || COULEURS.violet;
-    $('mon-avatar').textContent = ((profil.pseudo || (moi && moi.email) || '?').trim()[0] || '?').toUpperCase();
+    if (photoOk(profil.photo)) $('mon-avatar').innerHTML = `<img src="${profil.photo}" alt="Mon profil">`; else $('mon-avatar').textContent = ((profil.pseudo || (moi && moi.email) || '?').trim()[0] || '?').toUpperCase();
     $('mon-avatar').style.background = c[0]; $('mon-avatar').style.color = c[1];
     majTodo();
   }
   function majTodo() {
     const e = [
       ['Ajoute ton prénom ou pseudo', !!profil.pseudo, 'edit'],
-      ['Indique ta filière et ton année', !!profil.filiere, 'edit'],
+      ['Choisis ton campus et ta filière', !!(profil.filiere && profil.campus), 'edit'],
+      ['Ajoute ta photo', photoOk(profil.photo), 'edit'],
       ['Écris une courte présentation', !!profil.bio, 'edit'],
       ['Ajoute tes compétences', profil.competences.length > 0, 'cv'],
       ['Précise tes disponibilités', profil.dispos.length > 0, 'edit'],
@@ -1838,13 +2073,13 @@
     $('todo').innerHTML = e.map((x) => `<li class="${x[1] ? 'fait' : ''}"><span class="coche">&#10003;</span>${x[1] ? `<span class="lien-texte">${x[0]}</span>` : `<button type="button" class="lien-texte" data-pv="${x[2]}">${x[0]}</button>`}</li>`).join('');
   }
   async function chargerProfil() {
-    const { data } = await db.from('profils').select('competences, pseudo, bio, filiere, dispos, couleur').eq('user_id', moi.id).maybeSingle();
-    profil = { pseudo: (data && data.pseudo) || '', bio: (data && data.bio) || '', filiere: (data && data.filiere) || '', dispos: (data && data.dispos) || [], couleur: (data && data.couleur) || 'violet', competences: (data && data.competences) || [] };
+    const { data } = await db.from('profils').select('competences, pseudo, bio, filiere, campus, photo, dispos, couleur').eq('user_id', moi.id).maybeSingle();
+    profil = { pseudo: (data && data.pseudo) || '', bio: (data && data.bio) || '', filiere: (data && data.filiere) || '', campus: (data && data.campus) || (moi.user_metadata && moi.user_metadata.campus) || '', photo: (data && data.photo) || '', dispos: (data && data.dispos) || [], couleur: (data && data.couleur) || 'violet', competences: (data && data.competences) || [] };
     competences = profil.competences.slice(); afficherChips(); afficherRecap();
   }
   async function sauverProfil(champs) {
     const nouveau = Object.assign({}, profil, champs);
-    const { error } = await db.from('profils').upsert({ user_id: moi.id, pseudo: nouveau.pseudo || null, bio: nouveau.bio || null, filiere: nouveau.filiere || null, dispos: nouveau.dispos, couleur: nouveau.couleur, competences: nouveau.competences, updated_at: new Date().toISOString() });
+    const { error } = await db.from('profils').upsert({ user_id: moi.id, pseudo: nouveau.pseudo || null, bio: nouveau.bio || null, filiere: nouveau.filiere || null, campus: nouveau.campus || null, photo: nouveau.photo || null, dispos: nouveau.dispos, couleur: nouveau.couleur, competences: nouveau.competences, updated_at: new Date().toISOString() });
     if (error) { toast('Enregistrement impossible : ' + error.message, 'etoile', '#f8dbe3'); return false; }
     profil = nouveau; competences = profil.competences.slice(); afficherRecap(); return true;
   }
@@ -1863,13 +2098,15 @@
   $('e-couleurs').innerHTML = Object.keys(COULEURS).map((k) => `<label><input type="radio" name="couleur" value="${k}"><span style="background:${COULEURS[k][0]}" title="${k}"></span></label>`).join('');
   $('e-dispos').innerHTML = DISPOS.map((d) => `<label><input type="checkbox" value="${d}"><span>${d}</span></label>`).join('');
   const brouillon = () => ({
-    pseudo: $('e-pseudo').value.trim(), filiere: $('e-filiere').value.trim(), bio: $('e-bio').value.trim(),
+    pseudo: $('e-pseudo').value.trim(), filiere: $('e-filiere').value.trim(), bio: $('e-bio').value.trim(), campus: $('e-campus').value, photo: photoEdit,
     couleur: (document.querySelector('input[name=couleur]:checked') || { value: 'violet' }).value,
     dispos: [...document.querySelectorAll('#e-dispos input:checked')].map((x) => x.value), competences
   });
-  const majApercu = () => { $('apercu-profil').outerHTML = carteProfil(brouillon(), true).replace('class="carte-profil"', 'class="carte-profil" id="apercu-profil"'); $('c-bio').textContent = $('e-bio').value.length + '/160'; };
+  const majApercu = () => {
+    const bd = brouillon();
+    $('e-photo-apercu').innerHTML = avatarP(bd.pseudo || '?', bd.couleur, 96, photoEdit); $('btn-photo-retirer').hidden = !photoOk(photoEdit); $('apercu-profil').outerHTML = carteProfil(brouillon(), true).replace('class="carte-profil"', 'class="carte-profil" id="apercu-profil"'); $('c-bio').textContent = $('e-bio').value.length + '/160'; };
   function remplirEdition() {
-    $('e-pseudo').value = profil.pseudo; $('e-filiere').value = profil.filiere; $('e-bio').value = profil.bio;
+    $('e-pseudo').value = profil.pseudo; $('e-filiere').value = profil.filiere; $('e-campus').value = profil.campus; photoEdit = profil.photo; $('e-bio').value = profil.bio;
     document.querySelectorAll('input[name=couleur]').forEach((x) => { x.checked = x.value === profil.couleur; });
     document.querySelectorAll('#e-dispos input').forEach((x) => { x.checked = profil.dispos.includes(x.value); });
     competences = profil.competences.slice(); afficherChips(); majApercu();
@@ -1940,6 +2177,124 @@
     const ok = await sauverProfil({ competences: fusion }); b.disabled = false;
     if (ok) { confettis(e); toast('Compétences ajoutées à ton profil !', 'etoile', '#eef07a'); voirPv('recap'); }
   });
+
+  /* ---------- Photo de profil ---------- */
+  async function reduirePhoto(f) {
+    const url = URL.createObjectURL(f);
+    const img = await new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = ko; i.src = url; });
+    URL.revokeObjectURL(url);
+    const s = Math.min(img.width, img.height), T = 320;
+    const c = document.createElement('canvas'); c.width = c.height = T;
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, T, T);
+    x.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, T, T);
+    let q = 0.85, d = c.toDataURL('image/jpeg', q);
+    while (d.length > 70000 && q > 0.4) { q -= 0.1; d = c.toDataURL('image/jpeg', q); }
+    if (d.length > 70000) throw new Error('trop lourde');
+    return d;
+  }
+  $('btn-photo').addEventListener('click', () => $('e-photo').click());
+  $('e-photo').addEventListener('change', async () => {
+    const f = $('e-photo').files[0]; $('e-photo').value = ''; if (!f) return;
+    if (!/^image\/(jpeg|png|webp)$/.test(f.type)) return toast('Choisis une image JPG, PNG ou WebP.', 'crayon', '#f8dbe3');
+    if (f.size > 8 * 1024 * 1024) return toast('Image trop lourde (8 Mo maximum).', 'crayon', '#f8dbe3');
+    try { photoEdit = await reduirePhoto(f); majApercu(); } catch (e) { toast('Impossible de lire cette image.', 'crayon', '#f8dbe3'); }
+  });
+  $('btn-photo-retirer').addEventListener('click', () => { photoEdit = ''; majApercu(); });
+
+  /* ---------- Mes données : export et suppression du compte ---------- */
+  $('btn-export').addEventListener('click', async () => {
+    const uid = moi.id;
+    const [p, c, a, d, m] = await Promise.all([
+      db.from('profils').select('*').eq('user_id', uid),
+      db.from('coordonnees').select('*').eq('user_id', uid),
+      db.from('annonces').select('*').eq('auteur_id', uid),
+      db.from('demandes').select('*').or(`demandeur_id.eq.${uid},proprietaire_id.eq.${uid}`),
+      db.from('messages').select('*').eq('auteur_id', uid)
+    ]);
+    const donnees = { exporte_le: new Date().toISOString(), compte: { id: uid, email: moi.email }, profil: p.data, coordonnees: c.data, annonces: a.data, demandes: d.data, messages_envoyes: m.data };
+    const lien = document.createElement('a');
+    lien.href = URL.createObjectURL(new Blob([JSON.stringify(donnees, null, 2)], { type: 'application/json' }));
+    lien.download = 'le-bon-pote-mes-donnees.json'; document.body.appendChild(lien); lien.click(); lien.remove();
+    toast('Tes données sont téléchargées.', 'cadenas', '#eef07a');
+  });
+  const msgSuppr = (t) => { $('msg-suppr').textContent = t; $('msg-suppr').className = 'msg-co erreur'; };
+  $('btn-suppr').addEventListener('click', () => { $('suppr-mot').value = ''; msgSuppr(''); $('fond-suppr').classList.add('ouvert'); setTimeout(() => $('suppr-mot').focus(), 100); });
+  $('suppr-annuler').addEventListener('click', () => $('fond-suppr').classList.remove('ouvert'));
+  $('fond-suppr').addEventListener('click', (e) => { if (e.target === $('fond-suppr')) $('fond-suppr').classList.remove('ouvert'); });
+  $('form-suppr').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if ($('suppr-mot').value.trim().toUpperCase() !== 'SUPPRIMER') return msgSuppr('Écris SUPPRIMER pour confirmer.');
+    const b = $('btn-suppr-ok'); b.disabled = true;
+    const { error } = await db.rpc('supprimer_mon_compte');
+    b.disabled = false;
+    if (error) return msgSuppr('Suppression impossible : ' + error.message);
+    $('fond-suppr').classList.remove('ouvert');
+    await db.auth.signOut(); scrollTo(0, 0); toast('Ton compte a été supprimé.', 'cadenas', '#ddccf3');
+  });
+
+  /* ---------- Mentions légales et confidentialité ---------- */
+  const MAIL = 'safiya.seddiki@mail-esd.com';
+  const LEGAL = {
+    mentions: ['Mentions légales', `
+      <h3>Éditrice du site</h3>
+      <p>Le Bon Pote est édité à titre non professionnel par <b>Safiya Seddiki</b>, étudiante, qui en est aussi la directrice de la publication.<br>Contact : <a href="mailto:${MAIL}">${MAIL}</a></p>
+      <h3>Nature du projet</h3>
+      <p>Le Bon Pote est un projet étudiant réalisé dans le cadre du module Vibe Coding (ESP). Il est gratuit et sans but commercial. Il est indépendant : il n'est pas édité par l'ESP et n'engage pas l'école.</p>
+      <h3>Hébergement et services techniques</h3>
+      <ul>
+        <li>Site web : Vercel Inc., États-Unis (vercel.com). Coordonnées complètes : vercel.com/legal.</li>
+        <li>Base de données et comptes : Supabase Inc. (supabase.com).</li>
+        <li>Aide à la rédaction et lecture du CV : API Gemini de Google.</li>
+      </ul>
+      <h3>Contenus publiés par les étudiants</h3>
+      <p>Les annonces, profils et messages sont écrits par les utilisateurs, qui en sont responsables. Le site met des étudiants en relation : aucun paiement ne passe par le site, et l'éditrice n'est pas partie aux accords conclus entre étudiants. Pour signaler un contenu, écris à <a href="mailto:${MAIL}">${MAIL}</a>.</p>
+      <h3>Propriété intellectuelle</h3>
+      <p>Le code, le design et les illustrations du site sont l'œuvre de Safiya Seddiki. Les contenus publiés par les étudiants restent leur propriété. Le nom « ESP » est cité à titre indicatif et appartient à ses propriétaires.</p>
+      <h3>Données personnelles</h3>
+      <p>Tout est expliqué dans la <button type="button" class="lien-texte" data-legal="confidentialite">politique de confidentialité</button>.</p>
+      <p class="legal-maj">Dernière mise à jour : 19 novembre 2026.</p>`],
+    confidentialite: ['Confidentialité et données', `
+      <h3>Qui est responsable de tes données ?</h3>
+      <p>Safiya Seddiki, éditrice du site (voir les mentions légales). Contact pour toute question ou demande : <a href="mailto:${MAIL}">${MAIL}</a>.</p>
+      <h3>Quelles données, et pourquoi ?</h3>
+      <ul>
+        <li><b>Ton compte</b> : e-mail, mot de passe (conservé sous forme chiffrée, personne ne peut le lire) et campus. Pour créer ton compte et te connecter.</li>
+        <li><b>Ton profil</b> (facultatif) : pseudo, filière, présentation, compétences, disponibilités, couleur, photo. Pour te présenter aux personnes que tu as acceptées.</li>
+        <li><b>Tes annonces</b> : titre, description, catégorie, campus et prix affiché. Elles sont visibles par les étudiants connectés.</li>
+        <li><b>Tes demandes et tes messages</b> : lisibles uniquement par les deux personnes concernées.</li>
+        <li><b>Tes coordonnées</b> (facultatif) : visibles uniquement par les personnes dont tu acceptes la demande.</li>
+        <li><b>Ton CV</b> (facultatif) : il est lu dans ton navigateur, puis son texte est envoyé à un service d'IA (Google Gemini) pour proposer des compétences. Le fichier n'est pas enregistré sur le site. N'importe que ce que tu acceptes de partager.</li>
+        <li><b>Données techniques</b> : comme sur tout site, ton adresse IP est vue par l'hébergeur et par les services qui fournissent les polices et les bibliothèques du site.</li>
+      </ul>
+      <h3>Base légale</h3>
+      <p>Ton consentement, donné à l'inscription et à chaque information facultative que tu choisis de renseigner, et l'exécution du service que tu demandes (te mettre en relation avec d'autres étudiants).</p>
+      <h3>Qui reçoit tes données ?</h3>
+      <p>Seulement les prestataires techniques : Vercel (hébergement), Supabase (base de données et comptes), Google (IA Gemini et polices Google Fonts), jsDelivr et cdnjs (bibliothèques). Certains sont situés hors de l'Union européenne, notamment aux États-Unis : les transferts s'appuient sur les mécanismes prévus par le RGPD, comme les clauses contractuelles types. Tes données ne sont ni vendues ni utilisées pour de la publicité.</p>
+      <h3>Combien de temps ?</h3>
+      <p>Tant que ton compte existe. Si tu le supprimes, ton profil, tes annonces, tes demandes, tes messages et tes coordonnées sont effacés immédiatement. Un compte inactif depuis 12 mois peut être supprimé par l'éditrice. À la fin du projet pédagogique, l'ensemble des données pourra être effacé.</p>
+      <h3>Tes droits</h3>
+      <p>Tu peux accéder à tes données, les rectifier, les effacer, limiter leur usage, t'y opposer, les récupérer et retirer ton consentement à tout moment.</p>
+      <ul>
+        <li>Pour les voir et les récupérer : bouton « Télécharger mes données » dans ton profil.</li>
+        <li>Pour les modifier : « Modifier mon profil ».</li>
+        <li>Pour tout effacer : « Supprimer mon compte » dans ton profil.</li>
+        <li>Pour le reste : écris à <a href="mailto:${MAIL}">${MAIL}</a>, réponse sous un mois.</li>
+      </ul>
+      <p>Si tu estimes que tes droits ne sont pas respectés, tu peux saisir la CNIL (cnil.fr).</p>
+      <h3>Cookies et stockage dans ton navigateur</h3>
+      <p>Le site n'utilise ni cookie publicitaire, ni outil de mesure d'audience. Ton navigateur garde seulement des données techniques indispensables : ta session de connexion et les messages que tu as déjà lus. Elles ne nécessitent pas de bannière de consentement.</p>
+      <h3>Sécurité</h3>
+      <p>Les échanges sont chiffrés (HTTPS). Chaque donnée est protégée par des règles d'accès : tu ne vois que ce qui te concerne, et tes coordonnées ne sont visibles qu'après ton accord.</p>
+      <p class="legal-maj">Dernière mise à jour : 19 novembre 2026.</p>`]
+  };
+  function ouvrirLegal(k) {
+    $('legal-titre').textContent = LEGAL[k][0]; $('legal-texte').innerHTML = LEGAL[k][1];
+    $('fond-legal').classList.add('ouvert'); $('fond-legal').querySelector('.carte-legal').scrollTop = 0;
+  }
+  document.addEventListener('click', (e) => { const b = e.target.closest('[data-legal]'); if (b && LEGAL[b.dataset.legal]) { e.preventDefault(); ouvrirLegal(b.dataset.legal); } });
+  $('legal-fermer').addEventListener('click', () => $('fond-legal').classList.remove('ouvert'));
+  $('fond-legal').addEventListener('click', (e) => { if (e.target === $('fond-legal')) $('fond-legal').classList.remove('ouvert'); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { $('fond-legal').classList.remove('ouvert'); $('fond-suppr').classList.remove('ouvert'); } });
 
   /* actualisation douce toutes les 25 s quand l'onglet Messages est ouvert */
   setInterval(() => {
