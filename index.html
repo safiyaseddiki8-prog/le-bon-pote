@@ -157,20 +157,24 @@
     .nav .liens { display: flex; gap: 30px; }
 
     /* ================= HERO ================= */
-    .hero { position: relative; padding: 90px 0 0; overflow: hidden; }
+    .hero { position: relative; padding: 64px 0 0; overflow: hidden; }
     .hero::before { display: none; content: ''; position: absolute; left: 50%; top: -30%; width: 1600px; height: 1600px; margin-left: -800px; background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(148,101,205,.05) 0 4deg, transparent 4deg 12deg); -webkit-mask: radial-gradient(circle, #000 0, transparent 60%); mask: radial-gradient(circle, #000 0, transparent 60%); animation: rayons 120s linear infinite; pointer-events: none; }
     @keyframes rayons { to { transform: rotate(360deg); } }
-    .hero .conteneur { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 60px; align-items: center; }
-    .hero h1 { font-size: clamp(3rem, 7vw, 6rem); letter-spacing: -.05em; line-height: .92; }
+    .hero .conteneur { position: relative; display: grid; grid-template-columns: 1.25fr .75fr; gap: 48px; align-items: start; }
+    .hero-gauche { min-width: 0; }
+    .col-droite { min-width: 0; }
+    .cta-hero { display: none; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .hero h1 { font-size: clamp(2.6rem, 4.9vw, 4.6rem); letter-spacing: -.05em; line-height: .92; }
     .hero h1 .mot { display: inline-block; opacity: 0; transform: translateY(32px) rotate(4deg); animation: mot .9s var(--rebond) forwards; }
     .hero h1 .surligne { position: relative; color: var(--violet); z-index: 0; }
     .hero h1 .surligne::after { content: ''; position: absolute; left: -3%; right: -3%; bottom: .06em; height: .24em; background: var(--jaune); z-index: -1; border-radius: 6px; transform: scaleX(0) rotate(-1.5deg); transform-origin: left; animation: trace .7s var(--ease) 1.05s forwards; }
     @keyframes mot { to { opacity: 1; transform: none; } }
     @keyframes trace { to { transform: scaleX(1) rotate(-1.5deg); } }
-    .hero .intro { max-width: 500px; margin-top: 26px; font-size: 1.22rem; line-height: 1.5; color: #2f2a26; font-weight: 500; opacity: 0; animation: monte .8s var(--ease) .8s forwards; }
-    .confiance { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; opacity: 0; animation: monte .8s var(--ease) 1s forwards; }
-    .confiance > span { display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; transition: transform .4s var(--rebond); cursor: default; border-radius: 999px; background: var(--blanc); box-shadow: var(--ombre); font-family: var(--titres); font-weight: 600; font-size: .9rem; }
-    .confiance .ico-rond { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; transition: transform .5s var(--rebond); }
+    .hero .intro { max-width: 520px; margin-top: 16px; font-size: 1.15rem; line-height: 1.5; color: #2f2a26; font-weight: 500; opacity: 0; animation: monte .8s var(--ease) .8s forwards; }
+    .confiance { display: grid; gap: 0; margin-top: 16px; padding: 6px 8px; background: var(--blanc); border-radius: 26px; box-shadow: var(--ombre); opacity: 0; animation: monte .8s var(--ease) 1s forwards; }
+    .confiance > span { display: flex; align-items: center; gap: 14px; padding: 12px 14px; cursor: default; font-family: var(--titres); font-weight: 600; font-size: .95rem; }
+    .confiance > span + span { border-top: 1px solid var(--gris-clair); }
+    .confiance .ico-rond { width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center; transition: transform .5s var(--rebond); }
     .confiance .ico-rond svg { width: 18px; height: 18px; stroke: #4b2d80; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .confiance > span:hover .ico-rond { transform: rotate(-12deg) scale(1.1); }
     @keyframes monte { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
@@ -226,7 +230,11 @@
     .inline-pastille { display: inline-flex; vertical-align: middle; width: 1.1em; height: 1em; border-radius: 999px; background: var(--jaune); align-items: center; justify-content: center; transform: rotate(-6deg); margin: 0 .05em; }
     .inline-pastille svg { width: .95em; }
 
-    /* ================= HISTOIRE ANIMÉE ================= */
+    /* ================= HISTOIRE ANIMÉE (dans le haut de page) ================= */
+    .demo-entete { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .demo-entete b { font-family: var(--titres); font-size: 1rem; letter-spacing: -.02em; }
+    .live { flex: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px; border-radius: 999px; background: var(--lavande); color: var(--violet-fonce); font-family: var(--titres); font-size: .78rem; font-weight: 700; }
+    .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--violet); animation: pulseV 2s infinite; }
     .histoire-scroll { height: 420vh; padding-top: 80px; }
     .collant { position: sticky; top: 84px; }
     .histoire-scroll .centre h2 { font-size: clamp(2rem, 4vw, 3.2rem); }
@@ -235,10 +243,10 @@
     .defile-indic i { width: 18px; height: 28px; border: 2px solid currentColor; border-radius: 10px; position: relative; }
     .defile-indic i::after { content: ''; position: absolute; left: 50%; top: 5px; width: 3px; height: 6px; margin-left: -1.5px; border-radius: 2px; background: currentColor; animation: molette 1.6s infinite; }
     @keyframes molette { 0% { opacity: 1; transform: none; } 80% { opacity: 0; transform: translateY(9px); } 100% { opacity: 0; } }
-    .histoire { margin-top: 24px; background: var(--surface); border-radius: 36px; padding: 26px 30px 22px; box-shadow: var(--ombre); position: relative; overflow: hidden; }
+    .histoire { margin-top: 22px; background: var(--surface); border-radius: 30px; padding: 16px 18px 14px; box-shadow: var(--ombre); position: relative; overflow: hidden; }
     .histoire::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(148,101,205,.14) 1.2px, transparent 1.3px); background-size: 18px 18px; -webkit-mask: radial-gradient(ellipse at center, #000 30%, transparent 75%); mask: radial-gradient(ellipse at center, #000 30%, transparent 75%); pointer-events: none; }
-    .scene { position: relative; display: grid; grid-template-columns: 1fr 200px 1fr; align-items: center; justify-items: center; gap: 10px; }
-    .tel { width: 270px; height: min(470px, calc(100vh - 380px)); border-radius: 40px; background: var(--surface); border: 8px solid var(--blanc); box-shadow: 0 0 0 1px var(--gris-clair), var(--ombre-forte); display: flex; flex-direction: column; overflow: hidden; position: relative; transition: transform .5s var(--rebond); }
+    .scene { position: relative; display: grid; grid-template-columns: 1fr 150px 1fr; align-items: center; justify-items: center; gap: 4px; }
+    .tel { width: 212px; height: 380px; border-radius: 40px; background: var(--surface); border: 8px solid var(--blanc); box-shadow: 0 0 0 1px var(--gris-clair), var(--ombre-forte); display: flex; flex-direction: column; overflow: hidden; position: relative; transition: transform .5s var(--rebond); }
     .tel.vibre { animation: vibre .5s; }
     @keyframes vibre { 20%, 60% { transform: translateX(-4px) rotate(-1deg); } 40%, 80% { transform: translateX(4px) rotate(1deg); } }
     .tel .barre { display: flex; align-items: center; gap: 10px; padding: 16px 14px 12px; background: var(--blanc); border-bottom: 1px solid var(--gris-clair); }
@@ -277,29 +285,29 @@
     .t-photos span { aspect-ratio: 1; border-radius: 10px; }
     .t-photos small { grid-column: 1 / -1; color: #fff; font-size: .76rem; padding: 2px 4px; }
 
-    .milieu { position: relative; width: 200px; height: min(470px, calc(100vh - 380px)); display: grid; place-items: center; }
+    .milieu { position: relative; width: 150px; height: 380px; display: grid; place-items: center; }
     .milieu .fil-lien { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background-image: linear-gradient(90deg, var(--lavande2) 50%, transparent 0); background-size: 12px 2px; }
     .milieu .voyageur { position: absolute; top: calc(50% - 22px); width: 44px; opacity: 0; }
     .milieu .voyageur.vers-g { animation: versG 1s var(--ease) forwards; }
     .milieu .voyageur.vers-d { animation: versD 1s var(--ease) forwards; }
-    @keyframes versG { 0% { left: 150px; opacity: 0; transform: scale(.6); } 20% { opacity: 1; transform: scale(1) rotate(-10deg); } 100% { left: 6px; opacity: 0; transform: scale(.7) rotate(10deg); } }
-    @keyframes versD { 0% { left: 6px; opacity: 0; transform: scale(.6); } 20% { opacity: 1; transform: scale(1) rotate(10deg); } 100% { left: 150px; opacity: 0; transform: scale(.7) rotate(-10deg); } }
-    .badge-final { position: absolute; top: 50%; left: 50%; width: 200px; transform: translate(-50%, -50%) scale(0); text-align: center; background: var(--jaune); border-radius: 26px; padding: 16px 14px 14px; box-shadow: var(--ombre-forte); transition: transform .7s var(--rebond); z-index: 3; }
+    @keyframes versG { 0% { left: 100px; opacity: 0; transform: scale(.6); } 20% { opacity: 1; transform: scale(1) rotate(-10deg); } 100% { left: 6px; opacity: 0; transform: scale(.7) rotate(10deg); } }
+    @keyframes versD { 0% { left: 6px; opacity: 0; transform: scale(.6); } 20% { opacity: 1; transform: scale(1) rotate(10deg); } 100% { left: 100px; opacity: 0; transform: scale(.7) rotate(-10deg); } }
+    .badge-final { position: absolute; top: 50%; left: 50%; width: 170px; transform: translate(-50%, -50%) scale(0); text-align: center; background: var(--jaune); border-radius: 26px; padding: 16px 14px 14px; box-shadow: var(--ombre-forte); transition: transform .7s var(--rebond); z-index: 3; }
     .badge-final.visible { transform: translate(-50%, -50%) scale(1); }
     .badge-final svg { width: 90px; }
     .badge-final b { display: block; font-family: var(--titres); font-weight: 800; font-size: 1.1rem; line-height: 1.1; letter-spacing: -.02em; margin-top: 6px; }
     .badge-final .plus1 { display: inline-block; margin-top: 8px; background: var(--violet); color: #fff; font-family: var(--titres); font-weight: 700; font-size: .8rem; padding: 4px 10px; border-radius: 999px; }
 
-    .etapes-anim { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 30px; }
-    .etapes-anim .rail { position: absolute; left: 10%; right: 10%; top: 17px; height: 4px; border-radius: 4px; background: var(--gris-clair); overflow: hidden; }
+    .etapes-anim { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 16px; }
+    .etapes-anim .rail { position: absolute; left: 10%; right: 10%; top: 14px; height: 4px; border-radius: 4px; background: var(--gris-clair); overflow: hidden; }
     .etapes-anim .rail i { position: absolute; inset: 0; background: linear-gradient(90deg, var(--violet), #b38be0); transform-origin: left; transform: scaleX(0); transition: transform .8s var(--ease); }
     .etape-a { position: relative; z-index: 1; border: 0; background: none; cursor: pointer; text-align: center; padding: 0; font: inherit; color: var(--gris); }
-    .etape-a .rond { width: 38px; height: 38px; margin: 0 auto; border-radius: 50%; background: var(--blanc); border: 2px solid var(--gris-clair); display: grid; place-items: center; font-family: var(--titres); font-weight: 700; transition: all .45s var(--rebond); }
-    .etape-a b { display: block; margin-top: 10px; font-family: var(--titres); font-size: .95rem; transition: color .3s; }
+    .etape-a .rond { width: 32px; height: 32px; margin: 0 auto; border-radius: 50%; background: var(--blanc); border: 2px solid var(--gris-clair); display: grid; place-items: center; font-family: var(--titres); font-weight: 700; transition: all .45s var(--rebond); }
+    .etape-a b { display: block; margin-top: 8px; font-family: var(--titres); font-size: .85rem; transition: color .3s; }
     .etape-a.faite .rond { background: var(--violet); border-color: var(--violet); color: #fff; }
     .etape-a.active .rond { background: var(--jaune); border-color: var(--violet); color: var(--encre); transform: scale(1.18); box-shadow: 0 0 0 6px rgba(148,101,205,.15); }
     .etape-a.active b, .etape-a.faite b { color: var(--texte); }
-    .legende { text-align: center; margin-top: 18px; min-height: 26px; font-size: 1.05rem; color: var(--texte2); }
+    .legende { text-align: center; margin-top: 12px; min-height: 44px; font-size: 1rem; line-height: 1.35; font-weight: 500; color: var(--texte2); }
     .legende span { display: inline-block; animation: pop .5s var(--rebond); }
 
     /* ================= ÉVENTAIL ================= */
@@ -351,6 +359,27 @@
     .appli { display: none; }
     body.connecte .site { display: none; }
     body.connecte .appli { display: block; }
+    /* Connecté mais sur la page d'accueil : on réaffiche le site, et on remplace le formulaire par « Aller à mon espace » */
+    body.connecte.accueil .site { display: block; }
+    body.connecte.accueil .appli { display: none; }
+    #btn-espace, #co-connecte { display: none; }
+    body.connecte #btn-espace { display: inline-flex; }
+    body.connecte #btn-seco { display: none; }
+    body.connecte #co-connecte { display: block; }
+    body.connecte #connexion > :not(#co-connecte) { display: none; }
+    .app-droite { display: flex; align-items: center; gap: 10px; }
+    .compte { position: relative; }
+    button.avatar { border: 0; cursor: pointer; font-size: 1rem; transition: transform .3s var(--rebond), box-shadow .3s; }
+    button.avatar:hover, button.avatar[aria-expanded="true"] { transform: scale(1.06); box-shadow: 0 0 0 4px rgba(148,101,205,.18); }
+    button.avatar:focus-visible, .menu-compte [role=menuitem]:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+    .menu-compte { position: absolute; right: 0; top: calc(100% + 12px); width: 250px; background: var(--blanc); border: 1px solid var(--gris-clair); border-radius: 20px; padding: 8px; box-shadow: var(--ombre-forte); z-index: 60; animation: pop .35s var(--rebond) both; }
+    .menu-compte[hidden] { display: none; }
+    .menu-tete { padding: 10px 12px 12px; border-bottom: 1px solid var(--gris-clair); margin-bottom: 6px; }
+    .menu-tete b { display: block; font-family: var(--titres); }
+    .menu-tete span { display: block; color: var(--gris); font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .menu-compte [role=menuitem] { display: flex; align-items: center; gap: 12px; width: 100%; height: 44px; padding: 0 12px; border: 0; background: none; border-radius: 12px; font: inherit; font-weight: 500; color: var(--texte); cursor: pointer; text-align: left; }
+    .menu-compte [role=menuitem]:hover { background: var(--lavande); color: var(--violet-fonce); }
+    .menu-compte hr { border: 0; border-top: 1px solid var(--gris-clair); margin: 6px 0; }
     .app-nav { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,.86); backdrop-filter: blur(14px); border-bottom: 1px solid var(--gris-clair); }
     .app-nav .conteneur { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .segment { position: relative; display: flex; background: var(--gris-clair); border-radius: 999px; padding: 4px; }
@@ -408,12 +437,20 @@
     .btn-ia::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.8) 50%, transparent 70%); transform: translateX(-100%); animation: brille 3.2s ease-in-out infinite; }
     @keyframes brille { 60%, 100% { transform: translateX(100%); } }
 
-    .demande { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 20px; background: var(--surface); margin-top: 14px; transition: background .4s; }
-    .demande.acceptee { background: var(--menthe); }
-    .demande .txt { flex: 1; }
-    .demande p { margin-top: 6px; font-size: .95rem; }
+    /* Contacts : cartes sobres, mêmes couleurs partout (violet, lavande, un peu de jaune, gris) */
+    .inbox-tete .compte-titre, .panneau .compte-titre { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 8px; margin-left: 10px; border-radius: 999px; background: var(--lavande); color: var(--violet-fonce); font-family: var(--titres); font-size: .85rem; font-weight: 700; vertical-align: middle; }
+    .demande { display: flex; gap: 14px; align-items: flex-start; padding: 18px; border-radius: 20px; background: var(--blanc); border: 1px solid var(--gris-clair); margin-top: 12px; transition: border-color .3s, box-shadow .3s; }
+    .demande:hover { box-shadow: 0 8px 22px rgba(42,35,32,.06); }
+    .demande.acceptee { border-color: #ddccf3; background: #fcfaff; }
+    .demande .avatar { width: 40px; height: 40px; background: var(--lavande); color: var(--violet-fonce); }
+    .demande .txt { flex: 1; min-width: 0; }
+    .demande .ligne-st { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .demande p { margin-top: 8px; font-size: .95rem; }
+    .demande .actions-dem { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
     .verrou { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .86rem; color: var(--gris); }
-    .coord { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 14px; border-radius: 999px; background: var(--jaune-pale); font-weight: 600; font-size: .94rem; animation: pop .5s var(--rebond); }
+    .coord { display: inline-flex; flex-direction: column; gap: 2px; margin-top: 12px; padding: 9px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--gris-clair); font-size: .98rem; animation: pop .5s var(--rebond); }
+    .coord small { color: var(--gris); font-size: .76rem; font-weight: 500; }
+    .coord b { font-family: var(--titres); font-weight: 700; word-break: break-word; }
     .fil { display: flex; flex-direction: column; gap: 8px; margin: 18px 0; min-height: 140px; max-height: 320px; overflow-y: auto; }
     .bulle { max-width: 76%; padding: 10px 15px; border-radius: 20px; font-size: .96rem; animation: pop .45s var(--rebond) both; }
     .bulle small { display: block; font-size: .78rem; font-weight: 500; opacity: .95; margin-bottom: 3px; }
@@ -428,6 +465,113 @@
     .conv-vide { text-align: center; padding: 30px 10px; color: var(--gris); }
     .conv-vide .sticker { width: 60px; margin: 0 auto 10px; }
 
+    /* ================= MESSAGERIE (boîte de réception) ================= */
+    .av-p { display: inline-grid; place-items: center; flex: none; width: var(--t, 44px); height: var(--t, 44px); border-radius: 50%; background: var(--bg, var(--lavande)); color: var(--fg, var(--violet-fonce)); font-family: var(--titres); font-weight: 800; font-size: calc(var(--t, 44px) * .42); }
+    .bandeau-dem { background: var(--jaune-pale); box-shadow: none; border: 1px solid #e6e8a0; }
+    .nouvelle { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; padding: 14px 16px; border-radius: 20px; background: var(--blanc); margin-top: 12px; }
+    .nouvelle .txt { flex: 1; min-width: 200px; }
+    .nouvelle .txt b { font-family: var(--titres); }
+    .nouvelle .txt p { font-size: .92rem; color: var(--texte2); margin-top: 2px; }
+    .nouvelle .actions-dem { display: flex; gap: 8px; }
+    .inbox { display: grid; grid-template-columns: 350px 1fr; gap: 18px; align-items: start; }
+    .inbox-liste, .inbox-fil { background: var(--blanc); border-radius: 28px; box-shadow: var(--ombre); overflow: hidden; }
+    .inbox-liste { display: flex; flex-direction: column; max-height: 640px; }
+    .inbox-tete { padding: 20px 20px 12px; }
+    .inbox-tete h2 { font-size: 1.3rem; letter-spacing: -.03em; margin-bottom: 12px; }
+    .inbox-tete input { height: 44px; font-size: .92rem; }
+    .liste-conv { overflow-y: auto; padding: 4px 10px 10px; flex: 1; }
+    .ligne-conv { display: flex; gap: 12px; align-items: center; width: 100%; text-align: left; padding: 12px; border: 0; background: none; border-radius: 18px; cursor: pointer; font: inherit; color: inherit; transition: background .2s; position: relative; }
+    .ligne-conv:hover { background: #f7f3fc; }
+    .ligne-conv.actif { background: var(--lavande); }
+    .ligne-conv .lc-txt { flex: 1; min-width: 0; }
+    .ligne-conv .lc-haut { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+    .ligne-conv .lc-nom { font-family: var(--titres); font-weight: 700; font-size: .98rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ligne-conv .lc-date { font-size: .74rem; color: var(--gris); flex: none; }
+    .ligne-conv .lc-annonce { font-size: .78rem; color: var(--violet-fonce); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ligne-conv .lc-apercu { font-size: .86rem; color: var(--gris); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+    .ligne-conv.non-lu .lc-nom, .ligne-conv.non-lu .lc-apercu { color: var(--texte); font-weight: 700; }
+    .ligne-conv.non-lu::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--violet); flex: none; }
+    .attente { border-top: 1px solid var(--gris-clair); padding: 4px 10px 10px; }
+    .attente summary { cursor: pointer; padding: 12px; font-family: var(--titres); font-weight: 600; font-size: .92rem; color: var(--gris); list-style: none; display: flex; justify-content: space-between; }
+    .attente summary::after { content: '+'; font-size: 1.2rem; line-height: 1; }
+    .attente[open] summary::after { content: '\2212'; }
+    .attente .ligne-conv { cursor: default; }
+    .attente .ligne-conv:hover { background: none; }
+    .vide-liste { padding: 22px 16px; text-align: center; color: var(--gris); font-size: .92rem; }
+    .inbox-fil { min-height: 520px; display: flex; flex-direction: column; }
+    .inbox-fil > div { flex: 1; display: flex; flex-direction: column; }
+    .inbox-fil #conv-vide { justify-content: center; }
+    .conv-tete { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--gris-clair); }
+    .conv-nom { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .conv-nom b { font-family: var(--titres); font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .conv-nom .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .retour-liste { display: none; }
+    .conv-infos { padding: 0 20px; }
+    .conv-infos .coord { margin-top: 12px; }
+    .conv-infos .carte-profil { margin-top: 12px; box-shadow: none; border: 1px solid var(--gris-clair); }
+    .inbox-fil .fil { flex: 1; margin: 0; padding: 18px 20px; min-height: 260px; max-height: 420px; }
+    .inbox-fil .ecrire { margin: 0 16px 16px; }
+
+    /* ================= PROFIL (3 vues) ================= */
+    .pvue { display: none; }
+    .pvue.actif { display: block; animation: monte .6s var(--ease) both; }
+    .actions-titre { display: flex; gap: 10px; flex-wrap: wrap; }
+    .profil-grille { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; align-items: start; }
+    .carte-profil { background: var(--blanc); border-radius: 28px; box-shadow: var(--ombre); overflow: hidden; }
+    .cp-banniere { height: 118px; position: relative; background: var(--bg, var(--lavande)); }
+    .cp-banniere::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.6) 1.4px, transparent 1.5px); background-size: 16px 16px; }
+    .cp-corps { padding: 0 28px 24px; }
+    .cp-avatar { width: 92px; height: 92px; margin-top: -46px; position: relative; z-index: 1; display: grid; place-items: center; border-radius: 50%; border: 5px solid var(--blanc); background: var(--bg, var(--lavande)); color: var(--fg, var(--violet-fonce)); font-family: var(--titres); font-weight: 800; font-size: 2.4rem; box-shadow: 0 8px 20px rgba(42,35,32,.12); }
+    .cp-nom { font-size: 1.9rem; letter-spacing: -.04em; margin-top: 14px; line-height: 1.1; word-break: break-word; }
+    .cp-sous { color: var(--gris); font-weight: 500; margin-top: 4px; }
+    .cp-bio { margin-top: 14px; font-size: 1.02rem; line-height: 1.5; color: var(--texte2); word-break: break-word; }
+    .cp-bloc { margin-top: 22px; }
+    .cp-bloc h3 { font-size: .76rem; text-transform: uppercase; letter-spacing: .09em; color: var(--gris); margin-bottom: 10px; }
+    .carte-profil .chips { margin: 0; min-height: 0; }
+    .carte-profil .chips span { animation: none; }
+    .fantome { color: #8d877f; font-style: italic; font-size: .95rem; }
+    .pills-dispo { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pills-dispo span { padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--gris-clair); font-family: var(--titres); font-weight: 600; font-size: .88rem; }
+    .cp-pied { display: flex; align-items: center; gap: 8px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--gris-clair); color: var(--gris); font-size: .86rem; }
+    .progres { height: 8px; border-radius: 999px; background: var(--gris-clair); overflow: hidden; margin: 14px 0 16px; }
+    .progres i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--violet), #b38be0); border-radius: 999px; transition: width .9s var(--ease); }
+    .todo { list-style: none; display: grid; gap: 4px; }
+    .todo li { display: flex; align-items: center; gap: 10px; font-size: .95rem; }
+    .todo .coche { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--gris-clair); display: grid; place-items: center; flex: none; font-size: .7rem; color: transparent; }
+    .todo li.fait .coche { background: var(--violet); border-color: var(--violet); color: #fff; }
+    .lien-texte { border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--violet-fonce); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+    .todo .lien-texte { color: var(--texte); text-decoration: none; padding: 7px 0; text-align: left; }
+    .todo li:not(.fait) .lien-texte:hover { color: var(--violet-fonce); text-decoration: underline; }
+    .todo li.fait .lien-texte { color: var(--gris); text-decoration: line-through; }
+    .retour-barre { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+    .retour-barre h1 { font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -.045em; }
+    .edit-grille { display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; align-items: start; }
+    .apercu { position: sticky; top: 96px; display: grid; gap: 10px; }
+    .compte-car { float: right; color: var(--gris); font-size: .8rem; font-weight: 500; }
+    .couleurs, .dispos { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    .couleurs label, .dispos label { margin: 0; }
+    .couleurs input, .dispos input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .couleurs span { display: block; width: 42px; height: 42px; border-radius: 50%; border: 3px solid var(--blanc); box-shadow: 0 0 0 1.5px var(--gris-clair); cursor: pointer; transition: transform .3s var(--rebond), box-shadow .2s; }
+    .couleurs input:checked + span { box-shadow: 0 0 0 3px var(--violet); transform: scale(1.12); }
+    .couleurs input:focus-visible + span, .dispos input:focus-visible + span { outline: 2px solid var(--violet); outline-offset: 3px; }
+    .dispos span { display: inline-block; padding: 9px 15px; border-radius: 999px; border: 1.5px solid var(--gris-clair); font-family: var(--titres); font-weight: 600; font-size: .9rem; color: var(--texte); cursor: pointer; transition: all .25s var(--ease); }
+    .dispos input:checked + span { background: var(--lavande); border-color: var(--violet); color: var(--violet-fonce); }
+    .actions-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+    .etapes-cv { display: flex; gap: 8px 22px; list-style: none; margin-bottom: 22px; flex-wrap: wrap; }
+    .etapes-cv li { display: flex; align-items: center; gap: 8px; font-family: var(--titres); font-weight: 600; font-size: .92rem; color: var(--gris); }
+    .etapes-cv li b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--gris-clair); font-size: .82rem; transition: all .4s var(--rebond); }
+    .etapes-cv li.actif { color: var(--texte); }
+    .etapes-cv li.actif b { background: var(--violet); color: #fff; transform: scale(1.1); }
+    .etapes-cv li.fait b { background: var(--lavande); color: var(--violet-fonce); }
+    .depot.grand { flex-direction: column; text-align: center; padding: 38px 24px; margin-top: 0; }
+    .depot.grand .sticker { width: 64px; }
+    .depot.survol { border-color: var(--violet); background: #faf7fe; }
+    .depot.charge { pointer-events: none; opacity: .75; }
+    .choix-cv { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 4px; }
+    .chip-cv { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; border: 1.5px solid var(--gris-clair); background: var(--blanc); font: inherit; font-weight: 600; color: var(--gris); cursor: pointer; transition: all .25s var(--ease); text-decoration: line-through; }
+    .chip-cv.on { background: var(--lavande); border-color: var(--violet); color: var(--violet-fonce); text-decoration: none; }
+    .chip-cv.on::before { content: '\2713'; font-size: .85rem; }
+    .cv-panneau h2 { margin-top: 6px; }
     .depot { display: flex; align-items: center; gap: 16px; border: 1.5px dashed #d6d1c7; border-radius: 20px; padding: 16px 20px; color: var(--gris); font-size: .93rem; margin-top: 18px; transition: border-color .3s, background .3s; cursor: pointer; }
     .depot .sticker { width: 46px; flex: none; }
     .depot:hover { border-color: var(--violet); background: #faf7fe; }
@@ -450,6 +594,17 @@
     .choix input { position: absolute; opacity: 0; }
     .choix span { display: block; text-align: center; padding: 14px; border-radius: 16px; border: 1.5px solid var(--gris-clair); font-family: var(--titres); font-weight: 700; color: var(--texte); cursor: pointer; transition: all .3s var(--rebond); }
     .choix input:checked + span { border-color: var(--violet); background: var(--lavande); color: var(--violet-fonce); transform: scale(1.02); }
+    .choix.trois { grid-template-columns: repeat(3, 1fr); }
+    .choix.trois span { padding: 12px 6px; font-size: .92rem; }
+    .champ-prix { display: none; align-items: center; gap: 10px; margin-top: 12px; }
+    .champ-prix.visible { display: flex; animation: pop .4s var(--rebond) both; }
+    .champ-prix input { width: 130px; font-family: var(--titres); font-weight: 700; font-size: 1.1rem; text-align: right; }
+    .champ-prix b { font-family: var(--titres); font-size: 1.3rem; }
+    .champ-prix small { color: var(--gris); }
+    .prix { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 999px; font-family: var(--titres); font-weight: 700; font-size: .82rem; background: var(--surface); color: var(--texte); border: 1px solid var(--gris-clair); }
+    .prix.gratuit { background: var(--menthe); border-color: transparent; color: #1f7a48; }
+    .prix.fixe { background: var(--jaune-pale); border-color: transparent; color: #4e4d0a; }
+    .annonce .ligne-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .ia-ligne { display: flex; gap: 8px; }
     .ia-ligne input { flex: 1; }
     .fab { display: none; }
@@ -470,24 +625,38 @@
     @media (max-width: 1000px) {
       .nav .liens { display: none; }
       .hero { padding-top: 40px; }
-      .hero .conteneur, .grille2, .faq { grid-template-columns: 1fr; }
+      .hero .conteneur, .grille2, .faq { grid-template-columns: 1fr; gap: 28px; }
+      .cta-hero { display: flex; }
+      .profil-grille, .edit-grille { grid-template-columns: 1fr; }
+      .inbox { grid-template-columns: 1fr; }
+      .inbox-liste { max-height: none; }
+      .inbox:not(.fil-ouvert) .inbox-fil { display: none; }
+      .inbox.fil-ouvert .inbox-liste { display: none; }
+      .inbox.fil-ouvert .inbox-fil { min-height: 0; }
+      .bandeau-dem:has(+ .inbox.fil-ouvert) { display: none; }
+      .retour-liste { display: inline-flex; }
+      .apercu { display: none; }
+      .titre-page .actions-titre .btn { display: inline-flex; }
+      .hero .histoire { margin-top: 26px; }
       .carte-co { margin-top: 10px; }
       .securite { grid-template-columns: 1fr; }
       .scene { grid-template-columns: 1fr 1fr; }
       .milieu { display: none; }
       .badge-final { position: fixed; }
-      .tel { width: 100%; max-width: 270px; }
+      .tel { width: 100%; max-width: 270px; height: 360px; }
       .eventail { transform: scale(.72); transform-origin: top center; height: 280px; }
       .annonces { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 600px) {
       .nav .btn { height: 36px; padding: 0 14px; font-size: .85rem; }
-      .hero h1 { font-size: 3.1rem; }
+      .hero h1 { font-size: 2.7rem; }
+      .hero .intro { font-size: 1.05rem; }
       .pile { gap: 10px; margin-top: 30px; }
       .pastille { padding: 9px 16px; }
       .histoire { padding: 24px 12px 20px; }
       .scene { gap: 8px; }
-      .tel { height: calc(100vh - 400px); border-width: 5px; border-radius: 28px; }
+      .tel { height: 300px; border-width: 5px; border-radius: 28px; }
+      .demo-entete b { font-size: .92rem; }
       .histoire-scroll { height: 460vh; }
       .collant { top: 70px; }
       .histoire-scroll .centre p.sous { display: none; }
@@ -501,6 +670,7 @@
       .eventail { transform: scale(.5); height: 210px; }
       .annonces { grid-template-columns: 1fr; }
       .recherche { width: 100%; }
+      .app-nav { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--blanc); } /* sinon la barre du bas se colle sur la barre du haut */
       .app-nav .segment { position: fixed; left: 14px; right: 14px; bottom: 14px; justify-content: space-between; box-shadow: 0 12px 30px rgba(42,35,32,.16); background: var(--blanc); }
       .app-nav .segment .curseur { background: var(--lavande); box-shadow: none; }
       .app-nav .onglet { flex: 1; justify-content: center; padding: 0 8px; font-size: .84rem; }
@@ -550,22 +720,53 @@
         <a class="lien" href="#campus">Sur le campus</a>
         <a class="lien" href="#faq">Questions</a>
       </div>
-      <button class="btn petit sans" onclick="allerConnexion()">Se connecter</button>
+      <button class="btn petit sans" id="btn-seco" onclick="allerConnexion()">Se connecter</button>
+      <button class="btn petit sans" id="btn-espace" onclick="allerEspace()">Mon espace</button>
     </div>
   </nav>
 
   <header class="hero">
     <div class="conteneur">
-      <div>
+      <div class="hero-gauche">
         <h1 id="titre-hero">Un service rendu, un <span class="surligne">pote</span> gagné.</h1>
         <p class="intro">Propose ce que tu sais faire, trouve qui peut t'aider. Photo, montage, coloc, covoit' : tout se passe entre étudiants du campus.</p>
-        <div class="confiance">
-          <span><span class="ico-rond" style="background:var(--jaune)"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="16" r="1.2" fill="#4b2d80"/></svg></span>Coordonnées privées</span>
-          <span><span class="ico-rond" style="background:var(--lavande)"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9z"/></svg></span>100 % gratuit</span>
-          <span><span class="ico-rond" style="background:var(--peche)"><svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v5"/></svg></span>Réservé au campus</span>
+        <div class="cta-hero">
+          <button type="button" class="btn sans" onclick="allerConnexion('connexion')">Se connecter</button>
+          <button type="button" class="btn clair" onclick="allerConnexion('inscription')">Créer un compte</button>
+        </div>
+
+        <!-- L'histoire animée : elle tourne toute seule, en boucle -->
+        <div class="histoire" id="histoire" role="img" aria-label="Animation : Léa publie une annonce, Sam demande le contact, Léa accepte, ils discutent, le service est rendu.">
+          <div class="demo-entete"><b>Regarde comment ça marche</b><span class="live"><i></i>Léa &amp; Sam</span></div>
+          <div class="scene">
+            <div class="tel" id="tel-lea">
+              <div class="barre"><span class="av" style="background:var(--rose)">L</span><div><b>Léa</b><small>Étudiante en com'</small></div></div>
+              <div class="flux" id="flux-lea"></div>
+            </div>
+            <div class="milieu">
+              <div class="fil-lien"></div>
+              <span class="pouls"></span>
+              <span class="voyageur sticker" id="voyageur"></span>
+              <div class="badge-final" id="badge-final"><span class="sticker" data-s="coeur" data-c="#f8dbe3" style="width:64px"></span><b>Un service rendu,<br>un pote gagné !</b><span class="plus1">+1 pote</span></div>
+            </div>
+            <div class="tel" id="tel-sam">
+              <div class="barre"><span class="av" style="background:var(--lavande)">S</span><div><b>Sam</b><small>Photographe amateur</small></div></div>
+              <div class="flux" id="flux-sam"></div>
+            </div>
+          </div>
+          <div class="etapes-anim" id="etapes">
+            <div class="rail"><i id="rail"></i></div>
+            <button type="button" class="etape-a" data-e="0"><span class="rond">1</span><b>Annonce</b></button>
+            <button type="button" class="etape-a" data-e="1"><span class="rond">2</span><b>Demande</b></button>
+            <button type="button" class="etape-a" data-e="2"><span class="rond">3</span><b>Accord</b></button>
+            <button type="button" class="etape-a" data-e="3"><span class="rond">4</span><b>Discussion</b></button>
+            <button type="button" class="etape-a" data-e="4"><span class="rond">5</span><b>Service rendu</b></button>
+          </div>
+          <p class="legende" id="legende" aria-live="off"></p>
         </div>
       </div>
 
+      <div class="col-droite">
       <div class="carte-co" id="connexion">
         
         <h2 id="titre-co">Content de te revoir !</h2>
@@ -580,6 +781,18 @@
         <p class="msg-co" id="msg-co" role="status"></p>
         </form>
         <p class="aide"><svg class="ico"><use href="#i-lock"/></svg>Tes coordonnées ne sont visibles qu'après ton accord.</p>
+        <div id="co-connecte">
+          <h2>Content de te revoir !</h2>
+          <p class="sous">Tu es connecté·e avec <b id="co-email"></b>.</p>
+          <div style="margin-top:22px"><button type="button" class="btn plein" onclick="allerEspace()"><span>Aller à mon espace</span> <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
+          <button type="button" class="lien-oubli" id="co-deco" style="margin:8px auto 0">Se déconnecter</button>
+        </div>
+      </div>
+      <div class="confiance">
+        <span><span class="ico-rond" style="background:var(--jaune)"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="16" r="1.2" fill="#4b2d80"/></svg></span>Coordonnées privées</span>
+        <span><span class="ico-rond" style="background:var(--lavande)"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9z"/></svg></span>Gratuit ou à petit prix</span>
+        <span><span class="ico-rond" style="background:var(--peche)"><svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v5"/></svg></span>Réservé au campus</span>
+      </div>
       </div>
     </div>
     <div class="pile" id="pile" aria-hidden="true"></div>
@@ -589,44 +802,6 @@
     <span class="label"><i></i>En direct</span>
     <div class="defil"><div class="piste" id="piste-direct"></div></div>
   </div>
-
-  <!-- Histoire animée -->
-  <section class="bloc histoire-scroll" id="histoire">
-    <div class="conteneur collant">
-      <div class="centre reveal">
-        <h2>De l'annonce au <span class="surligne-h">service rendu.</span></h2>
-        <p class="sous">Léa cherche un photographe pour la soirée de son asso. Sam sait faire. Regarde comment ça se passe.</p>
-      </div>
-      <div class="histoire reveal">
-        <div class="scene">
-          <div class="tel" id="tel-lea">
-            <div class="barre"><span class="av" style="background:var(--rose)">L</span><div><b>Léa</b><small>Étudiante en com'</small></div></div>
-            <div class="flux" id="flux-lea"></div>
-          </div>
-          <div class="milieu">
-            <div class="fil-lien"></div>
-            <span class="pouls"></span>
-            <span class="voyageur sticker" id="voyageur"></span>
-            <div class="badge-final" id="badge-final"><span class="sticker" data-s="coeur" data-c="#f8dbe3" style="width:64px"></span><b>Un service rendu,<br>un pote gagné !</b><span class="plus1">+1 pote</span></div>
-          </div>
-          <div class="tel" id="tel-sam">
-            <div class="barre"><span class="av" style="background:var(--lavande)">S</span><div><b>Sam</b><small>Photographe amateur</small></div></div>
-            <div class="flux" id="flux-sam"></div>
-          </div>
-        </div>
-        <div class="etapes-anim" id="etapes">
-          <div class="rail"><i id="rail"></i></div>
-          <button class="etape-a" data-e="0"><span class="rond">1</span><b>Annonce</b></button>
-          <button class="etape-a" data-e="1"><span class="rond">2</span><b>Demande</b></button>
-          <button class="etape-a" data-e="2"><span class="rond">3</span><b>Accord</b></button>
-          <button class="etape-a" data-e="3"><span class="rond">4</span><b>Discussion</b></button>
-          <button class="etape-a" data-e="4"><span class="rond">5</span><b>Service rendu</b></button>
-        </div>
-        <p class="legende" id="legende"></p>
-        <div class="defile-indic" id="defile-indic"><i></i>Fais défiler pour suivre l'histoire</div>
-      </div>
-    </div>
-  </section>
 
   <section class="bloc" id="campus">
     <div class="conteneur">
@@ -669,7 +844,7 @@
         <p>Tout ce qu'il faut savoir avant de te lancer.</p>
       </div>
       <div class="reveal d1">
-        <div class="question ouverte"><button>C'est vraiment gratuit ?<span class="plus">+</span></button><div class="reponse"><div><p>Oui, totalement. On s'entraide entre étudiants, c'est tout.</p></div></div></div>
+        <div class="question ouverte"><button>C'est vraiment gratuit ?<span class="plus">+</span></button><div class="reponse"><div><p>L'appli est 100 % gratuite et n'encaisse jamais d'argent. Chaque annonce indique si le service est gratuit, à prix fixe ou à discuter, et vous vous arrangez entre vous.</p></div></div></div>
         <div class="question"><button>Qui peut voir mon numéro ?<span class="plus">+</span></button><div class="reponse"><div><p>Personne, tant que tu n'as pas accepté une demande de contact. Et seule la personne acceptée le voit.</p></div></div></div>
         <div class="question"><button>Que fait l'IA avec mon CV ?<span class="plus">+</span></button><div class="reponse"><div><p>Elle te propose tes compétences. Tu relis, tu corriges, et c'est toi qui valides.</p></div></div></div>
         <div class="question"><button>Je peux supprimer mon annonce ?<span class="plus">+</span></button><div class="reponse"><div><p>Oui, à tout moment. Et personne d'autre que toi ne peut la modifier ou la supprimer.</p></div></div></div>
@@ -693,10 +868,23 @@
       <div class="segment" id="segment">
         <span class="curseur"></span>
         <button class="onglet actif" data-ecran="annonces"><svg class="ico"><use href="#i-home"/></svg>Annonces</button>
-        <button class="onglet" data-ecran="contacts"><svg class="ico"><use href="#i-chat"/></svg>Contacts<span class="notif" id="notif" hidden></span></button>
+        <button class="onglet" data-ecran="contacts"><svg class="ico"><use href="#i-chat"/></svg>Messages<span class="notif" id="notif" hidden></span></button>
         <button class="onglet" data-ecran="profil"><svg class="ico"><use href="#i-user"/></svg>Profil</button>
       </div>
-      <div class="avatar" id="mon-avatar">?</div>
+      <div class="app-droite">
+        <button class="btn petit clair" id="btn-accueil" type="button"><svg class="ico"><use href="#i-home"/></svg>Accueil</button>
+        <div class="compte">
+          <button class="avatar" id="mon-avatar" type="button" aria-label="Mon compte" aria-haspopup="menu" aria-expanded="false">?</button>
+          <div class="menu-compte" id="menu-compte" role="menu" hidden>
+            <div class="menu-tete"><b>Mon compte</b><span id="menu-email"></span></div>
+            <button role="menuitem" data-go="profil"><svg class="ico"><use href="#i-user"/></svg>Mon profil</button>
+            <button role="menuitem" data-go="contacts"><svg class="ico"><use href="#i-chat"/></svg>Mes messages</button>
+            <button role="menuitem" data-go="accueil"><svg class="ico"><use href="#i-home"/></svg>Page d'accueil</button>
+            <hr>
+            <button role="menuitem" data-go="deco"><svg class="ico"><use href="#i-lock"/></svg>Se déconnecter</button>
+          </div>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -708,27 +896,37 @@
         <button class="btn jaune" onclick="ouvrirTiroir()">Publier une annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
       </div>
       <div class="outils entre">
-        <div class="filtres" id="filtres"><button class="actif" data-f="tout">Tout</button><button data-f="propose">Propose</button><button data-f="cherche">Cherche</button></div>
+        <div class="filtres" id="filtres"><button class="actif" data-f="tout">Tout</button><button data-f="propose">Propose</button><button data-f="cherche">Cherche</button><button data-f="gratuit">Gratuit</button></div>
         <div class="recherche"><svg class="ico"><use href="#i-loupe"/></svg><input id="recherche" placeholder="Photo, coloc, maths…"></div>
       </div>
       <div class="annonces" id="liste"></div>
     </section>
 
-    <!-- Contacts -->
+    <!-- Messages : boîte de réception à deux colonnes -->
     <section class="ecran" id="contacts">
-      <div class="titre-page entre"><div><h1>Contacts</h1><div class="compteur" id="compteur-contacts"><i></i>…</div></div></div>
-      <div class="grille2">
-        <div class="entre">
-          <div class="panneau"><h2>Demandes reçues</h2><div id="liste-recues"></div></div>
-          <div class="panneau"><h2>Demandes envoyées</h2><div id="liste-envoyees"></div></div>
-        </div>
-        <div class="panneau entre" id="panneau-conv">
-          <div class="conv-vide" id="conv-vide"><span class="sticker" data-s="bulle" data-c="#ddccf3"></span><b style="font-family:var(--titres); font-size:1.15rem; color:var(--texte)">Pas encore de conversation</b><p style="margin-top:4px">Quand une demande est acceptée, tu peux discuter ici.</p></div>
+      <div class="titre-page entre"><div><h1>Messages</h1><div class="compteur" id="compteur-contacts"><i></i>…</div></div></div>
+      <div class="panneau bandeau-dem entre" id="bandeau-dem" hidden>
+        <h2 id="titre-nouvelles">Nouvelles demandes</h2>
+        <p class="sous">Accepte pour échanger et partager tes coordonnées. Tu peux refuser sans te justifier.</p>
+        <div id="liste-nouvelles"></div>
+      </div>
+      <div class="inbox entre" id="inbox">
+        <aside class="inbox-liste" aria-label="Conversations">
+          <div class="inbox-tete"><h2>Conversations<span class="compte-titre" id="nb-conv" hidden></span></h2><input id="rech-conv" type="search" placeholder="Rechercher une personne ou une annonce" aria-label="Rechercher une conversation"></div>
+          <div id="liste-conv" class="liste-conv"></div>
+          <details class="attente" id="bloc-attente" hidden><summary id="titre-attente">En attente de réponse</summary><div id="liste-attente"></div></details>
+        </aside>
+        <div class="inbox-fil" id="panneau-conv">
+          <div class="conv-vide" id="conv-vide"><span class="sticker" data-s="bulle" data-c="#ddccf3"></span><b style="font-family:var(--titres); font-size:1.15rem; color:var(--texte)">Choisis une conversation</b><p style="margin-top:4px">Quand une demande est acceptée, vous pouvez discuter ici.</p></div>
           <div id="conv" hidden>
-            <div style="display:flex; gap:12px; align-items:center; justify-content:space-between">
-              <div style="display:flex; gap:12px; align-items:center"><div class="avatar">💬</div><div><b id="conv-titre" style="font-family:var(--titres); font-size:1.05rem"></b><br><span class="meta">Conversation privée</span></div></div>
-              <button class="btn petit clair" id="btn-actualiser">↻ Actualiser</button>
+            <div class="conv-tete">
+              <button type="button" class="btn petit clair retour-liste" id="conv-retour" aria-label="Retour aux conversations">&larr;</button>
+              <span id="conv-avatar"></span>
+              <div class="conv-nom"><b id="conv-nom"></b><span class="meta" id="conv-titre"></span></div>
+              <button type="button" class="btn petit clair" id="conv-voir">Profil</button>
+              <button type="button" class="btn petit clair" id="btn-actualiser" aria-label="Actualiser">&#8635;</button>
             </div>
+            <div class="conv-infos" id="conv-infos"></div>
             <div class="fil" id="fil"></div>
             <form class="ecrire" id="form-msg"><input id="msg" maxlength="1000" placeholder="Écris ton message…" autocomplete="off"><button class="envoyer" aria-label="Envoyer"><svg class="ico"><use href="#i-envoi"/></svg></button></form>
           </div>
@@ -736,26 +934,84 @@
       </div>
     </section>
 
-    <!-- Profil -->
+    <!-- Profil : 3 vues (récap, modifier, importer mon CV) -->
     <section class="ecran" id="profil">
-      <div class="titre-page entre"><div><h1>Profil</h1><div class="compteur" id="mon-email"></div></div></div>
-      <div class="grille2">
-        <div class="panneau entre">
-          <h2>Mes compétences</h2>
-          <p class="sous">Dépose ton CV : l'IA propose, tu relis, tu valides.</p>
-          <input type="file" id="cv" accept="application/pdf" hidden>
-          <div class="depot" id="depot"><span class="sticker" data-s="livre" data-c="#eef07a"></span><div><b style="color:var(--texte)" id="nom-cv">Choisis ton CV (PDF)</b><br><span id="etat-cv">L'IA analysera tes compétences</span></div></div>
-          <div class="chips" id="chips"></div>
-          <div class="ia-ligne" style="margin-bottom:16px"><input id="ajout-comp" maxlength="40" placeholder="Ajouter une compétence à la main"><button class="btn clair sans" id="btn-ajout">Ajouter</button></div>
-          <button class="btn" id="btn-profil">Valider mon profil <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
+      <!-- Vue 1 : mon profil (récap) -->
+      <div class="pvue actif" id="pv-recap">
+        <div class="titre-page entre">
+          <div><h1>Mon profil</h1><div class="compteur" id="mon-email"></div></div>
+          <div class="actions-titre">
+            <button type="button" class="btn clair" data-pv="cv">Importer mon CV</button>
+            <button type="button" class="btn jaune" data-pv="edit">Modifier mon profil <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
+          </div>
         </div>
-        <div class="panneau entre">
-          <h2>Mes coordonnées</h2>
-          <p class="sous">Visibles uniquement par les personnes dont tu acceptes la demande.</p>
-          <label for="contact">Téléphone, Insta, e-mail…</label><input id="contact" maxlength="200" placeholder="Ex. 06 12 34 56 78 ou @mon.insta">
-          <div style="margin-top:16px"><button class="btn sans" id="btn-coord">Enregistrer</button></div>
-          <div style="border-top:1px solid var(--gris-clair); margin:24px 0 18px"></div>
-          <button class="btn petit clair" id="btn-deco">Se déconnecter</button>
+        <div class="profil-grille">
+          <div class="carte-profil entre" id="carte-profil"></div>
+          <div class="entre">
+            <div class="panneau">
+              <h2>Ton profil est complet à <span id="pct">0</span>%</h2>
+              <div class="progres"><i id="barre-pct"></i></div>
+              <ul class="todo" id="todo"></ul>
+            </div>
+            <div class="panneau">
+              <h2>Mes coordonnées</h2>
+              <p class="sous">Visibles uniquement par les personnes dont tu acceptes la demande.</p>
+              <label for="contact">Téléphone, Insta, e-mail…</label><input id="contact" maxlength="200" placeholder="Ex. 06 12 34 56 78 ou @mon.insta">
+              <div style="margin-top:16px"><button class="btn sans" id="btn-coord">Enregistrer</button></div>
+            </div>
+            <div class="panneau">
+              <h2>Mon compte</h2>
+              <p class="sous">Tu peux te déconnecter à tout moment.</p>
+              <div style="margin-top:14px"><button class="btn petit clair" id="btn-deco">Se déconnecter</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vue 2 : modifier mon profil -->
+      <div class="pvue" id="pv-edit">
+        <div class="retour-barre"><button type="button" class="btn petit clair" data-pv="recap">&larr; Mon profil</button><h1>Modifier mon profil</h1></div>
+        <div class="edit-grille">
+          <form class="panneau" id="form-edit" novalidate>
+            <label for="e-pseudo" style="margin-top:0">Prénom ou pseudo</label><input id="e-pseudo" maxlength="30" placeholder="Ex. Léa" autocomplete="nickname">
+            <label for="e-filiere">Filière et année</label><input id="e-filiere" maxlength="60" placeholder="Ex. M2 Data, ESP">
+            <label for="e-bio">Courte présentation <span class="compte-car" id="c-bio">0/160</span></label><textarea id="e-bio" rows="3" maxlength="160" placeholder="Une ou deux phrases sur toi : ce que tu aimes faire, ce que tu cherches…"></textarea>
+            <label>Couleur de ton avatar</label><div class="couleurs" id="e-couleurs"></div>
+            <label>Quand es-tu disponible ?</label><div class="dispos" id="e-dispos"></div>
+            <label>Tes compétences</label>
+            <div class="chips" id="chips"></div>
+            <div class="ia-ligne"><input id="ajout-comp" maxlength="40" placeholder="Ajouter une compétence"><button type="button" class="btn clair sans" id="btn-ajout">Ajouter</button></div>
+            <p class="meta" style="margin-top:10px">Gagne du temps : <button type="button" class="lien-texte" data-pv="cv">importe ton CV</button> et l'IA te propose des compétences.</p>
+            <div class="actions-form">
+              <button type="submit" class="btn" id="btn-profil">Enregistrer <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
+              <button type="button" class="btn clair sans" data-pv="recap">Annuler</button>
+            </div>
+          </form>
+          <aside class="apercu"><span class="meta">Aperçu : comme te verront tes contacts</span><div class="carte-profil" id="apercu-profil"></div></aside>
+        </div>
+      </div>
+
+      <!-- Vue 3 : importer mon CV -->
+      <div class="pvue" id="pv-cv">
+        <div class="retour-barre"><button type="button" class="btn petit clair" data-pv="recap">&larr; Mon profil</button><h1>Importer mon CV</h1></div>
+        <div class="panneau cv-panneau">
+          <ol class="etapes-cv" aria-label="Étapes">
+            <li id="ec1" class="actif"><b>1</b>Dépose ton CV</li>
+            <li id="ec2"><b>2</b>L'IA le lit</li>
+            <li id="ec3"><b>3</b>Tu choisis</li>
+          </ol>
+          <input type="file" id="cv" accept="application/pdf" hidden>
+          <div class="depot grand" id="depot" role="button" tabindex="0"><span class="sticker" data-s="livre" data-c="#eef07a"></span><div><b style="color:var(--texte)" id="nom-cv">Glisse ton CV ici, ou clique pour le choisir</b><br><span id="etat-cv">PDF, 5 Mo maximum. Ton CV n'est pas conservé.</span></div></div>
+          <div id="cv-resultat" hidden>
+            <h2>Voici ce que l'IA a trouvé</h2>
+            <p class="sous">Clique sur une compétence pour la retirer. Rien n'est enregistré avant ton accord.</p>
+            <div class="choix-cv" id="cv-chips"></div>
+            <div class="actions-form">
+              <button type="button" class="btn" id="btn-cv-ajouter">Ajouter à mon profil <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button>
+              <button type="button" class="btn clair sans" id="btn-cv-autre">Choisir un autre CV</button>
+            </div>
+          </div>
+          <p class="meta" id="cv-secours" hidden style="margin-top:14px">Pas de souci : tu peux <button type="button" class="lien-texte" data-pv="edit">ajouter tes compétences à la main</button>.</p>
         </div>
       </div>
     </section>
@@ -776,6 +1032,13 @@
   <div class="ia-ligne"><input id="mots" maxlength="200" placeholder="Ex. covoit Lyon vendredi"><button class="btn btn-ia sans" id="btn-rediger">✨ Rédiger</button></div>
   <label for="t-titre">Titre</label><input id="t-titre" maxlength="100" placeholder="Le titre de ton annonce">
   <label for="t-desc">Description</label><textarea id="t-desc" rows="4" maxlength="1000" placeholder="Quelques phrases pour expliquer"></textarea>
+  <label>Prix</label>
+  <div class="choix trois" id="choix-prix">
+    <label><input type="radio" name="prix" value="gratuit" checked><span>Gratuit</span></label>
+    <label><input type="radio" name="prix" value="fixe"><span>Prix fixe</span></label>
+    <label><input type="radio" name="prix" value="discuter"><span>À discuter</span></label>
+  </div>
+  <div class="champ-prix" id="champ-prix"><input id="t-prix" type="number" inputmode="decimal" min="1" max="9999" step="0.5" placeholder="15" aria-label="Prix en euros"><b>€</b><small>Aucun paiement dans l'appli : vous vous arrangez entre vous.</small></div>
   <div style="margin-top:20px"><button class="btn plein" id="btn-publier">Publier l'annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div>
 </aside>
 
@@ -999,7 +1262,7 @@
     const fl = document.getElementById('flux-lea'), fs = document.getElementById('flux-sam');
     const telL = document.getElementById('tel-lea'), telS = document.getElementById('tel-sam');
     const voy = document.getElementById('voyageur'), badge = document.getElementById('badge-final');
-    const leg = document.getElementById('legende'), rail = document.getElementById('rail');
+    const leg = document.getElementById('legende'), rail = document.getElementById('rail'), conteneur = document.getElementById('histoire');
     const etapes = [...document.querySelectorAll('.etape-a')];
     const LEGENDES = ['Léa publie une annonce en 3 mots, l\'IA rédige le reste.', 'Sam demande le contact. Ses coordonnées à elle restent cachées.', 'Léa accepte : les coordonnées s\'affichent, pour eux deux seulement.', 'Ils s\'organisent dans une conversation privée.', 'Le service est rendu. Un pote de gagné !'];
     const ajoute = (f, html) => { f.insertAdjacentHTML('beforeend', html); const el = f.lastElementChild; f.scrollTo({ top: f.scrollHeight, behavior: 'smooth' }); return el; };
@@ -1030,7 +1293,7 @@
       [4, 1500, () => { const p = ['#ddccf3', '#eef07a', '#f19a7c', '#dcedf6', '#f8dbe3', '#dcf1e4']; ajoute(fs, `<div class="t-photos">${p.map((c) => `<span style="background:${c}"></span>`).join('')}<small>24 photos envoyées</small></div>`); voyage('vers-g', 'appareil', '#ffffff'); }],
       [4, 900, () => { vibre(telL); ajoute(fl, `<div class="t-photos" style="align-self:flex-start; background:var(--blanc); box-shadow:var(--ombre)">${['#ddccf3', '#eef07a', '#f19a7c', '#dcedf6', '#f8dbe3', '#dcf1e4'].map((c) => `<span style="background:${c}"></span>`).join('')}<small style="color:var(--gris)">24 photos reçues</small></div>`); }],
       [4, 900, () => message(false, 'Elles sont trop belles, merci !! 🙌')],
-      [4, 700, () => { badge.classList.add('visible'); const r = badge.getBoundingClientRect(); confettis({ clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 }); }]
+      [4, 700, () => { badge.classList.add('visible'); const r = badge.getBoundingClientRect(); if (r.width) confettis({ clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 }); }]
 
     ];
     const marquer = (e) => {
@@ -1039,34 +1302,36 @@
       if (leg.dataset.e !== String(e)) { leg.dataset.e = e; leg.innerHTML = `<span>${LEGENDES[e]}</span>`; }
     };
     const reset = () => { fl.innerHTML = ''; fs.innerHTML = ''; badge.classList.remove('visible'); voy.className = 'voyageur sticker'; };
-    // Le défilement pilote l'histoire : chaque « temps fort » correspond à une portion du scroll
-    const section = document.getElementById('histoire');
-    const indic = document.getElementById('defile-indic');
-    let fait = 0;
-    const allerA = (cible) => {
-      if (cible < fait) { reset(); fait = 0; const sauvegarde = document.body.classList.contains('rapide'); for (; fait < cible; fait++) BEATS[fait][2](); return; }
-      for (; fait < cible; fait++) BEATS[fait][2]();
-    };
-    const majScroll = () => {
-      const r = section.getBoundingClientRect();
-      const total = section.offsetHeight - innerHeight;
-      const prog = Math.min(1, Math.max(0, -r.top / total));
-      const cible = Math.min(BEATS.length, Math.floor(prog * (BEATS.length + 1)));
-      allerA(cible);
-      const etape = cible === 0 ? 0 : BEATS[Math.min(cible, BEATS.length) - 1][0];
-      marquer(etape);
-      indic.style.opacity = prog > .05 ? 0 : 1;
-    };
-    let attente = false;
-    addEventListener('scroll', () => { if (!attente) { attente = true; requestAnimationFrame(() => { majScroll(); attente = false; }); } }, { passive: true });
-    addEventListener('resize', majScroll);
-    // Clic sur une étape : on fait défiler jusqu'au bon endroit
+    // L'histoire se joue toute seule, en boucle, tant qu'elle est visible à l'écran
+    let jeton = 0, minuteur = null, enCours = false;
+    const attendre = (ms) => new Promise((ok) => { minuteur = setTimeout(ok, ms); });
+    async function jouer(depuis, moi) {
+      reset();
+      for (let i = 0; i < depuis; i++) BEATS[i][2]();           // on rattrape instantanément ce qui précède
+      marquer(depuis === 0 ? 0 : BEATS[depuis - 1][0]);
+      for (let i = depuis; i < BEATS.length; i++) {
+        await attendre(BEATS[i][1]); if (moi !== jeton) return;
+        BEATS[i][2](); marquer(BEATS[i][0]);
+      }
+      await attendre(5000); if (moi !== jeton) return;
+      jouer(0, moi);                                             // et on recommence
+    }
+    const arreter = () => { enCours = false; jeton++; clearTimeout(minuteur); };
+    const lancer = (depuis = 0) => { enCours = true; jeton++; clearTimeout(minuteur); jouer(depuis, jeton); };
+    const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduit) { BEATS.forEach((b) => b[2]()); marquer(4); }
+    else {
+      let visible = false;
+      const decider = () => { if (visible && document.visibilityState === 'visible') { if (!enCours) lancer(0); } else if (enCours) arreter(); };
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; decider(); }, { threshold: 0.2 }).observe(conteneur);
+      document.addEventListener('visibilitychange', decider);
+    }
+    // Clic sur une étape : on saute directement à ce moment de l'histoire
     etapes.forEach((b, i) => b.addEventListener('click', () => {
+      if (reduit) return;
       const premier = BEATS.findIndex((x) => x[0] === i);
-      const total = section.offsetHeight - innerHeight;
-      scrollTo({ top: section.offsetTop + total * ((premier + 1.2) / (BEATS.length + 1)), behavior: 'smooth' });
+      lancer(Math.max(0, premier));
     }));
-    majScroll();
     return { lancer: () => {} };
   })();
 
@@ -1081,7 +1346,6 @@
   const obs = new IntersectionObserver((es) => es.forEach((e) => {
     if (!e.isIntersecting) return;
     if (e.target.id === 'eventail') e.target.classList.add('ouvert');
-    else if (e.target.classList.contains('histoire')) { e.target.classList.add('vu'); H.lancer(); }
     else e.target.classList.add('vu');
     obs.unobserve(e.target);
   }), { threshold: 0.25 });
@@ -1120,7 +1384,9 @@
   const $ = (id) => document.getElementById(id);
   let moi = null;
   const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const STATUTS = { en_attente: '⏳ En attente', acceptee: '✓ Acceptée', refusee: '✕ Refusée' };
+  const STATUTS = { en_attente: 'Demande envoyée', acceptee: 'Acceptée', refusee: 'Refusée' };
+  const ETIQ = { en_attente: 'En attente', acceptee: 'Acceptée', refusee: 'Refusée' };
+  const COUL_ETIQ = { en_attente: 'cherche', acceptee: 'propose', refusee: '' };
   const FONDS = ['var(--lavande)', 'var(--jaune-pale)', 'var(--peche)', 'var(--menthe)', 'var(--ciel)', 'var(--rose)'];
   const quand = (d) => {
     const m = (Date.now() - new Date(d)) / 60000;
@@ -1216,7 +1482,8 @@
     $('fond-mdp').classList.remove('ouvert');
     toast('Mot de passe changé !');
   });
-  function allerConnexion() {
+  function allerConnexion(mode) {
+    if (mode) { const b = $('bascule').querySelectorAll('button')[mode === 'inscription' ? 1 : 0]; if (b && !b.classList.contains('actif')) b.click(); }
     $('connexion').scrollIntoView({ behavior: 'smooth', block: 'center' });
     setTimeout(() => $('email').focus({ preventScroll: true }), 500);
   }
@@ -1226,15 +1493,39 @@
     const { data } = await db.auth.getSession();
     moi = data.session ? data.session.user : null;
     document.body.classList.toggle('connecte', !!moi);
+    document.body.classList.remove('accueil');
+    convOuverte = null; $('inbox').classList.remove('fil-ouvert'); $('conv').hidden = true; $('conv-vide').hidden = false;
     if (!moi) return;
     $('mon-avatar').textContent = (moi.email || '?')[0].toUpperCase();
     $('mon-email').textContent = moi.email;
+    $('menu-email').textContent = moi.email; $('co-email').textContent = moi.email;
     scrollTo(0, 0); requestAnimationFrame(placerCurseur);
     await Promise.all([chargerCoordonnees(), chargerProfil()]);
     await chargerDemandes(); await chargerAnnonces();
   }
   db.auth.onAuthStateChange((ev, session) => { if (ev === 'PASSWORD_RECOVERY') ouvrirNouveauMdp(); if ((session ? session.user.id : null) !== (moi ? moi.id : null)) rafraichir(); });
   $('btn-deco').addEventListener('click', async () => { await db.auth.signOut(); scrollTo(0, 0); });
+  $('co-deco').addEventListener('click', () => $('btn-deco').click());
+
+  /* ---------- Accueil, logo et menu du cercle de profil ---------- */
+  const menuCompte = $('menu-compte'), avatarBtn = $('mon-avatar');
+  function fermerMenu() { menuCompte.hidden = true; avatarBtn.setAttribute('aria-expanded', 'false'); }
+  function allerAccueil() { fermerMenu(); document.body.classList.add('accueil'); scrollTo(0, 0); }
+  function allerEspace() { document.body.classList.remove('accueil'); scrollTo(0, 0); requestAnimationFrame(placerCurseur); }
+  avatarBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); const ouvrir = menuCompte.hidden;
+    menuCompte.hidden = !ouvrir; avatarBtn.setAttribute('aria-expanded', String(ouvrir));
+    if (ouvrir) menuCompte.querySelector('[role=menuitem]').focus();
+  });
+  document.addEventListener('click', (e) => { if (!menuCompte.hidden && !menuCompte.contains(e.target)) fermerMenu(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menuCompte.hidden) { fermerMenu(); avatarBtn.focus(); } });
+  menuCompte.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-go]'); if (!b) return; fermerMenu();
+    const v = b.dataset.go;
+    if (v === 'accueil') allerAccueil(); else if (v === 'deco') $('btn-deco').click(); else ouvrirOnglet(v);
+  });
+  $('btn-accueil').addEventListener('click', allerAccueil);
+  document.querySelector('.app-nav .logo').addEventListener('click', (e) => { e.preventDefault(); allerAccueil(); });
 
   /* ---------- Onglets ---------- */
   const segment = $('segment'), curseur = segment.querySelector('.curseur');
@@ -1245,6 +1536,7 @@
     document.body.dataset.onglet = nom; /* le bouton « + » n'est visible que sur Annonces */
     placerCurseur(); scrollTo({ top: 0, behavior: 'smooth' });
     if (nom === 'contacts') chargerDemandes();
+    if (nom === 'profil') voirPv('recap');
   }
   segment.querySelectorAll('.onglet').forEach((o) => o.addEventListener('click', () => ouvrirOnglet(o.dataset.ecran)));
   addEventListener('resize', placerCurseur);
@@ -1255,16 +1547,23 @@
   let tourA = 0;
   async function chargerAnnonces() {
     const t = ++tourA;
-    const { data, error } = await db.from('annonces').select('id, type, titre, description, created_at, auteur_id').order('created_at', { ascending: false });
+    const { data, error } = await db.from('annonces').select('id, type, titre, description, created_at, auteur_id, prix_type, prix_euros').order('created_at', { ascending: false });
     if (t !== tourA) return;
     if (error) { $('liste').innerHTML = '<p class="meta">Impossible de charger les annonces.</p>'; return; }
     annonces = data; afficherAnnonces();
   }
+  const formatEuros = (n) => (Number(n) % 1 === 0 ? String(Number(n)) : Number(n).toFixed(2).replace('.', ',')) + ' €';
+  const etiquettePrix = (a) => {
+    const t = a.prix_type || 'gratuit';
+    if (t === 'fixe') return `<span class="prix fixe">${formatEuros(a.prix_euros)}</span>`;
+    if (t === 'discuter') return '<span class="prix">À discuter</span>';
+    return '<span class="prix gratuit">Gratuit</span>';
+  };
   function afficherAnnonces() {
     const n = annonces.length;
     $('nb-annonces').textContent = n + (n > 1 ? ' annonces en ligne sur le campus' : ' annonce en ligne sur le campus');
     const q = filtre.q.toLowerCase();
-    const res = annonces.filter((a) => (filtre.f === 'tout' || a.type === filtre.f) && (!q || (a.titre + ' ' + (a.description || '')).toLowerCase().includes(q)));
+    const res = annonces.filter((a) => (filtre.f === 'tout' || (filtre.f === 'gratuit' ? (a.prix_type || 'gratuit') === 'gratuit' : a.type === filtre.f)) && (!q || (a.titre + ' ' + (a.description || '')).toLowerCase().includes(q)));
     if (!res.length) {
       $('liste').innerHTML = `<div class="vide"><span class="sticker" style="width:80px">${sticker('etoile', '#eef07a')}</span><h3>${n ? 'Aucune annonce ne correspond' : 'Pas encore d’annonce'}</h3><p>${n ? 'Essaie un autre mot, ou publie ta propre annonce.' : 'Sois le premier ou la première à publier !'}</p><div style="margin-top:16px"><button class="btn jaune" onclick="ouvrirTiroir()">Publier une annonce <span class="fleche"><svg><use href="#i-fleche"/></svg></span></button></div></div>`;
       return;
@@ -1279,7 +1578,7 @@
       return `<article class="annonce" style="animation-delay:${Math.min(i, 8) * 0.05}s">
         <div class="vis" style="background:${FONDS[i % FONDS.length]}">${nouveau ? '<span class="tag nouveau">Nouveau</span>' : ''}<span class="sticker">${sticker(s, c)}</span></div>
         <div class="corps">
-          <span class="tag ${a.type}"><span class="pt"></span>${a.type === 'propose' ? 'Propose' : 'Cherche'}</span>
+          <div class="ligne-tags"><span class="tag ${a.type}"><span class="pt"></span>${a.type === 'propose' ? 'Propose' : 'Cherche'}</span>${etiquettePrix(a)}</div>
           <h3>${esc(a.titre)}</h3><p>${esc(a.description)}</p>
           <div class="pied"><span class="meta">${a.auteur_id === moi.id ? 'Ton annonce · ' : ''}${quand(a.created_at)}</span>${action}</div>
         </div></article>`;
@@ -1299,7 +1598,7 @@
       b.disabled = false; b.textContent = 'Demander le contact';
       return toast(error.code === '23505' ? 'Tu as déjà demandé le contact pour cette annonce.' : 'Demande impossible : ' + error.message, 'bulle', '#f8dbe3');
     }
-    confettis(e); toast('Demande envoyée ! Tu verras sa réponse dans Contacts.', 'bulle', '#ddccf3');
+    confettis(e); toast('Demande envoyée ! Tu verras sa réponse dans Messages.', 'bulle', '#ddccf3');
     await chargerDemandes(); afficherAnnonces();
   }
   async function supprimerAnnonce(id) {
@@ -1340,146 +1639,313 @@
     } catch (err) { toast(err.message + ' Tu peux écrire à la main.', 'crayon', '#f8dbe3'); }
     b.disabled = false; b.innerHTML = '✨ Rédiger';
   });
+  $('choix-prix').addEventListener('change', () => {
+    const fixe = document.querySelector('input[name=prix]:checked').value === 'fixe';
+    $('champ-prix').classList.toggle('visible', fixe); if (fixe) setTimeout(() => $('t-prix').focus(), 50);
+  });
   $('btn-publier').addEventListener('click', async (e) => {
     const titre = $('t-titre').value.trim(), description = $('t-desc').value.trim();
     if (titre.length < 3) return toast('Ajoute un titre (3 caractères minimum).', 'crayon', '#f8dbe3');
+    const prixType = document.querySelector('input[name=prix]:checked').value;
+    let prixEuros = null;
+    if (prixType === 'fixe') {
+      prixEuros = Math.round(parseFloat(String($('t-prix').value).replace(',', '.')) * 100) / 100;
+      if (!(prixEuros > 0 && prixEuros <= 9999)) { $('t-prix').focus(); return toast('Indique un prix entre 1 et 9999 €.', 'crayon', '#f8dbe3'); }
+    }
     const b = $('btn-publier'); b.disabled = true;
-    const { error } = await db.from('annonces').insert({ type: document.querySelector('input[name=sens]:checked').value, titre, description });
+    const { error } = await db.from('annonces').insert({ type: document.querySelector('input[name=sens]:checked').value, titre, description, prix_type: prixType, prix_euros: prixEuros });
     b.disabled = false;
     if (error) return toast('Publication impossible : ' + error.message, 'crayon', '#f8dbe3');
-    $('t-titre').value = ''; $('t-desc').value = ''; $('mots').value = '';
+    $('t-titre').value = ''; $('t-desc').value = ''; $('mots').value = ''; $('t-prix').value = '';
+    document.querySelector('input[name=prix][value=gratuit]').checked = true; $('champ-prix').classList.remove('visible');
     fermerTiroir(); confettis(e); toast('Ton annonce est en ligne !', 'etoile', '#eef07a');
     ouvrirOnglet('annonces'); chargerAnnonces();
   });
 
-  /* ---------- Contacts ---------- */
-  let convOuverte = null, tourD = 0;
-  async function coordonneesDe(ids) {
-    if (!ids.length) return {};
-    const { data } = await db.from('coordonnees').select('user_id, contact').in('user_id', ids);
-    const r = {}; (data || []).forEach((c) => { r[c.user_id] = c.contact; }); return r;
-  }
-  const blocCoord = (c) => c ? `<span class="coord">📇 ${esc(c)}</span>` : '<span class="verrou">Cette personne n’a pas encore renseigné ses coordonnées.</span>';
+  /* ---------- Messages : boîte de réception ---------- */
+  let convOuverte = null, tourD = 0, convs = [], autres = {}, dernierMsg = {}, coordsCache = {}, rechConv = '';
+  const COULEURS = { violet: ['#ddccf3', '#4b2d80'], jaune: ['#eef07a', '#4e4d0a'], peche: ['#f8e2c8', '#7a4a14'], ciel: ['#dcedf6', '#1d5a7a'], rose: ['#f8dbe3', '#8a2a4a'], menthe: ['#dcf1e4', '#1f7a48'] };
+  const avatarP = (nom, couleur, t) => { const c = COULEURS[couleur] || COULEURS.violet; return `<span class="av-p" style="--bg:${c[0]};--fg:${c[1]};--t:${t || 44}px">${esc((nom || '?').trim()[0] || '?').toUpperCase()}</span>`; };
+  const nomDe = (id) => (autres[id] && autres[id].pseudo) || 'Étudiant·e';
+  const cleVu = () => 'lbp-vu-' + (moi ? moi.id : '');
+  const lireVu = () => { try { return JSON.parse(localStorage.getItem(cleVu()) || '{}'); } catch (e) { return {}; } };
+  const marquerVu = (id) => { try { const v = lireVu(); v[id] = new Date().toISOString(); localStorage.setItem(cleVu(), JSON.stringify(v)); } catch (e) { /* pas grave */ } };
+  const nonLu = (c) => { const m = dernierMsg[c.id]; if (!m || m.auteur_id === moi.id) return false; const vu = lireVu()[c.id]; return !vu || new Date(m.created_at) > new Date(vu); };
+  const blocCoord = (c) => c ? `<span class="coord"><small>Coordonnées</small><b>${esc(c)}</b></span>` : '<span class="verrou">Cette personne n’a pas encore renseigné ses coordonnées.</span>';
   async function chargerDemandes() {
     const t = ++tourD;
     const { data, error } = await db.from('demandes').select('id, statut, created_at, annonce_id, demandeur_id, proprietaire_id, annonces(titre)').order('created_at', { ascending: false });
     if (t !== tourD || error) return;
-    const recues = data.filter((d) => d.proprietaire_id === moi.id), envoyees = data.filter((d) => d.demandeur_id === moi.id);
-    mesDemandes = {}; envoyees.forEach((d) => { mesDemandes[d.annonce_id] = d.statut; });
-    const ids = data.filter((d) => d.statut === 'acceptee').map((d) => d.proprietaire_id === moi.id ? d.demandeur_id : d.proprietaire_id);
-    const coords = await coordonneesDe(ids);
+    const autreId = (d) => d.proprietaire_id === moi.id ? d.demandeur_id : d.proprietaire_id;
+    mesDemandes = {}; data.filter((d) => d.demandeur_id === moi.id).forEach((d) => { mesDemandes[d.annonce_id] = d.statut; });
+    const acceptees = data.filter((d) => d.statut === 'acceptee');
+    const ids = [...new Set(acceptees.map(autreId))];
+    const idsD = acceptees.map((d) => d.id);
+    const [coords, rp, rm] = await Promise.all([
+      coordonneesDe(ids),
+      ids.length ? db.from('profils').select('user_id, pseudo, bio, filiere, dispos, couleur, competences').in('user_id', ids) : { data: [] },
+      idsD.length ? db.from('messages').select('demande_id, auteur_id, contenu, created_at').in('demande_id', idsD).order('created_at', { ascending: false }).limit(300) : { data: [] }
+    ]);
     if (t !== tourD) return;
-    const enAttente = recues.filter((d) => d.statut === 'en_attente').length;
-    $('notif').hidden = !enAttente; $('notif').textContent = enAttente;
-    $('compteur-contacts').innerHTML = '<i></i>' + (enAttente ? `${enAttente} nouvelle${enAttente > 1 ? 's' : ''} demande${enAttente > 1 ? 's' : ''}` : 'Tout est à jour');
-    const titreDe = (d) => esc(d.annonces ? d.annonces.titre : 'une annonce');
-    const boutonConv = (d) => `<button class="btn petit sans" style="margin-top:10px" onclick="ouvrirConv('${d.id}', this.dataset.t)" data-t="${titreDe(d)}">💬 Discuter</button>`;
-    $('liste-recues').innerHTML = recues.length ? recues.map((d) => `
-      <div class="demande ${d.statut === 'acceptee' ? 'acceptee' : ''}"><div class="avatar">?</div><div class="txt">
-        <span class="tag ${d.statut === 'en_attente' ? 'nouveau' : 'propose'}">${d.statut === 'en_attente' ? 'Nouvelle' : STATUTS[d.statut]}</span>
-        <p>Un·e étudiant·e veut te contacter pour « <b>${titreDe(d)}</b> ».</p>
-        ${d.statut === 'en_attente' ? `<span class="verrou"><svg class="ico"><use href="#i-lock"/></svg>Ses coordonnées s'affichent après ton accord.</span>
-          <div style="display:flex; gap:8px; margin-top:12px"><button class="btn petit sans" onclick="repondre('${d.id}', 'acceptee', event)">Accepter</button><button class="btn petit clair" onclick="repondre('${d.id}', 'refusee')">Refuser</button></div>` : ''}
-        ${d.statut === 'acceptee' ? blocCoord(coords[d.demandeur_id]) + '<br>' + boutonConv(d) : ''}
-      </div></div>`).join('') : '<p class="meta" style="margin-top:12px">Aucune demande reçue pour l’instant.</p>';
-    $('liste-envoyees').innerHTML = envoyees.length ? envoyees.map((d) => `
-      <div class="demande ${d.statut === 'acceptee' ? 'acceptee' : ''}"><div class="avatar" style="background:var(--peche); color:#8a4b00">✉</div><div class="txt">
-        <p style="margin:0">« <b>${titreDe(d)}</b> »</p><span class="meta">${STATUTS[d.statut]}</span>
-        ${d.statut === 'acceptee' ? '<br>' + blocCoord(coords[d.proprietaire_id]) + '<br>' + boutonConv(d) : ''}
-        ${d.statut === 'en_attente' ? '<br><span class="verrou"><svg class="ico"><use href="#i-lock"/></svg>Les coordonnées s’afficheront si la personne accepte.</span>' : ''}
-      </div></div>`).join('') : '<p class="meta" style="margin-top:12px">Aucune demande envoyée pour l’instant.</p>';
-    if (!convOuverte) { const premiere = data.find((d) => d.statut === 'acceptee'); if (premiere) ouvrirConv(premiere.id, titreDe(premiere), true); }
+    coordsCache = coords; autres = {}; (rp.data || []).forEach((p) => { autres[p.user_id] = p; });
+    dernierMsg = {}; (rm.data || []).forEach((m) => { if (!dernierMsg[m.demande_id]) dernierMsg[m.demande_id] = m; });
+    const titreD = (d) => d.annonces ? d.annonces.titre : 'une annonce';
+    convs = acceptees.map((d) => ({ id: d.id, autre: autreId(d), titre: titreD(d), date: (dernierMsg[d.id] || d).created_at })).sort((a, b) => new Date(b.date) - new Date(a.date));
+    const nouvelles = data.filter((d) => d.proprietaire_id === moi.id && d.statut === 'en_attente');
+    const envoyeesAttente = data.filter((d) => d.demandeur_id === moi.id && d.statut !== 'acceptee');
+    const nbNonLus = convs.filter(nonLu).length, total = nouvelles.length + nbNonLus;
+    $('notif').hidden = !total; $('notif').textContent = total;
+    $('compteur-contacts').innerHTML = '<i></i>' + (total ? [nouvelles.length ? `${nouvelles.length} nouvelle${nouvelles.length > 1 ? 's' : ''} demande${nouvelles.length > 1 ? 's' : ''}` : '', nbNonLus ? `${nbNonLus} message${nbNonLus > 1 ? 's' : ''} non lu${nbNonLus > 1 ? 's' : ''}` : ''].filter(Boolean).join(' · ') : 'Tout est à jour');
+    $('bandeau-dem').hidden = !nouvelles.length;
+    $('titre-nouvelles').innerHTML = 'Nouvelles demandes' + `<span class="compte-titre">${nouvelles.length}</span>`;
+    $('liste-nouvelles').innerHTML = nouvelles.map((d) => `
+      <div class="nouvelle"><span class="av-p" style="--t:44px"><svg class="ico"><use href="#i-user"/></svg></span>
+        <div class="txt"><b>Un·e étudiant·e veut te contacter</b><p>pour « ${esc(titreD(d))} » · ${quand(d.created_at)}</p></div>
+        <div class="actions-dem"><button class="btn petit sans" onclick="repondre('${d.id}', 'acceptee', event)">Accepter</button><button class="btn petit clair" onclick="repondre('${d.id}', 'refusee')">Refuser</button></div>
+      </div>`).join('');
+    afficherListeConv();
+    $('bloc-attente').hidden = !envoyeesAttente.length;
+    $('titre-attente').textContent = `Mes demandes en attente (${envoyeesAttente.length})`;
+    $('liste-attente').innerHTML = envoyeesAttente.map((d) => `
+      <div class="ligne-conv"><span class="av-p" style="--t:40px"><svg class="ico"><use href="#i-envoi"/></svg></span>
+        <div class="lc-txt"><div class="lc-haut"><span class="lc-nom">${esc(titreD(d))}</span><span class="lc-date">${quand(d.created_at)}</span></div>
+        <div class="lc-apercu">${d.statut === 'refusee' ? 'Refusée' : 'En attente de réponse'}</div></div></div>`).join('');
+    if (convOuverte && !convs.some((c) => c.id === convOuverte)) convOuverte = null;
+    if (convOuverte) { const c = convs.find((x) => x.id === convOuverte); entete(c); }
+    else if (convs.length && innerWidth >= 1000) ouvrirConv(convs[0].id, true);
   }
+  function afficherListeConv() {
+    const q = rechConv.toLowerCase();
+    const liste = convs.filter((c) => !q || (nomDe(c.autre) + ' ' + c.titre).toLowerCase().includes(q));
+    $('nb-conv').hidden = !convs.length; $('nb-conv').textContent = convs.length;
+    $('liste-conv').innerHTML = liste.length ? liste.map((c) => {
+      const m = dernierMsg[c.id], p = autres[c.autre];
+      const apercu = m ? (m.auteur_id === moi.id ? 'Toi : ' : '') + m.contenu : 'Nouvelle conversation : dis bonjour !';
+      return `<button class="ligne-conv ${c.id === convOuverte ? 'actif' : ''} ${nonLu(c) ? 'non-lu' : ''}" data-c="${c.id}">${avatarP(nomDe(c.autre), p && p.couleur, 46)}
+        <span class="lc-txt"><span class="lc-haut"><span class="lc-nom">${esc(nomDe(c.autre))}</span><span class="lc-date">${quand(c.date)}</span></span>
+        <span class="lc-annonce" style="display:block">${esc(c.titre)}</span><span class="lc-apercu" style="display:block">${esc(apercu)}</span></span></button>`;
+    }).join('') : `<div class="vide-liste">${convs.length ? 'Aucun résultat.' : 'Pas encore de conversation. Accepte une demande, ou fais-en une depuis les annonces.'}</div>`;
+  }
+  $('liste-conv').addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) ouvrirConv(b.dataset.c); });
+  $('rech-conv').addEventListener('input', (e) => { rechConv = e.target.value; afficherListeConv(); });
   async function repondre(id, statut, e) {
     const { error } = await db.from('demandes').update({ statut }).eq('id', id);
     if (error) return toast('Réponse impossible : ' + error.message, 'bulle', '#f8dbe3');
-    if (statut === 'acceptee') { confettis(e); toast('Contact accepté : vous pouvez discuter', 'cadenas', '#eef07a'); convOuverte = null; }
-    chargerDemandes();
+    if (statut === 'acceptee') { confettis(e); toast('Contact accepté : vous pouvez discuter', 'cadenas', '#eef07a'); }
+    await chargerDemandes();
+    if (statut === 'acceptee') ouvrirConv(id, true);
   }
-  async function ouvrirConv(id, titre, silencieux) {
-    convOuverte = id; $('conv-vide').hidden = true; $('conv').hidden = false; $('conv-titre').textContent = titre;
-    await chargerMessages();
-    if (!silencieux) {
-      if (innerWidth < 1000) $('panneau-conv').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => $('msg').focus({ preventScroll: true }), 450);
-    }
+  function entete(c) {
+    const p = autres[c.autre];
+    $('conv-avatar').innerHTML = avatarP(nomDe(c.autre), p && p.couleur, 46);
+    $('conv-nom').textContent = nomDe(c.autre); $('conv-titre').textContent = 'À propos de « ' + c.titre + ' »';
+    $('conv-voir').hidden = !p;
+    $('conv-infos').innerHTML = blocCoord(coordsCache[c.autre]);
   }
+  async function ouvrirConv(id, silencieux) {
+    const c = convs.find((x) => x.id === id); if (!c) return;
+    convOuverte = id; $('conv-vide').hidden = true; $('conv').hidden = false;
+    $('inbox').classList.add('fil-ouvert'); entete(c);
+    await chargerMessages(); marquerVu(id); afficherListeConv();
+    const reste = convs.filter(nonLu).length; /* la pastille se met à jour au prochain chargement */
+    if (!silencieux) { setTimeout(() => $('msg').focus({ preventScroll: true }), 300); if (innerWidth < 1000) scrollTo({ top: 0, behavior: 'smooth' }); }
+    return reste;
+  }
+  $('conv-retour').addEventListener('click', () => { $('inbox').classList.remove('fil-ouvert'); convOuverte = null; afficherListeConv(); chargerDemandes(); });
+  $('conv-voir').addEventListener('click', () => {
+    const c = convs.find((x) => x.id === convOuverte), p = c && autres[c.autre]; if (!c || !p) return;
+    const ouvert = $('conv-infos').querySelector('.carte-profil');
+    $('conv-infos').innerHTML = blocCoord(coordsCache[c.autre]) + (ouvert ? '' : carteProfil(p, false));
+    $('conv-voir').textContent = ouvert ? 'Profil' : 'Masquer';
+  });
   async function chargerMessages() {
     if (!convOuverte) return;
-    const { data, error } = await db.from('messages').select('id, auteur_id, contenu, created_at').eq('demande_id', convOuverte).order('created_at', { ascending: true });
+    const id = convOuverte;
+    const { data, error } = await db.from('messages').select('id, auteur_id, contenu, created_at').eq('demande_id', id).order('created_at', { ascending: true });
+    if (id !== convOuverte) return;
     const fil = $('fil');
     if (error) { fil.innerHTML = '<p class="meta">Impossible de charger la conversation.</p>'; return; }
-    fil.innerHTML = data.length ? data.map((m) => `<div class="bulle ${m.auteur_id === moi.id ? 'moi' : 'autre'}"><small>${m.auteur_id === moi.id ? 'Moi' : 'L’autre étudiant·e'} · ${quand(m.created_at)}</small>${esc(m.contenu)}</div>`).join('')
+    if (data.length) dernierMsg[id] = data[data.length - 1];
+    const c = convs.find((x) => x.id === id), nom = c ? nomDe(c.autre) : 'L’autre étudiant·e';
+    fil.innerHTML = data.length ? data.map((m) => `<div class="bulle ${m.auteur_id === moi.id ? 'moi' : 'autre'}"><small>${m.auteur_id === moi.id ? 'Moi' : esc(nom)} · ${quand(m.created_at)}</small>${esc(m.contenu)}</div>`).join('')
       : '<p class="meta" style="text-align:center; padding:30px 0">Aucun message pour l’instant. Lance la conversation !</p>';
     fil.scrollTop = fil.scrollHeight;
   }
-  $('btn-actualiser').addEventListener('click', chargerMessages);
+  $('btn-actualiser').addEventListener('click', async () => { await chargerMessages(); marquerVu(convOuverte); chargerDemandes(); });
   $('form-msg').addEventListener('submit', async (e) => {
     e.preventDefault(); const contenu = $('msg').value.trim(); if (!contenu || !convOuverte) return;
     $('msg').value = '';
     const { error } = await db.from('messages').insert({ demande_id: convOuverte, contenu });
     if (error) { $('msg').value = contenu; return toast('Envoi impossible : ' + error.message, 'bulle', '#f8dbe3'); }
-    chargerMessages();
+    await chargerMessages(); marquerVu(convOuverte);
+    const c = convs.find((x) => x.id === convOuverte); if (c) { c.date = new Date().toISOString(); convs.sort((a, b) => new Date(b.date) - new Date(a.date)); }
+    afficherListeConv();
   });
 
   /* ---------- Profil : coordonnées ---------- */
+  async function coordonneesDe(ids) {
+    if (!ids.length) return {};
+    const { data } = await db.from('coordonnees').select('user_id, contact').in('user_id', ids);
+    const r = {}; (data || []).forEach((c) => { r[c.user_id] = c.contact; }); return r;
+  }
   async function chargerCoordonnees() {
     const { data } = await db.from('coordonnees').select('contact').eq('user_id', moi.id).maybeSingle();
-    $('contact').value = data ? data.contact : '';
+    $('contact').value = data ? data.contact : ''; majTodo();
   }
   $('btn-coord').addEventListener('click', async () => {
     const contact = $('contact').value.trim();
     if (contact.length < 3) return toast('Entre au moins 3 caractères.', 'cadenas', '#f8dbe3');
     const { error } = await db.from('coordonnees').upsert({ user_id: moi.id, contact, updated_at: new Date().toISOString() });
     if (error) return toast('Enregistrement impossible : ' + error.message, 'cadenas', '#f8dbe3');
-    toast('Coordonnées enregistrées', 'cadenas', '#eef07a');
+    toast('Coordonnées enregistrées', 'cadenas', '#eef07a'); majTodo();
   });
 
-  /* ---------- Profil : compétences depuis le CV ---------- */
-  let competences = [];
-  const afficherChips = () => {
-    $('chips').innerHTML = competences.length ? competences.map((c, i) => `<span style="animation-delay:${i * 0.05}s">${esc(c)} <button data-i="${i}" aria-label="Retirer">×</button></span>`).join('') : '<p class="meta">Aucune compétence pour l’instant.</p>';
+  /* ---------- Profil : récap, modification, import du CV ---------- */
+  const DISPOS = ['Matins', 'Midis', 'Après-midis', 'Soirs', 'Semaine', 'Week-ends'];
+  let profil = { pseudo: '', bio: '', filiere: '', dispos: [], couleur: 'violet', competences: [] };
+  let competences = [], brouillonCV = [];
+  const carteProfil = (p, perso) => {
+    const c = COULEURS[p.couleur] || COULEURS.violet, nom = p.pseudo || (perso ? 'Ton prénom ou pseudo' : 'Étudiant·e');
+    const comps = (p.competences || []), dispos = (p.dispos || []);
+    return `<div class="carte-profil" style="--bg:${c[0]};--fg:${c[1]}"><div class="cp-banniere"></div><div class="cp-corps">
+      <div class="cp-avatar">${esc((p.pseudo || '?').trim()[0] || '?').toUpperCase()}</div>
+      <h2 class="cp-nom ${p.pseudo ? '' : 'fantome'}">${esc(nom)}</h2>
+      ${p.filiere ? `<div class="cp-sous">${esc(p.filiere)}</div>` : (perso ? '<div class="cp-sous fantome">Ta filière et ton année</div>' : '')}
+      ${p.bio ? `<p class="cp-bio">${esc(p.bio)}</p>` : (perso ? '<p class="cp-bio fantome">Une courte présentation donne envie de te répondre.</p>' : '')}
+      <div class="cp-bloc"><h3>Compétences</h3>${comps.length ? `<div class="chips">${comps.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : '<p class="fantome">Aucune compétence pour l’instant.</p>'}</div>
+      <div class="cp-bloc"><h3>Disponibilités</h3>${dispos.length ? `<div class="pills-dispo">${dispos.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : '<p class="fantome">Pas encore indiquées.</p>'}</div>
+      ${perso ? '<div class="cp-pied"><svg class="ico" style="width:16px;height:16px"><use href="#i-lock"/></svg>Visible uniquement par les personnes que tu as acceptées ou qui t’ont accepté·e.</div>' : ''}
+    </div></div>`;
   };
-  $('chips').addEventListener('click', (e) => { const b = e.target.closest('button[data-i]'); if (!b) return; competences.splice(+b.dataset.i, 1); afficherChips(); });
-  const ajouterComp = () => { const v = $('ajout-comp').value.trim().slice(0, 40); if (v && !competences.includes(v) && competences.length < 15) { competences.push(v); afficherChips(); } $('ajout-comp').value = ''; };
+  function afficherRecap() {
+    $('carte-profil').innerHTML = carteProfil(profil, true);
+    const c = COULEURS[profil.couleur] || COULEURS.violet;
+    $('mon-avatar').textContent = ((profil.pseudo || (moi && moi.email) || '?').trim()[0] || '?').toUpperCase();
+    $('mon-avatar').style.background = c[0]; $('mon-avatar').style.color = c[1];
+    majTodo();
+  }
+  function majTodo() {
+    const e = [
+      ['Ajoute ton prénom ou pseudo', !!profil.pseudo, 'edit'],
+      ['Indique ta filière et ton année', !!profil.filiere, 'edit'],
+      ['Écris une courte présentation', !!profil.bio, 'edit'],
+      ['Ajoute tes compétences', profil.competences.length > 0, 'cv'],
+      ['Précise tes disponibilités', profil.dispos.length > 0, 'edit'],
+      ['Renseigne tes coordonnées', $('contact').value.trim().length >= 3, 'coord']
+    ];
+    const pct = Math.round(e.filter((x) => x[1]).length / e.length * 100);
+    $('pct').textContent = pct; $('barre-pct').style.width = pct + '%';
+    $('todo').innerHTML = e.map((x) => `<li class="${x[1] ? 'fait' : ''}"><span class="coche">&#10003;</span>${x[1] ? `<span class="lien-texte">${x[0]}</span>` : `<button type="button" class="lien-texte" data-pv="${x[2]}">${x[0]}</button>`}</li>`).join('');
+  }
+  async function chargerProfil() {
+    const { data } = await db.from('profils').select('competences, pseudo, bio, filiere, dispos, couleur').eq('user_id', moi.id).maybeSingle();
+    profil = { pseudo: (data && data.pseudo) || '', bio: (data && data.bio) || '', filiere: (data && data.filiere) || '', dispos: (data && data.dispos) || [], couleur: (data && data.couleur) || 'violet', competences: (data && data.competences) || [] };
+    competences = profil.competences.slice(); afficherChips(); afficherRecap();
+  }
+  async function sauverProfil(champs) {
+    const nouveau = Object.assign({}, profil, champs);
+    const { error } = await db.from('profils').upsert({ user_id: moi.id, pseudo: nouveau.pseudo || null, bio: nouveau.bio || null, filiere: nouveau.filiere || null, dispos: nouveau.dispos, couleur: nouveau.couleur, competences: nouveau.competences, updated_at: new Date().toISOString() });
+    if (error) { toast('Enregistrement impossible : ' + error.message, 'etoile', '#f8dbe3'); return false; }
+    profil = nouveau; competences = profil.competences.slice(); afficherRecap(); return true;
+  }
+  function voirPv(nom) {
+    document.querySelectorAll('.pvue').forEach((x) => x.classList.toggle('actif', x.id === 'pv-' + nom));
+    if (nom === 'edit') remplirEdition();
+    if (nom === 'cv') reinitCV();
+    scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-pv]'); if (!b) return;
+    if (b.dataset.pv === 'coord') { voirPv('recap'); return setTimeout(() => $('contact').focus(), 300); }
+    voirPv(b.dataset.pv);
+  });
+  /* édition */
+  $('e-couleurs').innerHTML = Object.keys(COULEURS).map((k) => `<label><input type="radio" name="couleur" value="${k}"><span style="background:${COULEURS[k][0]}" title="${k}"></span></label>`).join('');
+  $('e-dispos').innerHTML = DISPOS.map((d) => `<label><input type="checkbox" value="${d}"><span>${d}</span></label>`).join('');
+  const brouillon = () => ({
+    pseudo: $('e-pseudo').value.trim(), filiere: $('e-filiere').value.trim(), bio: $('e-bio').value.trim(),
+    couleur: (document.querySelector('input[name=couleur]:checked') || { value: 'violet' }).value,
+    dispos: [...document.querySelectorAll('#e-dispos input:checked')].map((x) => x.value), competences
+  });
+  const majApercu = () => { $('apercu-profil').outerHTML = carteProfil(brouillon(), true).replace('class="carte-profil"', 'class="carte-profil" id="apercu-profil"'); $('c-bio').textContent = $('e-bio').value.length + '/160'; };
+  function remplirEdition() {
+    $('e-pseudo').value = profil.pseudo; $('e-filiere').value = profil.filiere; $('e-bio').value = profil.bio;
+    document.querySelectorAll('input[name=couleur]').forEach((x) => { x.checked = x.value === profil.couleur; });
+    document.querySelectorAll('#e-dispos input').forEach((x) => { x.checked = profil.dispos.includes(x.value); });
+    competences = profil.competences.slice(); afficherChips(); majApercu();
+  }
+  $('form-edit').addEventListener('input', majApercu);
+  $('form-edit').addEventListener('change', majApercu);
+  const afficherChips = () => {
+    $('chips').innerHTML = competences.length ? competences.map((c, i) => `<span style="animation-delay:${i * 0.05}s">${esc(c)} <button type="button" data-i="${i}" aria-label="Retirer ${esc(c)}">×</button></span>`).join('') : '<p class="meta">Aucune compétence pour l’instant.</p>';
+  };
+  $('chips').addEventListener('click', (e) => { const b = e.target.closest('button[data-i]'); if (!b) return; competences.splice(+b.dataset.i, 1); afficherChips(); majApercu(); });
+  const ajouterComp = () => { const v = $('ajout-comp').value.trim().slice(0, 40); if (v && !competences.includes(v) && competences.length < 15) { competences.push(v); afficherChips(); majApercu(); } $('ajout-comp').value = ''; };
   $('btn-ajout').addEventListener('click', ajouterComp);
   $('ajout-comp').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); ajouterComp(); } });
-  async function chargerProfil() {
-    const { data } = await db.from('profils').select('competences').eq('user_id', moi.id).maybeSingle();
-    competences = data ? data.competences : []; afficherChips();
-  }
+  $('form-edit').addEventListener('submit', async (e) => {
+    e.preventDefault(); const b = brouillon();
+    if (b.pseudo && b.pseudo.length < 2) { $('e-pseudo').focus(); return toast('Ton pseudo doit faire au moins 2 caractères.', 'crayon', '#f8dbe3'); }
+    const bt = $('btn-profil'); bt.disabled = true;
+    const ok = await sauverProfil(b); bt.disabled = false;
+    if (ok) { confettis(e); toast('Profil enregistré !', 'etoile', '#eef07a'); voirPv('recap'); }
+  });
+  /* import du CV */
   if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   async function lireTextePDF(f) {
     const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise; let t = '';
     for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) { const c = await (await pdf.getPage(i)).getTextContent(); t += c.items.map((x) => x.str).join(' ') + '\n'; }
     return t.trim();
   }
-  $('depot').addEventListener('click', () => $('cv').click());
-  $('cv').addEventListener('change', async () => {
-    const f = $('cv').files[0]; if (!f) return;
-    $('nom-cv').textContent = f.name;
-    if (f.type !== 'application/pdf') return $('etat-cv').textContent = 'Le fichier doit être un PDF.';
-    if (f.size > 5 * 1024 * 1024) return $('etat-cv').textContent = 'Le PDF est trop lourd (5 Mo maximum).';
-    $('chips').innerHTML = '<span class="squelette"></span><span class="squelette"></span><span class="squelette" style="width:160px"></span>';
+  const etapeCV = (n) => ['ec1', 'ec2', 'ec3'].forEach((id, i) => { $(id).className = i + 1 === n ? 'actif' : (i + 1 < n ? 'fait' : ''); });
+  function reinitCV() {
+    brouillonCV = []; $('cv-resultat').hidden = true; $('cv-secours').hidden = true; $('depot').classList.remove('charge');
+    $('nom-cv').textContent = 'Glisse ton CV ici, ou clique pour le choisir'; $('etat-cv').textContent = "PDF, 5 Mo maximum. Ton CV n'est pas conservé."; etapeCV(1);
+  }
+  function afficherCV() {
+    $('cv-chips').innerHTML = brouillonCV.map((c, i) => `<button type="button" class="chip-cv ${c.on ? 'on' : ''}" data-i="${i}" aria-pressed="${c.on}">${esc(c.nom)}</button>`).join('');
+    const n = brouillonCV.filter((c) => c.on).length; $('btn-cv-ajouter').disabled = !n;
+  }
+  $('cv-chips').addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (!b) return; brouillonCV[+b.dataset.i].on = !brouillonCV[+b.dataset.i].on; afficherCV(); });
+  async function traiterCV(f) {
+    if (!f) return;
+    $('nom-cv').textContent = f.name; $('cv-resultat').hidden = true; $('cv-secours').hidden = true;
+    if (f.type !== 'application/pdf') { $('etat-cv').textContent = 'Le fichier doit être un PDF.'; return $('cv-secours').hidden = false; }
+    if (f.size > 5 * 1024 * 1024) { $('etat-cv').textContent = 'Le PDF est trop lourd (5 Mo maximum).'; return $('cv-secours').hidden = false; }
+    $('depot').classList.add('charge'); etapeCV(2);
     try {
       $('etat-cv').textContent = 'Lecture du CV…';
       const texte = await lireTextePDF(f);
-      if (texte.length < 20) { afficherChips(); return $('etat-cv').textContent = 'CV presque vide ou scanné : ajoute tes compétences à la main.'; }
+      if (texte.length < 20) throw new Error('CV presque vide ou scanné (image).');
       $('etat-cv').textContent = "L'IA analyse ton CV…";
       const r = await appelerIA('profil', texte);
-      if (!r.competences.length) { afficherChips(); return $('etat-cv').textContent = "L'IA n'a rien trouvé : ajoute-les à la main."; }
-      competences = r.competences; afficherChips();
-      $('etat-cv').textContent = 'Relis, corrige, puis valide. Rien n’est enregistré avant.';
-      toast(`L'IA a trouvé ${r.competences.length} compétences. Relis-les !`, 'etoile', '#ddccf3');
-    } catch (err) { afficherChips(); $('etat-cv').textContent = err.message + ' Tu peux les ajouter à la main.'; }
-    $('cv').value = '';
-  });
-  $('btn-profil').addEventListener('click', async (e) => {
-    const { error } = await db.from('profils').upsert({ user_id: moi.id, competences, updated_at: new Date().toISOString() });
-    if (error) return toast('Enregistrement impossible : ' + error.message, 'etoile', '#f8dbe3');
-    confettis(e); toast('Profil enregistré !', 'etoile', '#eef07a');
+      if (!r.competences.length) throw new Error("L'IA n'a rien trouvé.");
+      brouillonCV = r.competences.map((nom) => ({ nom, on: true }));
+      afficherCV(); $('cv-resultat').hidden = false; etapeCV(3);
+      $('etat-cv').textContent = r.competences.length + ' compétences trouvées.';
+    } catch (err) { etapeCV(1); $('etat-cv').textContent = err.message; $('cv-secours').hidden = false; }
+    $('depot').classList.remove('charge'); $('cv').value = '';
+  }
+  $('depot').addEventListener('click', () => $('cv').click());
+  $('depot').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('cv').click(); } });
+  $('cv').addEventListener('change', () => traiterCV($('cv').files[0]));
+  ['dragenter', 'dragover'].forEach((ev) => $('depot').addEventListener(ev, (e) => { e.preventDefault(); $('depot').classList.add('survol'); }));
+  ['dragleave', 'drop'].forEach((ev) => $('depot').addEventListener(ev, (e) => { e.preventDefault(); $('depot').classList.remove('survol'); }));
+  $('depot').addEventListener('drop', (e) => traiterCV(e.dataTransfer.files[0]));
+  $('btn-cv-autre').addEventListener('click', () => { reinitCV(); $('cv').click(); });
+  $('btn-cv-ajouter').addEventListener('click', async (e) => {
+    const choisies = brouillonCV.filter((c) => c.on).map((c) => c.nom);
+    const fusion = [...new Set([...profil.competences, ...choisies])].slice(0, 15);
+    const b = $('btn-cv-ajouter'); b.disabled = true;
+    const ok = await sauverProfil({ competences: fusion }); b.disabled = false;
+    if (ok) { confettis(e); toast('Compétences ajoutées à ton profil !', 'etoile', '#eef07a'); voirPv('recap'); }
   });
 
+  /* actualisation douce toutes les 25 s quand l'onglet Messages est ouvert */
+  setInterval(() => {
+    if (!moi || document.hidden || document.body.dataset.onglet !== 'contacts') return;
+    chargerDemandes(); if (convOuverte) chargerMessages();
+  }, 25000);
   rafraichir();
 </script>
 </body>
